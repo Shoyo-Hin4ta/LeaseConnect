@@ -5,7 +5,10 @@ type PropsType = {
 }
 
 const container = ({children} : PropsType) => {
-  return <div className="w-full max-w-7xl mx-auto px-4 ">{children}</div>
-}
+  return (
+  <div className="border border-red-500 flex flex-col items-center w-4/5 p-2 font-roboto my-">
+    {children}
+  </div>
+  )}
 
 export default container

@@ -7,9 +7,12 @@ import * as z from "zod";
 import {
   Form
 } from "../ui/form"
-import { Button } from "../ui/button";
 import InputBox from "../InputBox";
-
+import RegisterButton from "./RegisterButton";
+import Container from "../Container/container";
+import { useDispatch } from "react-redux";
+import { next } from "@/appstore/stepperSlice";
+import { steps } from "@/lib/utils";
 
 // type InputVal = string | null;
 
@@ -20,7 +23,34 @@ export type Inputs = {
   age:string,
 }
 
-const RegisterForm = () => {
+const formSchema = z.object({
+  name : z.string().min(2, {
+    message : "Username must be at least 2 characters."
+  }),
+  email : z.string(),
+  password : z.string().min(8, {
+    message : 'Password must be 8 characters long'
+  }),
+  age : z.string()
+        .refine((age) => !isNaN(parseInt(age)), {
+          message: "Age is required",
+        })
+        .transform((age) => Number(age) )
+        
+  // mobileNumber : z.string().regex(
+  //   phoneRegex, 'Please enter a valid number'
+  // ),
+  // bio : z.string().max(200, {
+  //   message : "Bio cannot be more than 200 characters"
+  // }), 
+})
+
+const RegisterForm = ({currentStep , isCompleted} : {
+  currentStep : number,
+  isCompleted : boolean
+}) => {
+
+  const dispatch = useDispatch();
 
   const { toast } = useToast();
 
@@ -39,31 +69,6 @@ const RegisterForm = () => {
   //   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
   // );
 
-  
-
-  const formSchema = z.object({
-    name : z.string().min(2, {
-      message : "Username must be at least 2 characters."
-    }),
-    email : z.string(),
-    password : z.string().min(8, {
-      message : 'Password must be 8 characters long'
-    }),
-    age : z.string()
-          .refine((age) => !isNaN(parseInt(age)), {
-            message: "Age is required",
-          })
-          .transform((age) => Number(age) )
-          
-    // mobileNumber : z.string().regex(
-    //   phoneRegex, 'Please enter a valid number'
-    // ),
-    // bio : z.string().max(200, {
-    //   message : "Bio cannot be more than 200 characters"
-    // }), 
-  })
-
-
   const form = useForm<Inputs>({
     resolver : zodResolver(formSchema),
     defaultValues: {
@@ -81,16 +86,23 @@ const RegisterForm = () => {
     // Api call to backend 
     // Need to print the data
     console.log(data);
+    dispatch(next());
+    if(currentStep > steps.length){
+      //step iscompleted true 
+      //and if is completed is true then then we don't show the button
+    }
     setIsSubmitting(false);
   }
 
   return (
-    <div className="border border-red-500 flex flex-col items-center w-4/5 p-2 font-roboto my-">
-      <div className="my-4">Register Form</div>
+    <Container >
+        <div className="my-4">Register Form</div>
       {/* <form>
         <Input label="First Name" onChange={() => {}} id="name" name="firstName" placeholder="Enter your first name" type="text"/>
       </form> */}
 
+
+      {/* use switch here to show different form based on current Step */}
       <Form {...form}>
         <form onSubmit = {form.handleSubmit(onSubmit)} className="w-full flex flex-col items-center">
           <InputBox name="name" label="Name" formControl={form.control} placeholder="Full Name" />
@@ -98,13 +110,12 @@ const RegisterForm = () => {
           <InputBox name="age" label="Age" formControl={form.control} placeholder="Age" type="number"/>
           <InputBox name="password" label="Password" formControl={form.control} placeholder="Password" type="password"/>
 
-          <Button type="submit" className="mt-5" disabled={isSubmitting}>
-            Next (1/2)
-          </Button>
+          <RegisterButton currentStep={currentStep} isCompleted={isCompleted}/>
+          
         </form>
       </Form>
-
-    </div>
+    </Container>
+      
   )
 }
 

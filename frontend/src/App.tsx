@@ -1,10 +1,12 @@
 
 import { RouterProvider, createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom'
-import './App.css'
+import './index.css'
 import Layout from './components/Layout'
 import HomePage from './components/HomePage'
 import ErrorPage from './components/ErrorPage'
 import RegisterPage from './components/Register/RegisterPage'
+import { Provider } from 'react-redux'
+import store from './appstore/appStore'
 
 
 const router = createBrowserRouter(
@@ -18,11 +20,11 @@ const router = createBrowserRouter(
 
 function App() {
 
-  
-
   return (
     <>
+    <Provider store={store}>
       <RouterProvider router={router} />
+    </Provider>
     </>
   )
 }
