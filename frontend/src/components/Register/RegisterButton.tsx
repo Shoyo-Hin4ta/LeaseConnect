@@ -5,8 +5,8 @@ import { Button } from "../ui/button"
 // }
 
 const RegisterButton = ({currentStep , isCompleted} : {
-  currentStep : number,
-  isCompleted : boolean
+  currentStep? : number,
+  isCompleted? : boolean
 }) => {
 
   return (

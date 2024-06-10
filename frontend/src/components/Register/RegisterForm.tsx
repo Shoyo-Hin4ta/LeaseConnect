@@ -13,6 +13,7 @@ import Container from "../Container/container";
 import { useDispatch } from "react-redux";
 import { next } from "@/appstore/stepperSlice";
 import { steps } from "@/lib/utils";
+import { Button } from "../ui/button";
 
 // type InputVal = string | null;
 
@@ -21,7 +22,9 @@ export type Inputs = {
   name:string,
   password:string,
   age:string,
+  image: string
 }
+
 
 const formSchema = z.object({
   name : z.string().min(2, {
@@ -35,7 +38,16 @@ const formSchema = z.object({
         .refine((age) => !isNaN(parseInt(age)), {
           message: "Age is required",
         })
-        .transform((age) => Number(age) )
+        .transform((age) => Number(age) ),
+  image : z
+    .any()
+    .refine((files) => {
+      return files?.[0]?.size <= MAX_FILE_SIZE;
+    }, `Max image size is 5MB.`)
+    .refine(
+      (files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
+      "Only .jpg, .jpeg, .png and .webp formats are supported."
+    ),
         
   // mobileNumber : z.string().regex(
   //   phoneRegex, 'Please enter a valid number'
@@ -51,7 +63,6 @@ const RegisterForm = ({currentStep , isCompleted} : {
 }) => {
 
   const dispatch = useDispatch();
-
   const { toast } = useToast();
 
   // const [name, setName] = useState<InputVal>("");
@@ -76,10 +87,12 @@ const RegisterForm = ({currentStep , isCompleted} : {
       email: "",
       password: "",
       age: "",
+      image : undefined
       // mobileNumber: "",
       // bio: "",
     },
   });
+
 
   const onSubmit: SubmitHandler<Inputs> = async(data) => {
     setIsSubmitting(true);
@@ -114,6 +127,7 @@ const RegisterForm = ({currentStep , isCompleted} : {
           
         </form>
       </Form>
+      
     </Container>
       
   )

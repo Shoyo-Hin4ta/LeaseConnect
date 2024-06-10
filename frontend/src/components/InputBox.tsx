@@ -1,5 +1,5 @@
 // import { HTMLInputTypeAttribute } from "react";
-import {  Control, FieldPath } from "react-hook-form";
+import { Control, FieldPath } from "react-hook-form";
 import { 
     FormControl,
     FormItem,
@@ -10,6 +10,7 @@ import {
 import { Input } from "./ui/input"
 import { z } from "zod";
 import { Inputs } from "./Register/RegisterForm";
+import { ReactNode } from "react";
 
 
 const formSchema = z.object({
@@ -24,7 +25,8 @@ const formSchema = z.object({
         .refine((age) => !isNaN(parseInt(age)), {
           message: "Age is required",
         })
-        .transform((age) => Number(age) )
+        .transform((age) => Number(age) ),
+  image : z.instanceof(File),
       
 })
 
@@ -35,9 +37,13 @@ const formSchema = z.object({
 
 interface SignUpFormFieldProps{
   name : FieldPath<z.infer<typeof formSchema>>;
-  label : string,
+  label : string | ReactNode,
   placeholder : string,
   type? : string,
+  props?: {
+    field?: React.InputHTMLAttributes<HTMLInputElement>;
+    css?: string;
+  };
   formControl : Control<Inputs>,
 }
 
@@ -46,7 +52,9 @@ const InputBox: React.FC<SignUpFormFieldProps> = ({
   placeholder, 
   name, 
   formControl, 
-  type} ) => {
+  type,
+  props,
+  } ) => {
         return ( 
             <>
             <FormField
@@ -54,9 +62,13 @@ const InputBox: React.FC<SignUpFormFieldProps> = ({
               control={formControl}
               render={({ field }) => (
                 <FormItem className="flex w-full items-center justify-center">
-                  <FormLabel className="w-2/5 mt-2">{label}</FormLabel>
+                  {props?.field ? '' : <FormLabel className="w-2/5 mt-2">{label}</FormLabel>}
                   <FormControl>
-                    <Input placeholder={placeholder} type={type ? type : "text"} className="w-4/5"
+                    <Input 
+                    placeholder={placeholder} 
+                    type={type ? type : "text"} 
+                    className={`w-4/5 ${props?.css && props.css}`} 
+                    {...props?.field}
                     {...field} 
                     />
                   </FormControl>

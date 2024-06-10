@@ -3,6 +3,7 @@ import RegisterForm from "./RegisterForm";
 import Stepper from "./Stepper";
 import { RootState } from "@/appstore/appStore";
 import RegisterForm2 from "./RegisterForm2";
+import RegisterForm3 from "./RegisterForm3";
 
 
 const RegisterPage = () => {
@@ -13,11 +14,12 @@ const RegisterPage = () => {
     // console.log(currentStep);
     return (
         <div className="flex items-center justify-center border border-blue-600 ">
-            <div className="flex flex-col items-center border border-green-600 w-full">
+            <div className="flex flex-col items-center border border-green-600 w-full h-screen">
                 
                 <Stepper currentStep={currentStep} isCompleted={isCompleted}/>
-                <RegisterForm currentStep={currentStep} isCompleted={isCompleted}/>
-                <RegisterForm2 />
+                {/* <RegisterForm currentStep={currentStep} isCompleted={isCompleted}/> */}
+                {/* <RegisterForm2 /> */}
+                <RegisterForm3 />
             </div>
         </div>
     )
