@@ -27,7 +27,6 @@ const formSchema = z.object({
         })
         .transform((age) => Number(age) ),
   image : z.instanceof(File),
-      
 })
 
 
@@ -45,6 +44,7 @@ interface SignUpFormFieldProps{
     css?: string;
   };
   formControl : Control<Inputs>,
+
 }
 
 const InputBox: React.FC<SignUpFormFieldProps> = ({

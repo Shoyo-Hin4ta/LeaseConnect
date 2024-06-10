@@ -7,8 +7,8 @@ type marginTypes = {
 }
 
 const Stepper = ({currentStep , isCompleted} : {
-  currentStep : number,
-  isCompleted : boolean
+  currentStep? : number,
+  isCompleted? : boolean
 }) => {
 
 
@@ -23,8 +23,8 @@ const Stepper = ({currentStep , isCompleted} : {
     console.log(stepRef.current[0]?.current?.offsetWidth);
     console.log(stepRef.current[steps.length-1]?.current?.offsetWidth);
     setMargins({
-      marginLeft: ((stepRef.current[0]?.current?.offsetWidth)/2) ?? 0,
-      marginRight : ((stepRef.current[steps.length-1]?.current?.offsetWidth)/2) ?? 0
+      marginLeft: ((stepRef.current[0]?.current?.offsetWidth)/2),
+      marginRight : ((stepRef.current[steps.length-1]?.current?.offsetWidth)/2)
     })
   }, [stepRef]);
   

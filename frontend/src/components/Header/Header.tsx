@@ -7,7 +7,7 @@ const Header = () => {
     <div className='w-screen justify-between items-center flex h-20 dark:bg-black dark:text-white bg-gray-200 font-roboto'>
         <div className='h-full font-roboto font-bold flex items-center ml-2'>
           {/* <img src={LOGO_URL} alt="Logo" className='h-full'/> */}
-          SubLeaseConnect.
+          LeaseConnect.
         </div>
         <div className='flex'>
           <Link to='/'><Button variant="link">Home</Button></Link>

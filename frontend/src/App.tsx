@@ -7,13 +7,14 @@ import ErrorPage from './components/ErrorPage'
 import RegisterPage from './components/Register/RegisterPage'
 import { Provider } from 'react-redux'
 import store from './appstore/appStore'
-
+import Browse from './components/Browse'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element = { <Layout /> } errorElement= {< ErrorPage /> }>
       <Route path='/' element = { <HomePage />} />
       <Route path='register' element = { < RegisterPage />} />
+      <Route path='browse' element = { < Browse />} />
     </Route>
   )
 )
