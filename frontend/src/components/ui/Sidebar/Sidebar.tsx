@@ -9,10 +9,10 @@ const Sidebar = () => {
     }
 
     return (
-        <div className = {`absolute h-full transition-all duration-300 ease-in-out ${isActive ? 'bg-gray-400 w-full' : 'bg-white w-0' }`}>
+        <div className = {`absolute top-4 mr-10 h-screen transition-all duration-300 ease-in-out ${isActive ? 'bg-gray-400 w-full' : 'bg-white w-0' }`}>
 
                     <div 
-                        className={`flex cursor-pointer ${isActive ? 'justify-end' : 'justify-start'}`}
+                        className={`flex cursor-pointer transition-opacity duration-300 ease-in-out ${isActive ? 'justify-end' : 'justify-start'}`}
                         onClick={toogleSidebar}
                     >
                         Sidebar

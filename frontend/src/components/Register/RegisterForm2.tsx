@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useState } from "react"
 // import Input from "../Input"
 import { useToast } from "../ui/use-toast";
 import { useForm } from "react-hook-form";
@@ -30,18 +30,21 @@ const ACCEPTED_IMAGE_MIME_TYPES = [
 
 
 export const imageFormSchema = z.object({
-  image : z
+  image: z
     .any()
-    .refine((files) => {
-      console.log(files)
-      return files.size <= MAX_FILE_SIZE;
-    }, `Max image size is 5MB.`)
     .refine(
-      (files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files.type),
+      (file) => file !== null,
+      "Please upload the image to proceed"
+    )
+    .refine(
+      (file) => file?.size <= MAX_FILE_SIZE,
+      `Max image size is 5MB.`
+    )
+    .refine(
+      (file) => ACCEPTED_IMAGE_MIME_TYPES.includes(file?.type || ""),
       "Only .jpg, .jpeg, .png and .webp formats are supported."
     ),
-  
-})
+});
 
 const RegisterForm2 = ({currentStep , isCompleted} : {
   currentStep : number,
@@ -107,7 +110,8 @@ const RegisterForm2 = ({currentStep , isCompleted} : {
               <label htmlFor="imageInput" className="w-full h-[70%] block" >
                 <ImageContainer image={selectedImage}/>
               </label>
-          <RegisterButton currentStep={currentStep} isCompleted={isCompleted}/>
+              
+              <RegisterButton currentStep={currentStep} isCompleted={isCompleted}/>
               
           </form>
         </Form>

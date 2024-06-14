@@ -1,3 +1,4 @@
+import { steps } from "@/lib/utils"
 import { Button } from "../ui/button"
 
 // interface BtnFieldTypes{
@@ -5,15 +6,22 @@ import { Button } from "../ui/button"
 // }
 
 const RegisterButton = ({currentStep , isCompleted} : {
-  currentStep? : number,
+  currentStep : number,
   isCompleted? : boolean
 }) => {
 
   return (
     <>
+       {!isCompleted && (
+
         <Button type="submit" className="mt-5">
-                Next
+          {currentStep < steps.length
+            ? `Next ( ${currentStep}/${steps.length} )`
+            : currentStep === steps.length
+            ? `Finish ( ${currentStep}/${steps.length} )`
+            : "Submit"}
         </Button>
+      )}
     </>
   )
 }

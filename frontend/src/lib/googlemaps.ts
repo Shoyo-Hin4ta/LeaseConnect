@@ -1,3 +1,18 @@
+// Simplified to match the option where initAutocomplete is called with setValue
+declare global {
+  interface Window {
+    initAutocomplete: () => void;
+  }
+}
+
+// Assigning initAutocomplete to window, but noting that it should be called with setValue
+window.initAutocomplete = () => {
+  console.warn("initAutocomplete should be called with setValue from React component.");
+};
+
+
+
+
 let autocomplete: google.maps.places.Autocomplete;
 let address1Field: HTMLInputElement;
 // let address2Field: HTMLInputElement;
@@ -14,7 +29,23 @@ let postalField: HTMLInputElement;
 //   document.body.appendChild(script);
 // }
 
-function initAutocomplete() {
+export interface AddressComponentType{
+  city:string | undefined,
+  state:string | undefined,
+  country : string | undefined,
+  zipcode : string | undefined
+}
+
+export const defaultAddress: AddressComponentType = {
+    city : '',
+    state : '',
+    country : '',
+    zipcode : '',
+}
+
+
+
+export function initAutocomplete(setValue: (name: string, value: string) => void){
   address1Field = document.querySelector("#city") as HTMLInputElement;
 //   address2Field = document.querySelector("#address2") as HTMLInputElement;
   postalField = document.querySelector("#postcode") as HTMLInputElement;
@@ -30,14 +61,20 @@ function initAutocomplete() {
 
   // When the user selects an address from the drop-down, populate the
   // address fields in the form.
-  autocomplete.addListener("place_changed", fillInAddress);
+  autocomplete.addListener("place_changed", () => fillInAddress(setValue));
+
+  address1Field.focus();
+
 }
 
-function fillInAddress() {
+function fillInAddress(setValue: (name: string, value: string) => void) {
   // Get the place details from the autocomplete object.
   const place = autocomplete.getPlace();
   // let address1 = "";
   let postcode = "";
+
+  const addressDetails: AddressComponentType = { ...defaultAddress };
+
 
   // Get each component of the address from the place details,
   // and then fill-in the corresponding field on the form.
@@ -71,39 +108,50 @@ function fillInAddress() {
       // }
 
       case "locality":
+        console.log("printing localtiy");
         (document.querySelector("#city") as HTMLInputElement).value =
           component.long_name;
+          addressDetails.city = component.long_name;
+          setValue("city", addressDetails.city);
         break;
 
       case "administrative_area_level_1": {
         (document.querySelector("#state") as HTMLInputElement).value =
           component.short_name;
+          addressDetails.state = component.short_name;
+          setValue("state", addressDetails.state);
         break;
       }
 
       case "country":
         (document.querySelector("#country") as HTMLInputElement).value =
           component.long_name;
+          addressDetails.country = component.long_name;
+          setValue("country", addressDetails.country);
         break;
     }
   }
 
   // address1Field.value = address1;
   postalField.value = postcode;
+  addressDetails.zipcode = postcode;
+  setValue("postcode", addressDetails.zipcode);
+
 
   // After filling the form with address components from the Autocomplete
   // prediction, set cursor focus on the second address line to encourage
   // entry of subpremise information such as apartment, unit, or floor number.
   // address2Field.focus();
+
 }
 
 
 
 
-declare global {
-  interface Window {
-    initAutocomplete: () => void;
-  }
-}
-window.initAutocomplete = initAutocomplete;
-export { initAutocomplete }
+// declare global {
+//   interface Window {
+//     initAutocomplete: () => void;
+//   }
+// }
+// window.initAutocomplete = initAutocomplete;
+// export { initAutocomplete }

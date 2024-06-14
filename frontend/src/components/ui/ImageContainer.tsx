@@ -7,13 +7,13 @@ interface ImageContainerDim{
 
 const ImageContainer = ({height='full', width='full', image=null} : ImageContainerDim) => {
   return (
-    <div className={`text-center w-${width} h-${height} rounded-lg border-2 border-black border-dashed flex flex-col gap-10 justify-center items-center`}>
+    <div className={`text-center w-${width} h-${height} rounded-lg border-2 border-black border-dashed dark:border-white flex flex-col gap-10 justify-center items-center`}>
         {image ? (
             
                 <img
                     src={URL.createObjectURL(image)}
                     alt="Selected"
-                    className="max-h-full max-w-full object-cover"
+                    className="h-full w-full object-cover"
                 />
             ) : (
             <>

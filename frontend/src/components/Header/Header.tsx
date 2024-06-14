@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 const Header = () => {
   return (
-    <div className='w-screen justify-between items-center flex h-20 dark:bg-black dark:text-white bg-gray-200 font-roboto'>
+    <div className='w-screen justify-between items-center flex h-20 dark:bg-gray-600 dark:text-white bg-gray-200 font-roboto'>
         <div className='h-full font-roboto font-bold flex items-center ml-2'>
           {/* <img src={LOGO_URL} alt="Logo" className='h-full'/> */}
           LeaseConnect.

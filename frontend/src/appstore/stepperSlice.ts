@@ -16,10 +16,13 @@ const stepperSlice = createSlice({
         },
         prev : (state) => {
             state.currentStep = state.currentStep-1
+        },
+        setIsComplete : (state) => {
+            state.isCompleted = true
         }
     },
 });
 
-export const {next, prev} = stepperSlice.actions;
+export const {next, prev, setIsComplete} = stepperSlice.actions;
 
 export default stepperSlice.reducer;

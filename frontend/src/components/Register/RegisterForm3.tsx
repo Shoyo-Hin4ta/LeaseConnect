@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -13,38 +12,32 @@ import Container from "../Container/container"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { initAutocomplete } from "@/lib/googlemaps.ts"
+import RegisterButton from "./RegisterButton"
+import { useDispatch } from "react-redux"
+import { next, setIsComplete } from "@/appstore/stepperSlice"
+import { useNavigate } from "react-router-dom"
 
 
 interface Form3Types{
-    currentStep? : number,
-    isCompleted? : boolean
+    currentStep : number,
+    isCompleted : boolean
 }
 
 const addressFormSchema = z.object({
-  // address : z.string({
-  //   required_error : "Please fill the address"
-  // }),
-  city : z.string({
-    required_error : "Please fill the city"
-  }),
-  state : z.string({
-    required_error : "Please fill the state"
-  }),
-  country: z.string({
-    required_error : "Please fill the country"
-  }),
-  postcode : z.string({
-    required_error : "Please fill the zipcode"
-  })
-})
+  city: z.string().min(1, { message: "City is required" }),
+  state: z.string().min(1, { message: "State is required" }),
+  country: z.string().min(1, { message: "Country is required" }),
+  postcode: z.string().min(1, { message: "Postcode is required" }),
+});
 
 const RegisterForm3 = ({currentStep, isCompleted} : Form3Types) => {
 
-  useEffect((()=> {   
-    initAutocomplete();
-  }), [])
+  
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   const addressForm = useForm<z.infer<typeof addressFormSchema>>({
     resolver: zodResolver(addressFormSchema),
@@ -56,85 +49,89 @@ const RegisterForm3 = ({currentStep, isCompleted} : Form3Types) => {
     },
   })
 
+  const { control, handleSubmit, setValue } = addressForm;
+
+  useEffect(() => {
+    window.initAutocomplete = () => initAutocomplete(setValue);
+    window.initAutocomplete();
+  }, [setValue]);
+
   function onSubmit(data: z.infer<typeof addressFormSchema>) {
+    dispatch(setIsComplete());
+    dispatch(next());
+    navigate('/browse');
     console.log(data)
   }
 
   return (
     <Container>
-        <div>RegisterForm3</div>
-        <Form {...addressForm}>
-        <form onSubmit={addressForm.handleSubmit(onSubmit)} className="space-y-8">
+      <Form {...addressForm}>
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col gap-4 items-center">
+          <div>RegisterForm3</div>
+
           <FormField
-            control={addressForm.control}
+            control={control}
             name="city"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>City</FormLabel>
+              <FormItem className="flex w-full items-center justify-center">
+                <FormLabel className="w-2/5 mt-2">City</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter City" id="city" {...field} />
+                  <Input className="w-4/5" placeholder="Enter City" id="city" {...field} />
                 </FormControl>
-                {/* <FormDescription>
-                  This is your public display name.
-                </FormDescription> */}
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <FormField
-            control={addressForm.control}
+            control={control}
             name="state"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>State</FormLabel>
+              <FormItem className="flex w-full items-center justify-center">
+                <FormLabel className="w-2/5 mt-2">State</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter State" id="state" {...field} />
+                  <Input className="w-4/5" placeholder="Enter State" id="state" {...field} />
                 </FormControl>
-                {/* <FormDescription>
-                  This is your public display name.
-                </FormDescription> */}
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <FormField
-            control={addressForm.control}
+            control={control}
             name="country"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Country</FormLabel>
+              <FormItem className="flex w-full items-center justify-center">
+                <FormLabel className="w-2/5 mt-2">Country</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter Country" id="country" {...field} />
+                  <Input className="w-4/5" placeholder="Enter Country" id="country" {...field} />
                 </FormControl>
-                {/* <FormDescription>
-                  This is your public display name.
-                </FormDescription> */}
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <FormField
-            control={addressForm.control}
+            control={control}
             name="postcode"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>ZipCode</FormLabel>
+              <FormItem className="flex w-full items-center justify-center">
+                <FormLabel className="w-2/5 mt-2">Postcode</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter PostCode" id="postcode" {...field} />
+                  <Input className="w-4/5" placeholder="Enter Postcode" id="postcode" {...field} />
                 </FormControl>
-                {/* <FormDescription>
-                  This is your public display name.
-                </FormDescription> */}
                 <FormMessage />
               </FormItem>
             )}
           />
-        {/* <Button type="submit">Submit</Button> */}
-      </form>
-    </Form>
-    </Container>
-    
-  )
-}
 
-export default RegisterForm3
+        <RegisterButton 
+            currentStep={currentStep} 
+            isCompleted={isCompleted}/>
+        </form>
+      </Form>
+    </Container>
+  );
+};
+
+export default RegisterForm3;

@@ -13,7 +13,6 @@ import Container from "../Container/container";
 import { useDispatch } from "react-redux";
 import { next } from "@/appstore/stepperSlice";
 import { steps } from "@/lib/utils";
-import { Button } from "../ui/button";
 
 // type InputVal = string | null;
 
@@ -22,11 +21,15 @@ export type Inputs = {
   name:string,
   password:string,
   age:string,
-  image: string
+  image: string,
+  city : string,
+  state : string,
+  country : string,
+  postcode : string,
 }
 
 
-const formSchema = z.object({
+export const formSchema = z.object({
   name : z.string().min(2, {
     message : "Username must be at least 2 characters."
   }),
@@ -34,20 +37,11 @@ const formSchema = z.object({
   password : z.string().min(8, {
     message : 'Password must be 8 characters long'
   }),
-  age : z.string()
-        .refine((age) => !isNaN(parseInt(age)), {
-          message: "Age is required",
-        })
-        .transform((age) => Number(age) ),
-  image : z
-    .any()
-    .refine((files) => {
-      return files?.[0]?.size <= MAX_FILE_SIZE;
-    }, `Max image size is 5MB.`)
-    .refine(
-      (files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
-      "Only .jpg, .jpeg, .png and .webp formats are supported."
-    ),
+  age: z.string()
+  .refine((age) => !isNaN(parseInt(age)), { message: "Age is required" })
+  .transform((age) => Number(age))
+  .refine((age) => age >= 18 && age <= 50, { message: "Age should be between 18 and 50" }),
+
         
   // mobileNumber : z.string().regex(
   //   phoneRegex, 'Please enter a valid number'
@@ -59,7 +53,7 @@ const formSchema = z.object({
 
 const RegisterForm = ({currentStep , isCompleted} : {
   currentStep : number,
-  isCompleted : boolean
+  isCompleted? : boolean
 }) => {
 
   const dispatch = useDispatch();
@@ -87,7 +81,7 @@ const RegisterForm = ({currentStep , isCompleted} : {
       email: "",
       password: "",
       age: "",
-      image : undefined
+      image : undefined,
       // mobileNumber: "",
       // bio: "",
     },
@@ -103,6 +97,7 @@ const RegisterForm = ({currentStep , isCompleted} : {
     if(currentStep > steps.length){
       //step iscompleted true 
       //and if is completed is true then then we don't show the button
+      
     }
     setIsSubmitting(false);
   }
@@ -117,13 +112,36 @@ const RegisterForm = ({currentStep , isCompleted} : {
 
       {/* use switch here to show different form based on current Step */}
       <Form {...form}>
-        <form onSubmit = {form.handleSubmit(onSubmit)} className="w-full flex flex-col items-center">
-          <InputBox name="name" label="Name" formControl={form.control} placeholder="Full Name" />
-          <InputBox name="email" label="Email" formControl={form.control} placeholder="Email" type="email"/>
-          <InputBox name="age" label="Age" formControl={form.control} placeholder="Age" type="number"/>
-          <InputBox name="password" label="Password" formControl={form.control} placeholder="Password" type="password"/>
+        <form onSubmit = {form.handleSubmit(onSubmit)} className="w-full flex flex-col items-center gap-4">
+          <InputBox 
+            name="name" 
+            label="Name" 
+            formControl={form.control} 
+            placeholder="Full Name" />
 
-          <RegisterButton currentStep={currentStep} isCompleted={isCompleted}/>
+          <InputBox name="email" 
+            label="Email" 
+            formControl={form.control} 
+            placeholder="Email" 
+            type="email"/>
+
+          <InputBox 
+            name="age" 
+            label="Age" 
+            formControl={form.control} 
+            placeholder="Age" 
+            type="number"/>
+
+          <InputBox 
+            name="password" 
+            label="Password" 
+            formControl={form.control} 
+            placeholder="Password" 
+            type="password"/>
+
+          <RegisterButton 
+            currentStep={currentStep} 
+            isCompleted={isCompleted}/>
           
         </form>
       </Form>

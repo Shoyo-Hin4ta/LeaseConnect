@@ -6,7 +6,6 @@ import {
     FormLabel,
     FormField,
     FormMessage,
-    FormDescription
 } from "./ui/form";
 import { Input } from "./ui/input"
 import { z } from "zod";
@@ -51,9 +50,10 @@ const InputImage: React.FC<InputImageProps> = ({
       if (file) {
         console.log("File size:", file.size);
         console.log("File type:", file.type);
+        onChange(file);
+        field.onChange(file);
       }
-      onChange(file);
-      field.onChange(file);
+      
     };
         return ( 
             <>
