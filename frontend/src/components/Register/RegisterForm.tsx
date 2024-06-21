@@ -1,7 +1,7 @@
 import { useState } from "react"
 // import Input from "../Input"
 import { useToast } from "../ui/use-toast";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {
@@ -13,6 +13,10 @@ import Container from "../Container/container";
 import { useDispatch } from "react-redux";
 import { next } from "@/appstore/stepperSlice";
 import { steps } from "@/lib/utils";
+import SelectInput from "../SelectInput";
+import { isValidPhoneNumber } from "react-phone-number-input";
+import InputMobileNumber from "../InputMobileNumber";
+
 
 // type InputVal = string | null;
 
@@ -22,10 +26,9 @@ export type Inputs = {
   password:string,
   age:string,
   image: string,
-  city : string,
-  state : string,
-  country : string,
-  postcode : string,
+  gender : string,
+  phone : string
+  
 }
 
 
@@ -41,6 +44,11 @@ export const formSchema = z.object({
   .refine((age) => !isNaN(parseInt(age)), { message: "Age is required" })
   .transform((age) => Number(age))
   .refine((age) => age >= 18 && age <= 50, { message: "Age should be between 18 and 50" }),
+  gender : z.enum(["male", "female", "other"]),
+  phone: z
+    .string()
+    .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
+
 
         
   // mobileNumber : z.string().regex(
@@ -82,10 +90,13 @@ const RegisterForm = ({currentStep , isCompleted} : {
       password: "",
       age: "",
       image : undefined,
+      gender : "",
       // mobileNumber: "",
       // bio: "",
+      phone:""
     },
   });
+
 
 
   const onSubmit: SubmitHandler<Inputs> = async(data) => {
@@ -97,10 +108,10 @@ const RegisterForm = ({currentStep , isCompleted} : {
     if(currentStep > steps.length){
       //step iscompleted true 
       //and if is completed is true then then we don't show the button
-      
     }
     setIsSubmitting(false);
   }
+
 
   return (
     <Container >
@@ -139,9 +150,25 @@ const RegisterForm = ({currentStep , isCompleted} : {
             placeholder="Password" 
             type="password"/>
 
-          <RegisterButton 
+          <SelectInput 
+            name="gender"
+            label="Gender"
+            formControl={form.control}
+            //need to pass an array of gender inputs
+            />
+
+          <InputMobileNumber
+            formControl={form.control}
+            label="Mobile Number"
+            placeholder="Mobile Number"
+            />
+
+
+        
+
+          < RegisterButton 
             currentStep={currentStep} 
-            isCompleted={isCompleted}/>
+            isCompleted={isCompleted} />
           
         </form>
       </Form>

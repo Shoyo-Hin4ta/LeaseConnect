@@ -1,14 +1,23 @@
 import ListingCard from '../Card/ListingCard';
-import Sidebar from '../ui/Sidebar/Sidebar';
 import SearchBar from '../SearchBar/SearchBar';
 
 const BrowsePage = () => {
   return (
     <div className='w-full '>
-        {/* <Sidebar /> */}
+        
         {/* <div className='h-screen'></div> */}
         {/* <ListingCard /> */}
-        <SearchBar />
+
+          {/* <Sidebar /> */}
+          <SearchBar />
+          <div className='flex flex-col items-center gap-5 mt-4'>
+            <ListingCard />
+            <ListingCard />
+            <ListingCard />          
+            <ListingCard />
+          </div>
+          
+  
     </div>
   )
 }

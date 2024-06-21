@@ -39,7 +39,7 @@ export function ListingCard() {
             </div>
           
           <div className="w-full h-[45%]">
-            <div className="border border-red-500 w-full my-1 overflow-x-auto p-1">
+            <div className="border border-red-500 w-full my-1 overflow-x-auto">
               Featuressssssssssssssssssssssssssssssssssadadasdadadasds
             </div>
             <Button></Button>

@@ -6,7 +6,7 @@ import { Toaster } from './ui/toaster'
 
 const Layout = () => {
   return (
-    <div className='h-screen w-screen bg-white dark:bg-black'>
+    <div className='w-screen h-screen overflow-y-scroll bg-white dark:bg-black'>
         <Header/>
         <Outlet/>
         <Toaster />

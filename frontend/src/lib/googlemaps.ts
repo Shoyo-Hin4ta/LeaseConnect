@@ -1,3 +1,6 @@
+import { UseFormSetValue } from "react-hook-form";
+
+
 // Simplified to match the option where initAutocomplete is called with setValue
 declare global {
   interface Window {
@@ -45,7 +48,9 @@ export const defaultAddress: AddressComponentType = {
 
 
 
-export function initAutocomplete(setValue: (name: string, value: string) => void){
+export function initAutocomplete(
+  setValue: UseFormSetValue<{ city: string; state: string; country: string; postcode: string; }>
+){
   address1Field = document.querySelector("#city") as HTMLInputElement;
 //   address2Field = document.querySelector("#address2") as HTMLInputElement;
   postalField = document.querySelector("#postcode") as HTMLInputElement;
@@ -67,7 +72,9 @@ export function initAutocomplete(setValue: (name: string, value: string) => void
 
 }
 
-function fillInAddress(setValue: (name: string, value: string) => void) {
+function fillInAddress(
+  setValue: UseFormSetValue<{ city: string; state: string; country: string; postcode: string; }>
+) {
   // Get the place details from the autocomplete object.
   const place = autocomplete.getPlace();
   // let address1 = "";
