@@ -6,6 +6,12 @@ import { Controller, useForm } from 'react-hook-form';
 import { ListingTypes } from './ListingForm1';
 import { Form } from '../ui/form';
 import ListingFormButton from './ListingFormButton';
+import RadioInput from './RadioInput';
+
+export const UTIL_RADIO_ARR = [
+    { value: "true", desc : "Yes"},
+    { value: "false", desc : "No"},
+]
 
 const UTILITIES: Option[] = [
     { label: 'Water', value: 'water' },
@@ -35,7 +41,9 @@ const PREFERENCES: Option[] = [
 
 const listingForm2Schema = z.object({
     utilities: z.array(z.string()).optional(),
-    utilitiesIncudedInRent : z.string().optional(),
+    utilitiesIncludedInRent : z.string({
+        required_error: "Please select one",
+      }),
     amenities : z.array(z.string()).optional(),
     preferences : z.array(z.string()).optional()
   })
@@ -46,7 +54,6 @@ const ListingForm2 = () => {
         resolver :zodResolver(listingForm2Schema),
         defaultValues: {
             utilities: [],
-            utilitiesIncludedInRent: '',
             amenities: [],
             preferences: []
           },
@@ -57,6 +64,7 @@ const ListingForm2 = () => {
     const onSubmit = async(data) => {
         console.log(data)
     }
+    
     // Helper function to convert string[] to Option[]
     const stringsToOptions = (strings: string[], options: Option[]): Option[] => {
         return strings.map(s => options.find(o => o.value === s) || { value: s, label: s });
@@ -74,7 +82,16 @@ const ListingForm2 = () => {
             </div>
            <div className='w-full'>
                 <Form {...listingForm2}>
-                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 p-2">
+                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 p-2">
+
+                        <RadioInput
+                            name="utilitiesIncludedInRent"
+                            formControl={control}
+                            label='Are Utilities Included In The Rent'
+                            inputArray={UTIL_RADIO_ARR}
+                            placeholder='Please Select...'
+                        />
+                        
                         <Controller
                         name="utilities"
                         control={control}
@@ -93,7 +110,6 @@ const ListingForm2 = () => {
                             />
                             )}
                         />
-
                         <Controller
                             name="amenities"
                             control={control}
@@ -112,7 +128,6 @@ const ListingForm2 = () => {
                                 />
                                 )}
                         />
-
                         <Controller
                             name="preferences"
                             control={control}

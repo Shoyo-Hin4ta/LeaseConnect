@@ -73,8 +73,6 @@ const ListingForm1 = () => {
     resolver :zodResolver(listingForm1Schema),
     defaultValues: {
       title : "",
-      propertyType : "",
-      bedroom : "",
       streetAddress : "",
       state:"",
       city:"",

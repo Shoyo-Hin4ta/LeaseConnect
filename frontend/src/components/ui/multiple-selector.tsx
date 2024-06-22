@@ -354,6 +354,9 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
       return undefined;
     }, [creatable, commandProps?.filter]);
 
+    const [isFocused, setIsFocused] = React.useState(false);
+
+
     return (
       <Command
         {...commandProps}
@@ -368,19 +371,25 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
         filter={commandFilter()}
       >
         <div
-          className={cn(
-            'min-h-10 rounded-md border border-input text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2',
-            {
-              'px-3 py-2': selected.length !== 0,
-              'cursor-text': !disabled && selected.length !== 0,
-            },
-            className,
-          )}
-          onClick={() => {
-            if (disabled) return;
-            inputRef.current?.focus();
-          }}
-        >
+            className={cn(
+              'min-h-10 rounded-md border border-input text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2',
+              {
+                'px-3 py-2': selected.length !== 0,
+                'cursor-pointer': !disabled,
+              },
+              className,
+            )}
+            onClick={() => {
+              if (disabled) return;
+              if (isFocused) {
+                setOpen((prevOpen) => !prevOpen);
+              } else {
+                setOpen(true);
+              }
+              inputRef.current?.focus();
+            }}
+          >
+          
           <div className="flex flex-wrap gap-1">
             {selected.map((option) => {
               return (
@@ -418,23 +427,24 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
             })}
             {/* Avoid having the "Search" Icon */}
             <CommandPrimitive.Input
-              {...inputProps}
-              ref={inputRef}
-              value={inputValue}
-              disabled={disabled}
-              onValueChange={(value) => {
-                setInputValue(value);
-                inputProps?.onValueChange?.(value);
-              }}
-              onBlur={(event) => {
-                setOpen(false);
-                inputProps?.onBlur?.(event);
-              }}
-              onFocus={(event) => {
-                setOpen(true);
-                triggerSearchOnFocus && onSearch?.(debouncedSearchTerm);
-                inputProps?.onFocus?.(event);
-              }}
+                {...inputProps}
+                ref={inputRef}
+                value={inputValue}
+                disabled={disabled}
+                onValueChange={(value) => {
+                  setInputValue(value);
+                  inputProps?.onValueChange?.(value);
+                }}
+                onBlur={(event) => {
+                  setOpen(false);
+                  setIsFocused(false);
+                  inputProps?.onBlur?.(event);
+                }}
+                onFocus={(event) => {
+                  setIsFocused(true);
+                  triggerSearchOnFocus && onSearch?.(debouncedSearchTerm);
+                  inputProps?.onFocus?.(event);
+                }}
               placeholder={hidePlaceholderWhenSelected && selected.length !== 0 ? '' : placeholder}
               className={cn(
                 'flex-1 bg-transparent outline-none placeholder:text-muted-foreground',
