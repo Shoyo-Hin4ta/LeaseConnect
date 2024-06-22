@@ -1,3 +1,4 @@
+import { ListingTypes } from "@/components/Listing/ListingForm1";
 import { UseFormSetValue } from "react-hook-form";
 
 
@@ -49,11 +50,11 @@ let postalField: HTMLInputElement;
 
 
 export function initAutocomplete(
-  setValue: UseFormSetValue<{ city: string; state: string; country: string; postcode: string; }>
+  setValue: UseFormSetValue<ListingTypes>
 ){
-  address1Field = document.querySelector("#city") as HTMLInputElement;
+  address1Field = document.querySelector("#streetAddress") as HTMLInputElement;
 //   address2Field = document.querySelector("#address2") as HTMLInputElement;
-  postalField = document.querySelector("#postcode") as HTMLInputElement;
+  postalField = document.querySelector("#zipcode") as HTMLInputElement;
 
   // Create the autocomplete object, restricting the search predictions to
   // addresses in the US and Canada.
@@ -62,23 +63,23 @@ export function initAutocomplete(
     fields: ["address_components", "geometry"],
     types: ["address"],
   });
-  address1Field.focus();
+  // address1Field.focus();
 
   // When the user selects an address from the drop-down, populate the
   // address fields in the form.
   autocomplete.addListener("place_changed", () => fillInAddress(setValue));
 
-  address1Field.focus();
+  // address1Field.focus();
 
 }
 
 function fillInAddress(
-  setValue: UseFormSetValue<{ city: string; state: string; country: string; postcode: string; }>
+  setValue: UseFormSetValue<ListingTypes>
 ) {
   // Get the place details from the autocomplete object.
   const place = autocomplete.getPlace();
-  // let address1 = "";
-  let postcode = "";
+  let address1 = "";
+  let zipcode = "";
 
   // const addressDetails: AddressComponentType = { ...defaultAddress };
 
@@ -94,23 +95,23 @@ function fillInAddress(
     const componentType = component.types[0];
     
     switch (componentType) {
-      // case "street_number": {
-      //   address1 = `${component.long_name} ${address1}`;
-      //   break;
-      // }
+      case "street_number": {
+        address1 = `${component.long_name} ${address1}`;
+        break;
+      }
 
-      // case "route": {
-      //   address1 += component.short_name;
-      //   break;
-      // }
+      case "route": {
+        address1 += component.short_name;
+        break;
+      }
 
       case "postal_code": {
-        postcode = `${component.long_name}${postcode}`;
+        zipcode = `${component.long_name}${zipcode}`;
         break;
       }
 
       // case "postal_code_suffix": {
-      //   postcode = `${postcode}-${component.long_name}`;
+      //   zipcode = `${zipcode}-${component.long_name}`;
       //   break;
       // }
 
@@ -139,10 +140,13 @@ function fillInAddress(
     }
   }
 
-  // address1Field.value = address1;
-  postalField.value = postcode;
-  // addressDetails.zipcode = postcode;
-  setValue("postcode", postalField.value);
+  address1Field.value = address1;
+  // console.log(address1)
+  setValue("streetAddress", address1Field.value)
+  
+  postalField.value = zipcode;
+  // addressDetails.zipcode = zipcode;
+  setValue("zipcode", postalField.value);
 
 
   // After filling the form with address components from the Autocomplete

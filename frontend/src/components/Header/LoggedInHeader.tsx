@@ -12,7 +12,7 @@ const LoggedInHeader = () => {
     <>
     
         <Button variant="link" size="sm"> 
-            <Link to="/listingForm" className='flex items-center justify-center'> 
+            <Link to="/listingform" className='flex items-center justify-center'> 
                 <span className='mr-1' >Add Listing</span> <CirclePlus size={15}/>
             </Link>
         </Button>

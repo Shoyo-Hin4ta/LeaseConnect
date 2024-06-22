@@ -11,8 +11,6 @@ import RegisterButton from "./RegisterButton";
 import Container from "../Container/container";
 import { useDispatch } from "react-redux";
 import { next } from "@/appstore/stepperSlice";
-import { steps } from "@/lib/utils";
-import { Button } from "../ui/button";
 import InputImage from "../InputImage";
 import ImageContainer from "../ui/ImageContainer";
 

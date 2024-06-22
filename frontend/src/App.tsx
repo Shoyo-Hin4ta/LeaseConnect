@@ -8,6 +8,7 @@ import RegisterPage from './components/Register/RegisterPage'
 import { Provider } from 'react-redux'
 import store from './appstore/appStore'
 import Browse from './components/Browse/BrowsePage'
+import ListingPage from './components/Listing/ListingPage'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -15,7 +16,9 @@ const router = createBrowserRouter(
       <Route path='/' element = { <HomePage />} />
       <Route path='/register' element = { < RegisterPage />} />
       <Route path='/browse' element = { < Browse />} />
+      <Route path ='/listingform' element = { < ListingPage/> } />
     </Route>
+   
   )
 )
 

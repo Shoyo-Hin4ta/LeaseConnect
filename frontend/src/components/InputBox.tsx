@@ -44,7 +44,7 @@ interface SignUpFormFieldProps{
   };
   formControl : Control<Inputs>,
   id? : string,
-
+ 
 }
 
 const InputBox: React.FC<SignUpFormFieldProps> = ({
@@ -81,7 +81,7 @@ const InputBox: React.FC<SignUpFormFieldProps> = ({
                       Enter Full Name
                     </FormDescription> */}
                     <FormMessage className=""/>
-                </FormItem>
+                  </FormItem>
               )}
             />
             </>
