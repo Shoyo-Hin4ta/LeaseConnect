@@ -43,7 +43,12 @@ export type ListingTypes = {
   amenities : string[],
   utilitiesIncludedInRent : string,
   utilities : string[],
-  preferences : string[]
+  preferences : string[],
+  currency : string,
+  amount : string,
+  timePeriod : string,
+  subleaseDuration : string,
+  image : string
 }
 
 const listingForm1Schema = z.object({

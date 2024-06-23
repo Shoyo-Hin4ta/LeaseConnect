@@ -35,7 +35,7 @@ const RadioInput: React.FC<RadioTypes> = ({
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  defaultValue={undefined}
                   className="flex"
                 >
                   {inputArray.map((item) => {

@@ -9,8 +9,9 @@ export interface ListingInputTypes{
     name : FieldPath<ListingTypes>,
     formControl : Control<ListingTypes>,
     placeholder : string,
-    label : string,
-    id? : string
+    label? : string,
+    id? : string,
+    className? : string,
 }
 
 const InputBox: React.FC<ListingInputTypes> = ({
@@ -18,7 +19,8 @@ const InputBox: React.FC<ListingInputTypes> = ({
     label,
     placeholder,
     formControl,
-    id
+    id,
+    className=""
 }) => {
   return (
     <FormField
@@ -28,8 +30,10 @@ const InputBox: React.FC<ListingInputTypes> = ({
             <FormItem>
               <FormLabel>{label}</FormLabel>
               <FormControl>
-                <Input placeholder={placeholder}
+                <Input 
+                placeholder={placeholder}
                 {...(id && { id })} 
+                className={`${className}`}
                 {...field} />
               </FormControl>
               <FormMessage />

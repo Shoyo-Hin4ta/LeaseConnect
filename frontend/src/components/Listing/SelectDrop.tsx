@@ -15,33 +15,43 @@ import {
 import { toast } from "@/components/ui/use-toast"
 import { ListingInputTypes } from "./InputBox"
 
+type InputArrayType = {
+  value : string,
+  desc : string
+}
+
+interface SelectTypes extends ListingInputTypes{
+  inputArray : InputArrayType[],
+  className? : string,
+}
 
 
-
-const SelectDrop: React.FC<ListingInputTypes> = ({
+const SelectDrop: React.FC<SelectTypes> = ({
     label,
     formControl,
     placeholder,
-    name
+    name,
+    inputArray,
+    className=''
 }) => {
     return (
         <FormField
           control={formControl}
           name={name}
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>{label}</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <FormItem >
+              {label && <FormLabel>{label}</FormLabel>}
+              <Select onValueChange={field.onChange} defaultValue={undefined}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className={className}>
                     <SelectValue placeholder={placeholder} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   {/* run a map using the array */}
-                  <SelectItem value="house">House</SelectItem>
-                  <SelectItem value="apartment">Apartment</SelectItem>
-                  <SelectItem value="studio">Studio</SelectItem>
+                  {inputArray.map((item) => (
+                    <SelectItem key={item.value} value={item.value}>{item.desc}</SelectItem>
+                  ))} 
                 </SelectContent>
               </Select>
               <FormMessage />

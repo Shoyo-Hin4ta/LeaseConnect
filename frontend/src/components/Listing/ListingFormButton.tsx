@@ -3,7 +3,7 @@ import { Button } from "../ui/button"
 const ListingFormButton = () => {
   return (
     <>
-        <Button>
+        <Button type="submit">
             Next
         </Button>
     </>

@@ -11,10 +11,11 @@ import { Input } from "./ui/input"
 import { z } from "zod";
 import { imageFormSchema } from "./Register/RegisterForm2";
 import { Button } from "./ui/button";
+import { ListingTypes } from "./ListingForm1";
 
 
 interface InputImageProps{
-  name : FieldPath<z.infer<typeof imageFormSchema>>;
+  name : FieldPath<ListingTypes>;
   label? : string,
   id:  string,
   placeholder : string,
@@ -23,7 +24,7 @@ interface InputImageProps{
     field?: React.InputHTMLAttributes<HTMLInputElement>;
     css?: string;
   };
-  formControl : Control<z.infer<typeof imageFormSchema>>,
+  formControl : Control<ListingTypes>,
   onChange: (file: File | null) => void
 }
 
@@ -57,32 +58,32 @@ const InputImage: React.FC<InputImageProps> = ({
     };
         return ( 
             <>
-            <FormField
-              name={name}
-              control={formControl}
-              render={({ field }) => (
-                <FormItem className="flex w-full items-center justify-center">
-                  {/* {props?.field ? '' : <FormLabel className="w-2/5 mt-2">{label}</FormLabel>} */}
-                  <FormControl>
-                    {/* <Button size="lg" type="button"> */}
-                      <Input 
-                      placeholder={placeholder}
-                      id={id}
-                      type={type ? type : "text"} 
-                      className={`w-4/5 ${props?.css && props.css}`} 
-                      onChange={handleFileChange}
-                      ref={field.ref}
-                      {...props?.field}
-                      />
-                    {/* </Button> */}
-                  </FormControl>
-                  {/* <FormDescription>
-                    Choose Your Image
-                  </FormDescription> */}
-                  <FormMessage />
-              </FormItem>
-            )}
-          />
+                <FormField
+                name={name}
+                control={formControl}
+                render={({ field }) => (
+                    <FormItem className="flex w-full items-center justify-center">
+                    {/* {props?.field ? '' : <FormLabel className="w-2/5 mt-2">{label}</FormLabel>} */}
+                    <FormControl>
+                        {/* <Button size="lg" type="button"> */}
+                        <Input 
+                        placeholder={placeholder}
+                        id={id}
+                        type={type ? type : "text"} 
+                        className={`w-4/5 ${props?.css && props.css}`} 
+                        onChange={handleFileChange}
+                        ref={field.ref}
+                        {...props?.field}
+                        />
+                        {/* </Button> */}
+                    </FormControl>
+                    {/* <FormDescription>
+                        Choose Your Image
+                    </FormDescription> */}
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
             </>
         )
 }
