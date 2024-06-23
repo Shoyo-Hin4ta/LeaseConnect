@@ -3,14 +3,10 @@ import {  useController, Control, FieldPath } from "react-hook-form";
 import { 
     FormControl,
     FormItem,
-    FormLabel,
     FormField,
     FormMessage,
-} from "./ui/form";
-import { Input } from "./ui/input"
-import { z } from "zod";
-import { imageFormSchema } from "./Register/RegisterForm2";
-import { Button } from "./ui/button";
+} from "../ui/form";
+import { Input } from "../ui/input"
 import { ListingTypes } from "./ListingForm1";
 
 
@@ -25,11 +21,10 @@ interface InputImageProps{
     css?: string;
   };
   formControl : Control<ListingTypes>,
-  onChange: (file: File | null) => void
+  onChange: (file: File | null ) => void
 }
 
-const InputImage: React.FC<InputImageProps> = ({
-  label, 
+const ListingImageInput: React.FC<InputImageProps> = ({ 
   placeholder, 
   name, 
   formControl, 
@@ -54,7 +49,6 @@ const InputImage: React.FC<InputImageProps> = ({
         onChange(file);
         field.onChange(file);
       }
-      
     };
         return ( 
             <>
@@ -67,13 +61,13 @@ const InputImage: React.FC<InputImageProps> = ({
                     <FormControl>
                         {/* <Button size="lg" type="button"> */}
                         <Input 
-                        placeholder={placeholder}
-                        id={id}
-                        type={type ? type : "text"} 
-                        className={`w-4/5 ${props?.css && props.css}`} 
-                        onChange={handleFileChange}
-                        ref={field.ref}
-                        {...props?.field}
+                            placeholder={placeholder}
+                            id={id}
+                            type={type ? type : "text"} 
+                            className={`${props?.css && props.css}`} 
+                            onChange={handleFileChange}
+                            ref={field.ref}
+                            {...props?.field}
                         />
                         {/* </Button> */}
                     </FormControl>
@@ -88,4 +82,4 @@ const InputImage: React.FC<InputImageProps> = ({
         )
 }
 
-export default InputImage
+export default ListingImageInput

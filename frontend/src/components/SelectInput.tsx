@@ -60,6 +60,8 @@ const SelectInput: React.FC<SignUpFormFieldProps> = ({
                         </FormControl>
                         <SelectContent>
                         <SelectItem value="male">Male</SelectItem>
+                        <SelectItem value="female">Female</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
                         </SelectContent>
                         </Select>
                       </div>

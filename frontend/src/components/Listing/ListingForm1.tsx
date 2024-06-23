@@ -48,7 +48,7 @@ export type ListingTypes = {
   amount : string,
   timePeriod : string,
   subleaseDuration : string,
-  image : string
+  image : (File | null)[]
 }
 
 const listingForm1Schema = z.object({
@@ -65,12 +65,30 @@ const listingForm1Schema = z.object({
             .string(),
   streetAddress : z
             .string(),
-  city : z.string(),
-  state : z.string(),
-  zipcode : z.string(),
-  country : z.string(),
+  city : z.string({
+    required_error: "City is required",
+    invalid_type_error: "Name must be a string",
+  }),
+  state : z.string({
+    required_error: "State is required",
+    invalid_type_error: "Name must be a string",
+  }),
+  zipcode : z.string({
+    required_error: "ZipCode is required",
+    invalid_type_error: "Name must be a string",
+  }),
+  country : z.string({
+    required_error: "Country is required",
+    invalid_type_error: "Name must be a string",
+  }),
 
 })
+
+export const GENDER_ARRAY = [
+  { value : "house", desc : "House" },
+  { value : "studio", desc : "Studio" },
+  { value : "apartment", desc : "Apartment" }
+]
 
 const ListingForm1 = () => {
 
@@ -78,11 +96,11 @@ const ListingForm1 = () => {
     resolver :zodResolver(listingForm1Schema),
     defaultValues: {
       title : "",
-      streetAddress : "",
-      state:"",
-      city:"",
-      zipcode:"",
-      country:"",
+      // streetAddress : "",
+      // state:"",
+      // city:"",
+      // zipcode:"",
+      // country:"",
     },
   })
 
@@ -118,6 +136,7 @@ const ListingForm1 = () => {
                   formControl={control}
                   placeholder="Select property type"
                   label="Property Type"
+                  inputArray={GENDER_ARRAY}
                 />
 
               <div className="flex justify-between">

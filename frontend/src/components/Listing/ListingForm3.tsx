@@ -53,8 +53,8 @@ const ListingForm3 = () => {
            <div className='w-full'>
                 <Form {...listingForm3}>
                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 p-2">
-                      <div className="flex items-center justify-center gap-1">
 
+                      <div className="flex items-center justify-center gap-1">
                         <div className="h-10 flex items-center">
                           <SelectDrop
                           placeholder="Currency"
@@ -103,9 +103,7 @@ const ListingForm3 = () => {
                             />
                           )}
                         />
-
                       </div>
-                      
 
                         
                       <ListingFormButton />
@@ -114,7 +112,7 @@ const ListingForm3 = () => {
                 </Form>
 
            </div>
-    </div>
+        </div>
   )
 }
 
