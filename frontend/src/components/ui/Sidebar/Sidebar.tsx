@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Filter from '../../FilterElements/Filter'
 
 const Sidebar = ({isActive, setIsActive, toggleSidebar}: {
     isActive : boolean,
@@ -14,7 +15,8 @@ const Sidebar = ({isActive, setIsActive, toggleSidebar}: {
 
     return (
         
-        <div className = {`absolute  h-full transition-all duration-300 ease-in-out  ${isActive ? 'bg-gray-400 w-full overflow-hidden' : 'bg-white w-0' }`}>
+        <div className = {`absolute h-full transition-all duration-300 z-50
+                            ease-in-out  ${isActive ? 'bg-gray-400 w-full overflow-hidden' : 'bg-white w-0' }`}>
 
                     {/* <div 
                         className={`flex cursor-pointer transition-opacity duration-300 ease-in-out ${isActive ? 'justify-end' : 'justify-start'}`}
@@ -23,10 +25,10 @@ const Sidebar = ({isActive, setIsActive, toggleSidebar}: {
                         Sidebar
                     </div> */}
                     <div 
-                        className={`p-2 transition-opacity duration-300 ease-in-out ${isActive ? 'flex flex-col items-center' : 'hidden'}`}>
+                        className={`p-2 transition-opacity duration-300 ease-in-out ${isActive ? 'flex flex-col items-center justify-center' : 'hidden'}`}>
                             <div className='ml-auto' onClick={toggleSidebar}>Sidebar</div>
-                            <div>Filter </div>
-                            <div>Items 1</div>
+                            {/* Filter items will go in here */}
+                                <Filter />
                     </div>
               
         </div>

@@ -33,6 +33,7 @@ const PREFERENCES: Option[] = [
 { label: 'No drinking', value: 'no_drinking' },
 { label: 'No pets', value: 'no_pets' },
 { label: 'Students only', value: 'students_only' },
+{ label: 'Working only', value: 'working_only' },
 { label: 'Vegetarian', value: 'vegetarian' },
 { label: 'Eggeterian', value: 'eggeterian'},
 { label: 'Girls Only', value: 'girls_only'},

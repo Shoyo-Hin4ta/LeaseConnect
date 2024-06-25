@@ -9,8 +9,10 @@ const BrowsePage = () => {
         {/* <ListingCard /> */}
 
           {/* <Sidebar /> */}
-          <SearchBar />
-          <div className='flex flex-col items-center gap-5 mt-4'>
+          <div className='z-20'>
+            <SearchBar />
+          </div>
+          <div className='flex flex-col items-center gap-5 mt-4 z-0'>
             <ListingCard />
             <ListingCard />
             <ListingCard />          
