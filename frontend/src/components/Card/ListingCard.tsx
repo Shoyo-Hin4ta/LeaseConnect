@@ -8,9 +8,9 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import Carousel from "./Carousel/Carousel"
 import { Heart } from "lucide-react";
 import CardFooter from "./CardFooter/CardFoot"
+import CardCarousel from "./Carousel/CardCaraousel"
 
  
 export function ListingCard() {
@@ -25,7 +25,7 @@ export function ListingCard() {
           <CardDescription>Deploy your new project in one-click.</CardDescription>
         </CardHeader> */}
         <CardContent className="w-full h-3/5 ">
-            <Carousel />
+            <CardCarousel />
         </CardContent>
         
         <CardFooter />

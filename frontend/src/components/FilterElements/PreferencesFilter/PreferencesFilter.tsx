@@ -1,33 +1,64 @@
+import React, { useState } from 'react'
 import { Button } from "@/components/ui/button"
 
-const PreferencesFilter = () => {
+interface PreferencesFilterProps {
+  onPreferencesChange: (preferences: string[]) => void;
+  onAmenitiesChange: (amenities: string[]) => void;
+}
+
+const PreferencesFilter: React.FC<PreferencesFilterProps> = ({ onPreferencesChange, onAmenitiesChange }) => {
+  const [selectedPreferences, setSelectedPreferences] = useState<string[]>([])
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([])
+
+  const togglePreference = (preference: string) => {
+    setSelectedPreferences(prev => {
+      const newPreferences = prev.includes(preference)
+        ? prev.filter(p => p !== preference)
+        : [...prev, preference]
+      onPreferencesChange(newPreferences)
+      return newPreferences
+    })
+  }
+
+  const toggleAmenity = (amenity: string) => {
+    setSelectedAmenities(prev => {
+      const newAmenities = prev.includes(amenity)
+        ? prev.filter(a => a !== amenity)
+        : [...prev, amenity]
+      onAmenitiesChange(newAmenities)
+      return newAmenities
+    })
+  }
+
+  const preferences = ["Pets Allowed", "Smoking", "Drinking", "Only Students", "Only Working", "Only Girls", "Vegetarian", "Non-Vegetarian"]
+  const amenities = ["Pool", "Gym", "Parking", "Only Working"]
+
   return (
     <div className="my-2">
-        <div>
-            Preferences
-        </div>
-        <div>
-            <div className="flex flex-wrap gap-2">
-                <Button>Pets Allowed</Button>
-                <Button>Smoking</Button>
-                <Button>Drinking</Button>
-                <Button>Only Students</Button>
-                <Button>Only Working</Button>
-                <Button>Only Girls </Button>
-                <Button>Vegetarian </Button>
-                <Button>Non-Vegetarian </Button>
-            </div>
-        </div>
-        <div>
-            Amentities
-        </div>
-        <div className="flex flex-wrap gap-2">
-            <Button>Pool</Button>
-            <Button>Gym</Button>
-            <Button>Parking</Button>
-            <Button>Gym</Button>
-            <Button>Only Working</Button>
-        </div>
+      <div>Preferences</div>
+      <div className="flex flex-wrap gap-2">
+        {preferences.map(preference => (
+          <Button
+            key={preference}
+            onClick={() => togglePreference(preference)}
+            variant={selectedPreferences.includes(preference) ? "default" : "outline"}
+          >
+            {preference}
+          </Button>
+        ))}
+      </div>
+      <div>Amenities</div>
+      <div className="flex flex-wrap gap-2">
+        {amenities.map(amenity => (
+          <Button
+            key={amenity}
+            onClick={() => toggleAmenity(amenity)}
+            variant={selectedAmenities.includes(amenity) ? "default" : "outline"}
+          >
+            {amenity}
+          </Button>
+        ))}
+      </div>
     </div>
   )
 }

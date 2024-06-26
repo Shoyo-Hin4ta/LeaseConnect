@@ -1,39 +1,85 @@
-import { DateRangePicker } from "../ui/date-range-picker"
-import BathAndFilter from "./BathAndBedFilter.tsx/BathAndFilter"
+import React, { useState } from 'react'
+import { Button } from "../ui/button"
+import BathAndFilter from "./BathAndBedFilter/BathAndBedFilter"
 import DatePostedFilter from "./DatePostedFilter/DatePostedFilter"
 import DateRangeFilter from "./DateRangeFilter/DateRangeFilter"
+import LocationInputFilter from "./LocationInputFilter/LocationInputFilter"
 import PreferencesFilter from "./PreferencesFilter/PreferencesFilter"
 import PriceRangeFilter from "./PriceRangeFilter/PriceRangeFilter"
 import SDFilter from "./SecurityDepositFilter/SDFilter"
 
-const Filter = () => {
+interface FilterData {
+  city: string;
+  datePosted: string;
+  bedCount: string;
+  bathCount: string;
+  priceRange: { min: number; max: number };
+  pricePeriod: 'per_day' | 'per_week' | 'per_month';
+  dateRange: { from: Date | null; to: Date | null };
+  preferences: string[];
+  amenities: string[];
+  securityDepositIncluded: boolean;
+  utilitiesIncluded: boolean;
+}
 
+const Filter: React.FC = () => {
+  const [filterData, setFilterData] = useState<FilterData>({
+    city: '',
+    datePosted: '',
+    bedCount: '',
+    bathCount: '',
+    priceRange: { min: 0, max: 0 },
+    pricePeriod: 'per_day',
+    dateRange: { from: null, to: null },
+    preferences: [],
+    amenities: [],
+    securityDepositIncluded: false,
+    utilitiesIncluded: false
+  })
 
+  const handleFilterClick = () => {
+    console.log('Filter data:', filterData)
+    // Here you can use the filterData object to apply filters or send it to an API
+  }
 
   return (
     <div className="border border-red-300 w-[90%]">
-        <div>
-            Filter
-        </div>
-        <div className="flex flex-col">
+      <div>Filter</div>
+      <div className="flex flex-col">
+        <LocationInputFilter 
+          onChange={(city: string) => setFilterData(prev => ({ ...prev, city }))}
+        />
+        
+        <DatePostedFilter 
+          onChange={(datePosted: string) => setFilterData(prev => ({ ...prev, datePosted }))}
+        />
+        
+        <BathAndFilter 
+          onBedChange={(bedCount: string) => setFilterData(prev => ({ ...prev, bedCount }))}
+          onBathChange={(bathCount: string) => setFilterData(prev => ({ ...prev, bathCount }))}
+        />
 
-                {/* City Filter */}
-            
-                <DatePostedFilter />
-                
-                <BathAndFilter />
+        <PriceRangeFilter 
+          onChange={(priceRange: { min: number; max: number }, pricePeriod: 'per_day' | 'per_week' | 'per_month') => 
+            setFilterData(prev => ({ ...prev, priceRange, pricePeriod }))}
+        />
+        
+        <DateRangeFilter 
+          onChange={(dateRange: { from: Date | null; to: Date | null }) => setFilterData(prev => ({ ...prev, dateRange }))}
+        />
 
-                <PriceRangeFilter />
-                
-                <DateRangeFilter />
+        <PreferencesFilter 
+          onPreferencesChange={(preferences: string[]) => setFilterData(prev => ({ ...prev, preferences }))}
+          onAmenitiesChange={(amenities: string[]) => setFilterData(prev => ({ ...prev, amenities }))}
+        />
 
-                <PreferencesFilter />
+        <SDFilter 
+          onSecurityDepositChange={(securityDepositIncluded: boolean) => setFilterData(prev => ({ ...prev, securityDepositIncluded }))}
+          onUtilitiesChange={(utilitiesIncluded: boolean) => setFilterData(prev => ({ ...prev, utilitiesIncluded }))}
+        />
 
-                <SDFilter />
-
-            
-
-        </div>
+        <Button onClick={handleFilterClick}>Filter</Button>
+      </div>
     </div>
   )
 }

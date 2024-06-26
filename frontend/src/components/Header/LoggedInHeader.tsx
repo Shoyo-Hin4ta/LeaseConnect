@@ -1,10 +1,10 @@
 import React from 'react'
-import { User } from 'lucide-react';
 import { Heart } from 'lucide-react';
 import { Button } from '../ui/button';
 import { CirclePlus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { MessageSquare } from 'lucide-react';
+import DropDown from '../DropDown/DropDown';
 
 
 const LoggedInHeader = () => {
@@ -20,8 +20,8 @@ const LoggedInHeader = () => {
     
     <div className='flex gap-4 mr-2'>
         <Heart size={18}/> 
-        <MessageSquare size={18}/>
-        <User size={18} className=''/>
+        <Link to="/messages"><MessageSquare size={18}/></Link>
+        <DropDown />
     </div>
     </>
   )
