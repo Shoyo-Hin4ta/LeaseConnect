@@ -7,7 +7,7 @@ import { useState } from "react";
 
 const SearchBar = () => {
 
-  const [isActive, setIsActive] = useState< boolean >(true);
+  const [isActive, setIsActive] = useState< boolean >(false);
 
     const toggleSidebar = () => {
         setIsActive(!isActive);
