@@ -12,6 +12,7 @@ import {
     DropdownMenuSubTrigger,
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
+import { Link } from "react-router-dom"
 
 const DropDown = () => {
   return (
@@ -27,9 +28,12 @@ const DropDown = () => {
                 <DropdownMenuLabel>Account Details</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                        My Profile
-                    </DropdownMenuItem>
+                    <Link
+                    to="/profilepage">
+                        <DropdownMenuItem>
+                            My Profile
+                        </DropdownMenuItem>
+                    </Link>
                     <DropdownMenuItem>
                         My Lisitings
                     </DropdownMenuItem>

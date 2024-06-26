@@ -1,6 +1,9 @@
+import React from 'react'
 import { DateRangePicker } from '@/components/ui/date-range-picker'
 
-const DateRangeFilter = ({ onChange }) => {
+const DateRangeFilter = ({ onChange } : {
+  onChange : (dateRange: { from: Date | undefined; to: Date | undefined }) => void,
+}) => {
   return (
     <div className='my-2'>
       <div>Looking For</div>

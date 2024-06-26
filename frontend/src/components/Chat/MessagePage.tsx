@@ -9,7 +9,7 @@ const MessagePage = () => {
   const defaultLayout = layout ? JSON.parse(layout) : undefined;
 
   return (
-    <div className="z-10 border rounded-lg max-w-5xl w-full h-full text-sm lg:flex">
+    <div className="">
         <ChatLayout defaultLayout={defaultLayout} navCollapsedSize={8} />
       </div>
   );

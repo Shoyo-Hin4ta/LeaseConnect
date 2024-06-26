@@ -15,7 +15,7 @@ interface FilterData {
   bathCount: string;
   priceRange: { min: number; max: number };
   pricePeriod: 'per_day' | 'per_week' | 'per_month';
-  dateRange: { from: Date | null; to: Date | null };
+  dateRange: { from: Date | undefined; to: Date | undefined };
   preferences: string[];
   amenities: string[];
   securityDepositIncluded: boolean;
@@ -28,9 +28,9 @@ const Filter: React.FC = () => {
     datePosted: '',
     bedCount: '',
     bathCount: '',
-    priceRange: { min: 0, max: 0 },
+    priceRange: { min: 0, max: 200 },
     pricePeriod: 'per_day',
-    dateRange: { from: null, to: null },
+    dateRange: { from: undefined, to: undefined },
     preferences: [],
     amenities: [],
     securityDepositIncluded: false,
@@ -65,7 +65,7 @@ const Filter: React.FC = () => {
         />
         
         <DateRangeFilter 
-          onChange={(dateRange: { from: Date | null; to: Date | null }) => setFilterData(prev => ({ ...prev, dateRange }))}
+          onChange={(dateRange: { from: Date | undefined; to: Date | undefined }) => setFilterData(prev => ({ ...prev, dateRange }))}
         />
 
         <PreferencesFilter 
