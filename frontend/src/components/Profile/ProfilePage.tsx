@@ -10,14 +10,14 @@ const GenderArr = [
 const ProfilePage = () => {
   return (
     <div className='flex flex-col w-full p-2 border border-red-600'>
-        <div className='m-2 text-3xl'>Profile Page</div>
+        <div className='my-2 mb-8 text-3xl'>Profile Page</div>
         <div className='flex justify-between'>
-            <div className='w-1/2 flex items-center justify-center'>
+            <div className='w-1/2 h-[300px] flex items-center justify-center'>
                 <div className='h-[300px] w-[200px] bg-cyan-300'>
                     Image
                 </div>
             </div>
-            <div className='w-[45%]'>
+            <div className='w-[45%] flex flex-col gap-4'>
 
                 <UpdateField
                 label='Name'
@@ -53,9 +53,6 @@ const ProfilePage = () => {
                 inputType='phonenumber'
                 />
 
-
-
-                
             </div>
             
                

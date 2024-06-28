@@ -12,6 +12,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { PhoneInput } from "./ui-profile/phone-input";
+import { Pencil } from "lucide-react";
 
 type objType = {
     value: string;
@@ -76,12 +77,12 @@ const UpdateField: React.FC<UpdateFieldTypes> = ({
 
     return (
         <div>
-            <div className="flex flex-col gap-0 mb-2">
+            <div className="flex flex-col gap-2 mb-2">
                 <div className="flex items-center justify-between">
                     <Label htmlFor={id}>{label}</Label>
-                    <Button variant="outline" size="sm" onClick={() => setIsEditClicked(!isEditClicked)}>
-                        Edit
-                    </Button>
+                    <div onClick={() => setIsEditClicked(!isEditClicked)}>
+                        <Pencil size={11}/>
+                    </div>
                 </div>
                 {isEditClicked ? renderInputField() : (
                     <h1 className="text-sm">{value}</h1>

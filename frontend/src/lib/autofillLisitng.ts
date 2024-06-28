@@ -1,4 +1,4 @@
-import { ListingTypes } from "@/components/Listing/ListingForm1";
+import { ListingTypes } from "@/components/ListingForm/ListingForm1";
 import { UseFormSetValue } from "react-hook-form";
 
 

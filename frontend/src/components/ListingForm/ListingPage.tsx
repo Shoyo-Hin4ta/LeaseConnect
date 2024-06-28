@@ -10,9 +10,9 @@ const ListingPage = () => {
   return (
     <ListingContainer>
         {/* <ListingForm1 /> */}
-        {/* <ListingForm2 /> */}
+        <ListingForm2 />
         {/* <ListingForm3 /> */}
-        <ListingForm4 />
+        {/* <ListingForm4 /> */}
     </ListingContainer>
   ) 
 }
