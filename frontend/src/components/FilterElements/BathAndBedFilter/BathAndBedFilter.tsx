@@ -1,15 +1,17 @@
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import FilterElementContainer from "../FilterElementContainer"
 
 const BathAndFilter = ({onBathChange, onBedChange} : {
     onBedChange : (bedCount : string) => void,
     onBathChange : (bathCount : string) => void
 }) => {
   return (
-    <div className="my-2">
+    <FilterElementContainer>
         <div>Select Bed and Bath</div>
         <div className="flex justify-between">
             <div>
+                <span className="text-sm">Beds</span>
                 <RadioGroup defaultValue="" className="flex" onValueChange={onBedChange}>
                     <div className="flex items-center space-x-2">
                         <RadioGroupItem value="1bed" id="1bed" />
@@ -30,6 +32,8 @@ const BathAndFilter = ({onBathChange, onBedChange} : {
                 </RadioGroup>
             </div>
             <div>
+                <span className="text-sm">Baths</span>
+
                 <RadioGroup defaultValue="" className="flex" onValueChange={onBathChange}>
                         <div className="flex items-center space-x-2">
                             <RadioGroupItem value="1bath" id="1bath" />
@@ -46,7 +50,7 @@ const BathAndFilter = ({onBathChange, onBedChange} : {
                 </RadioGroup>
             </div>
         </div>
-    </div>
+    </FilterElementContainer>
    
   )
 }

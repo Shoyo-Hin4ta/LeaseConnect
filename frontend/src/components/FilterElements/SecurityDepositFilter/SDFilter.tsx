@@ -7,9 +7,9 @@ const SDFilter = ({ onSecurityDepositChange, onUtilitiesChange } : {
   onUtilitiesChange : (utilitiesIncluded: boolean) => void
 }) => {
   return (
-    <div className="my-2 flex flex-col gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 my-2 text-base">
       <div className="flex gap-4 items-center">
-        <Label htmlFor="security-deposit-included">Security Deposit Included</Label>
+        <Label htmlFor="security-deposit-included">No Security Deposit</Label>
         <Switch 
           id="security-deposit-included" 
           onCheckedChange={onSecurityDepositChange}

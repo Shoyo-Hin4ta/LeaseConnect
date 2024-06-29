@@ -1,5 +1,6 @@
 import React from 'react'
 import { Input } from '@/components/ui/input'
+import FilterElementContainer from '../FilterElementContainer';
 
 interface LocationInputFilterProps {
   onChange: (city: string) => void;
@@ -7,16 +8,18 @@ interface LocationInputFilterProps {
 
 const LocationInputFilter: React.FC<LocationInputFilterProps> = ({ onChange }) => {
   return (
-    <div className='my-2'>
-      <div>Enter City</div>
-      <div>
-        <Input 
-          type="text" 
-          placeholder="City" 
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
-        />
-      </div>
-    </div>
+    
+      <FilterElementContainer>
+        <div>Enter City</div>
+        <div>
+          <Input 
+            type="text" 
+            placeholder="City" 
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+          />
+        </div>
+      </FilterElementContainer>
+    
   )
 }
 

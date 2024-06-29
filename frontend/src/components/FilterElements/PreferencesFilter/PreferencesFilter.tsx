@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Button } from "@/components/ui/button"
+import FilterElementContainer from '../FilterElementContainer';
 
 interface PreferencesFilterProps {
   onPreferencesChange: (preferences: string[]) => void;
@@ -34,9 +35,9 @@ const PreferencesFilter: React.FC<PreferencesFilterProps> = ({ onPreferencesChan
   const amenities = ["Pool", "Gym", "Parking", "Only Working"]
 
   return (
-    <div className="my-2">
+    <FilterElementContainer>
       <div>Preferences</div>
-      <div className="flex flex-wrap gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
         {preferences.map(preference => (
           <Button
             key={preference}
@@ -48,7 +49,7 @@ const PreferencesFilter: React.FC<PreferencesFilterProps> = ({ onPreferencesChan
         ))}
       </div>
       <div>Amenities</div>
-      <div className="flex flex-wrap gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
         {amenities.map(amenity => (
           <Button
             key={amenity}
@@ -59,7 +60,8 @@ const PreferencesFilter: React.FC<PreferencesFilterProps> = ({ onPreferencesChan
           </Button>
         ))}
       </div>
-    </div>
+    </FilterElementContainer>
+
   )
 }
 

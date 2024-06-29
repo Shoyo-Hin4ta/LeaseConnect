@@ -1,39 +1,34 @@
-import { Input } from "@/components/ui/input"
-import { Search } from 'lucide-react';
+import { useState } from 'react';
+import { Input } from "@/components/ui/input";
+import { Search, Menu } from 'lucide-react'; // Menu icon for sidebar
 import Sidebar from "../ui/Sidebar/Sidebar";
-import { useState } from "react";
-
-
+import { Button } from '../ui/button';
 
 const SearchBar = () => {
+  const [isActive, setIsActive] = useState(false);
 
-  const [isActive, setIsActive] = useState< boolean >(false);
-
-    const toggleSidebar = () => {
-        setIsActive(!isActive);
-    }
+  const toggleSidebar = () => {
+    setIsActive(!isActive);
+  };
 
   return (
-      <div className=""> 
-      <Sidebar isActive={isActive} setIsActive={setIsActive} toggleSidebar={toggleSidebar}/>
-      <div className="bg-pink-400 flex  items-center justify-around">
-        {/* <div className="w-[20%] absolute">
-          <Sidebar />
-        </div> */}
-        
-        <div onClick={toggleSidebar} className="ml-2">
-          Sidebar
+    <div>
+      <Sidebar isActive={isActive} toggleSidebar={toggleSidebar} />
+      <div className="bg-pink-400 flex items-center justify-around h-18">
+        <div onClick={toggleSidebar} className="ml-2 cursor-pointer">
+          <Menu /> {/* Sidebar Open Icon */}
         </div>
-        
-        <div className="flex items-center p-2 w-[80%]">
-          <Search />
-          <Input type="text" placeholder="search" />
+
+        <div className="flex items-center p-2 w-[80%] h-[90%]">
+          <Search size={35} className='mr-2'/>
+          <Input type="text" placeholder="Search" />
+          <Button className="bg-blue-500 text-white p-2 text-sm rounded ml-2">
+            Search
+          </Button>
         </div>
-        
       </div>
     </div>
+  );
+};
 
-  )
-}
-
-export default SearchBar 
+export default SearchBar;

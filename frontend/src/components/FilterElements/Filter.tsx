@@ -41,11 +41,11 @@ const Filter: React.FC = () => {
     console.log('Filter data:', filterData)
     // Here you can use the filterData object to apply filters or send it to an API
   }
-
+ 
   return (
-    <div className="border border-red-300 w-[90%]">
-      <div>Filter</div>
-      <div className="flex flex-col">
+    <div className="p-3 flex flex-col gap-1  w-[90%] mt-2">
+      <div className='text-center font-semibold text-lg'>Filtering Option</div>
+
         <LocationInputFilter 
           onChange={(city: string) => setFilterData(prev => ({ ...prev, city }))}
         />
@@ -78,9 +78,8 @@ const Filter: React.FC = () => {
           onUtilitiesChange={(utilitiesIncluded: boolean) => setFilterData(prev => ({ ...prev, utilitiesIncluded }))}
         />
 
-        <Button onClick={handleFilterClick}>Filter</Button>
+        <Button className="my-2" onClick={handleFilterClick}>Filter</Button>
       </div>
-    </div>
   )
 }
 

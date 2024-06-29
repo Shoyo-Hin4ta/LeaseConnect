@@ -1,18 +1,10 @@
-import { useState } from "react";
-import { Button } from "../ui/button";
+import React from "react";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PhoneInput } from "./ui-profile/phone-input";
 import { Pencil } from "lucide-react";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { ControllerRenderProps } from "react-hook-form";
 
 type objType = {
     value: string;
@@ -22,36 +14,35 @@ type objType = {
 interface UpdateFieldTypes {
     label: string;
     id: string;
-    value: string;
     type?: string;
     inputType?: string;
     arr?: objType[];
+    addressField?: boolean;
+    isEditMode: boolean;
+    setEditMode: (mode: boolean) => void;
+    field: ControllerRenderProps<any, any>;
 }
 
 const UpdateField: React.FC<UpdateFieldTypes> = ({
     label,
     type = "text",
-    value,
     id,
     inputType = "input",
-    arr
+    arr,
+    addressField = false,
+    isEditMode,
+    setEditMode,
+    field
 }) => {
-    const [isEditClicked, setIsEditClicked] = useState<boolean>(false);
-
-    const handleInputChange = (newValue?: string) => {
-        console.log(`Updated value: ${newValue || ""}`);
-        // Here, you can add logic to update the value if needed.
-    };
-
     const renderInputField = () => {
         switch (inputType) {
             case "input":
-                return <Input id={id} type={type} value={value} />;
+                return <Input id={id} type={type} {...field} />;
             case "select":
                 return (
-                    <Select>
-                        <SelectTrigger className="">
-                            <SelectValue placeholder={value} defaultValue={value} />
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <SelectTrigger id={id}>
+                            <SelectValue placeholder={field.value} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
@@ -64,31 +55,29 @@ const UpdateField: React.FC<UpdateFieldTypes> = ({
                     </Select>
                 );
             case "phonenumber":
-                return (
-                    <PhoneInput
-                        value={value}
-                        onChange={handleInputChange} // Pass the change handler here
-                    />
-                );
+                return <PhoneInput placeholder="Enter a phone number" {...field} />;
             default:
                 return <p>Unsupported input type</p>;
         }
     };
 
     return (
-        <div>
-            <div className="flex flex-col gap-2 mb-2">
-                <div className="flex items-center justify-between">
-                    <Label htmlFor={id}>{label}</Label>
-                    <div onClick={() => setIsEditClicked(!isEditClicked)}>
-                        <Pencil size={11}/>
+        <FormItem>
+            <div className="flex items-center justify-between">
+                <FormLabel htmlFor={id}>{label}</FormLabel>
+                {!addressField && (
+                    <div onClick={() => setEditMode(!isEditMode)}>
+                        <Pencil size={11} className="cursor-pointer" />
                     </div>
-                </div>
-                {isEditClicked ? renderInputField() : (
-                    <h1 className="text-sm">{value}</h1>
                 )}
             </div>
-        </div>
+            {isEditMode ? (
+                <FormControl>{renderInputField()}</FormControl>
+            ) : (
+                <h1 className="text-sm">{field.value}</h1>
+            )}
+            <FormMessage />
+        </FormItem>
     );
 };
 

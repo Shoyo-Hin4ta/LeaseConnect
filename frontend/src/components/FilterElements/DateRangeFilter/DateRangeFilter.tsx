@@ -1,11 +1,13 @@
 import React from 'react'
 import { DateRangePicker } from '@/components/ui/date-range-picker'
+import FilterElementContainer from '../FilterElementContainer';
 
 const DateRangeFilter = ({ onChange } : {
   onChange : (dateRange: { from: Date | undefined; to: Date | undefined }) => void,
 }) => {
   return (
-    <div className='my-2'>
+    <FilterElementContainer>
+
       <div>Looking For</div>
       <div>   
         <DateRangePicker
@@ -15,7 +17,7 @@ const DateRangeFilter = ({ onChange } : {
           showCompare={false}
         />
       </div>
-    </div>
+    </FilterElementContainer>
   )
 }
 
