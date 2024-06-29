@@ -8,6 +8,9 @@ import ImageContainer from "../ui/ImageContainer";
 import { useState } from "react";
 import ListingImageInput from "./ListingImageInput";
 import { Button } from "../ui/button";
+import { useDispatch } from "react-redux";
+import { next, resetState, setIsComplete } from "@/appstore/stepperSlice";
+import { useNavigate } from "react-router-dom";
 
 export const MAX_FILE_SIZE = 1024 * 1024 * 5;
 export const ACCEPTED_IMAGE_MIME_TYPES = [
@@ -80,12 +83,20 @@ const ListingForm4 = () => {
     setValue('image', newImages);
   };
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { handleSubmit, control, setValue, formState: { errors } } = listingForm4;
 
   const onSubmit = async (data: ListingTypes) => {
-    console.log(data);
     setSubmitAttempted(true);
-    // Your form submission logic here
+
+    dispatch(next());
+    dispatch(setIsComplete(true));
+    console.log(data);
+    navigate('/mylistings');
+    dispatch(setIsComplete(false));
+    dispatch(resetState());
+    setSubmitAttempted(false);
   }
 
   const hasValidImage = selectedImages.some(img => img !== null);

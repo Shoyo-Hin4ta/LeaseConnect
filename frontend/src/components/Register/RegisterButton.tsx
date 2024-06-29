@@ -1,14 +1,18 @@
 import { steps } from "@/lib/utils"
 import { Button } from "../ui/button"
+import { useSelector } from "react-redux";
+import { RootState } from "@/appstore/appStore";
 
 // interface BtnFieldTypes{
 //   type : "submit"
 // }
 
-const RegisterButton = ({currentStep , isCompleted} : {
+const RegisterButton = ({currentStep} : {
   currentStep : number,
-  isCompleted? : boolean
 }) => {
+
+  const isCompleted = useSelector((s:RootState) => s.stepper.isCompleted);
+
 
   return (
     <>

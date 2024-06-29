@@ -17,12 +17,15 @@ const stepperSlice = createSlice({
         prev : (state) => {
             state.currentStep = state.currentStep-1
         },
-        setIsComplete : (state) => {
-            state.isCompleted = true
+        setIsComplete : (state, action) => {
+            state.isCompleted  = action.payload
+        },
+        resetState : (state) => {
+            state.currentStep = 1
         }
     },
 });
 
-export const {next, prev, setIsComplete} = stepperSlice.actions;
+export const {next, prev, setIsComplete, resetState} = stepperSlice.actions;
 
 export default stepperSlice.reducer;

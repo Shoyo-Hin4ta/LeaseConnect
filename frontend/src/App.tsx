@@ -2,7 +2,7 @@
 import { RouterProvider, createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom'
 import './index.css'
 import Layout from './components/Layout'
-import HomePage from './components/HomePage'
+import HomePage from './components/Home/HomePage'
 import ErrorPage from './components/ErrorPage'
 import RegisterPage from './components/Register/RegisterPage'
 import { Provider } from 'react-redux'
@@ -27,7 +27,6 @@ const router = createBrowserRouter(
       <Route path ='/listing' element = { < IndividualListingPage/> } />
       <Route path ='/mylistings' element = { < MyListings/> } />
       <Route path ='/editlisting' element = { < EditListingPage/> } />
-
     </Route>
    
   )

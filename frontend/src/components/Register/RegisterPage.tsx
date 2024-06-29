@@ -10,18 +10,17 @@ import { ReactNode } from "react"
 const RegisterPage = () => {
 
     const currentStep = useSelector((s:RootState) => s.stepper.currentStep);
-    console.log(currentStep)
-    const isCompleted = useSelector((s:RootState) => s.stepper.isCompleted);
+    // console.log(currentStep)
 
-
+    
     const renderForm = (): ReactNode => {
         switch(currentStep){
             case 1:
-                return <RegisterForm currentStep={currentStep} isCompleted={isCompleted}/>
+                return <RegisterForm currentStep={currentStep} />
             case 2:
-                return <RegisterForm2 currentStep={currentStep} isCompleted={isCompleted}/>
+                return <RegisterForm2 currentStep={currentStep} />
             case 3:
-                return <RegisterForm3 currentStep={currentStep} isCompleted={isCompleted}/>
+                return <RegisterForm3 currentStep={currentStep} />
             default:
                 return null
         }
@@ -32,7 +31,7 @@ const RegisterPage = () => {
         <div className="flex items-center justify-center border border-blue-600 dark:bg-black dark:text-white font-roboto">
             <div className="flex flex-col items-center border border-green-600 w-full h-screen">
                 
-                <Stepper currentStep={currentStep} isCompleted={isCompleted}/>
+                <Stepper currentStep={currentStep}/>
                 {renderForm()}
                 
             </div>

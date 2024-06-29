@@ -30,19 +30,18 @@ const InputMobileNumber: React.FC<InputPhoneTypes> = ({
         control={formControl}
         name="phone"
         render={({ field }) => (
-        <FormItem className="flex flex-col w-full items-center justify-center">
-            <div className="flex w-full items-center justify-center">
-
-                <FormLabel className="w-2/5 mt-2">{label}</FormLabel>
-                <FormControl >
-                <PhoneInput className="w-4/5 text-sm" placeholder={placeholder} {...field} />
-                </FormControl>
-                {/* <FormDescription className="text-left">
-                Enter a phone number
-                </FormDescription> */}
-                <FormMessage />
-
-            </div>
+          <FormItem className="flex flex-col w-full">
+          <div className="flex items-center justify-between w-full">
+            <FormLabel className="w-1/3">{label}</FormLabel>
+            <FormControl className="w-2/3">
+              <PhoneInput
+                className="w-full text-sm"
+                placeholder={placeholder}
+                {...field}
+              />
+            </FormControl>
+          </div>
+          <FormMessage />
         </FormItem>
         )}
     />

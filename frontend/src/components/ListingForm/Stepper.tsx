@@ -1,15 +1,13 @@
 import { RefObject, useEffect, useRef, useState } from "react";
-import { steps } from "@/lib/utils";
-import { useSelector } from "react-redux";
-import { RootState } from "@/appstore/appStore";
+import { listingPropertySteps, steps } from "@/lib/utils";
 
 type marginTypes = {
   marginLeft : number | undefined,
   marginRight : number | undefined
 }
 
-const Stepper = ({currentStep } : {
-  currentStep : number,
+const Stepper = ({currentStep} : {
+  currentStep : number
 }) => {
 
 
@@ -45,7 +43,7 @@ const Stepper = ({currentStep } : {
       <div className="relative flex  justify-between items-center w-4/5 z-20 p-0 border-2 my-4 mb-5">
     
         {
-          steps.map((stepper, index) => {
+          listingPropertySteps.map((stepper, index) => {
             
             return (
       

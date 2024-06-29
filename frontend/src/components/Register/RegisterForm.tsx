@@ -33,30 +33,35 @@ export type Inputs = {
 
 
 export const formSchema = z.object({
-  name : z.string().min(2, {
-    message : "Username must be at least 2 characters."
-  }),
-  email : z.string(),
-  password : z.string().min(8, {
-    message : 'Password must be 8 characters long'
-  }),
-  age: z.string()
-  .refine((age) => !isNaN(parseInt(age)), { message: "Age is required" })
-  .transform((age) => Number(age))
-  .refine((age) => age >= 18 && age <= 50, { message: "Age should be between 18 and 50" }),
-  gender : z.enum(["male", "female", "other"]),
+  name: z
+    .string()
+    .min(2, { message: "Username must be at least 2 characters long." })
+    .max(50, { message: "Username cannot exceed 50 characters." })
+    .transform((name) => name.trim()),
+
+  email: z
+    .string()
+    .email({ message: "Please enter a valid email address." })
+    .transform((email) => email.toLowerCase()),
+
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters long." })
+    .max(100, { message: "Password cannot exceed 100 characters." }),
+
+  age: z
+    .string()
+    .refine((age) => !isNaN(parseInt(age)), { message: "Age must be a number." })
+    .transform((age) => Number(age))
+    .refine((age) => age >= 18 && age <= 50, { message: "Age should be between 18 and 50." }),
+
+  gender: z.enum(["male", "female", "other"], { message: "Please select one." }),
   phone: z
     .string()
     .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
 
 
-        
-  // mobileNumber : z.string().regex(
-  //   phoneRegex, 'Please enter a valid number'
-  // ),
-  // bio : z.string().max(200, {
-  //   message : "Bio cannot be more than 200 characters"
-  // }), 
+      
 })
 
 const RegisterForm = ({currentStep , isCompleted} : {
@@ -167,8 +172,7 @@ const RegisterForm = ({currentStep , isCompleted} : {
         
 
           < RegisterButton 
-            currentStep={currentStep} 
-            isCompleted={isCompleted} />
+            currentStep={currentStep} />
           
         </form>
       </Form>

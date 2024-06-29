@@ -8,6 +8,8 @@ import RadioInput from "./RadioInput"
 import { useEffect } from "react"
 import { initAutocomplete } from "@/lib/autofillLisitng"
 import ListingFormButton from "./ListingFormButton"
+import { useDispatch } from "react-redux"
+import { next } from "@/appstore/stepperSlice"
 
 
 export const BedroomInputArray = [{
@@ -96,6 +98,8 @@ export const PROPERTY_ARRAY = [
 
 const ListingForm1 = () => {
 
+  const dispatch = useDispatch();
+
   const listingForm1 = useForm<ListingTypes>({
     resolver :zodResolver(listingForm1Schema),
     defaultValues: {
@@ -111,6 +115,7 @@ const ListingForm1 = () => {
   const { handleSubmit, control, setValue } = listingForm1;
 
   const onSubmit = async(data) => {
+    dispatch(next());
     console.log(data)
   }
 

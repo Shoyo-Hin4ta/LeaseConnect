@@ -15,23 +15,46 @@ import { useEffect } from "react";
 import { initAutocomplete } from "@/lib/googlemaps.ts"
 import RegisterButton from "./RegisterButton"
 import { useDispatch } from "react-redux"
-import { next, setIsComplete } from "@/appstore/stepperSlice"
+import { next, resetState, setIsComplete } from "@/appstore/stepperSlice"
 import { useNavigate } from "react-router-dom"
 
 
 interface Form3Types{
     currentStep : number,
-    isCompleted : boolean
 }
 
+const postcodeRegex = /^[A-Za-z0-9]{3,10}$/; // Example regex for postcode validation, customize as needed
+const stateRegex = /^[A-Za-z\s-]+$/; // Example regex for state validation, allowing letters, spaces, and hyphens
+
 const addressFormSchema = z.object({
-  city: z.string().min(1, { message: "City is required" }),
-  state: z.string().min(1, { message: "State is required" }),
-  country: z.string().min(1, { message: "Country is required" }),
-  postcode: z.string().min(1, { message: "Postcode is required" }),
+  city: z
+    .string()
+    .min(1, { message: "City is required" })
+    .max(50, { message: "City name cannot exceed 50 characters" })
+    .transform((city) => city.trim()),
+
+  state: z
+    .string()
+    .min(1, { message: "State is required" })
+    .max(50, { message: "State name cannot exceed 50 characters" })
+    .regex(stateRegex, { message: "State must only contain letters, spaces, or hyphens" })
+    .transform((state) => state.trim()),
+
+  country: z
+    .string()
+    .min(1, { message: "Country is required" })
+    .max(50, { message: "Country name cannot exceed 50 characters" })
+    .transform((country) => country.trim()),
+
+  postcode: z
+    .string()
+    .min(1, { message: "Postcode is required" })
+    .max(10, { message: "Postcode cannot exceed 10 characters" })
+    .regex(postcodeRegex, { message: "Postcode format is invalid" })
+    .transform((postcode) => postcode.trim()),
 });
 
-const RegisterForm3 = ({currentStep, isCompleted} : Form3Types) => {
+const RegisterForm3 = ({currentStep} : Form3Types) => {
 
   
   const dispatch = useDispatch();
@@ -56,9 +79,11 @@ const RegisterForm3 = ({currentStep, isCompleted} : Form3Types) => {
   }, [setValue]);
 
   function onSubmit(data: z.infer<typeof addressFormSchema>) {
-    dispatch(setIsComplete());
+    dispatch(setIsComplete(true));
     dispatch(next());
+    dispatch(resetState());
     navigate('/browse');
+    dispatch(setIsComplete(false));
     console.log(data)
   }
 
@@ -125,8 +150,7 @@ const RegisterForm3 = ({currentStep, isCompleted} : Form3Types) => {
           />
 
         <RegisterButton 
-            currentStep={currentStep} 
-            isCompleted={isCompleted}/>
+            currentStep={currentStep} />
         </form>
       </Form>
     </Container>

@@ -1,4 +1,5 @@
-import { User } from "lucide-react"
+import React from 'react';
+import { Menu, User } from 'lucide-react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -7,64 +8,53 @@ import {
     DropdownMenuLabel,
     DropdownMenuPortal,
     DropdownMenuSeparator,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
     DropdownMenuTrigger,
-  } from "@/components/ui/dropdown-menu"
-import { Link } from "react-router-dom"
+} from '@/components/ui/dropdown-menu';
+import { Link } from 'react-router-dom';
 
 const DropDown = () => {
   return (
-
-
     <div>
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <User size={18} className=''/>
-            </DropdownMenuTrigger>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button className="flex items-center justify-center rounded-full hover:bg-gray-100">
+            <Menu size={24} />
+          </button>
+        </DropdownMenuTrigger>
 
-            <DropdownMenuContent className="w-24">
-                <DropdownMenuLabel>Account Details</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                    <Link
-                    to="/profilepage">
-                        <DropdownMenuItem>
-                            My Profile
-                        </DropdownMenuItem>
-                    </Link>
-                    <Link
-                    to='/mylistings'>
-                        <DropdownMenuItem>
-                            My Lisitings
-                        </DropdownMenuItem>
-                    </Link>
-                </DropdownMenuGroup>
+        <DropdownMenuPortal>
+          <DropdownMenuContent className="" align='end'>
+            <DropdownMenuLabel className="text-center font-semibold">Account Details</DropdownMenuLabel>
+            <DropdownMenuSeparator />
 
-                <DropdownMenuGroup>
-                <DropdownMenuSub>
-                    <DropdownMenuSubTrigger>Change Details</DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                    <DropdownMenuSubContent>
-                        <DropdownMenuItem>Change Email</DropdownMenuItem>
-                        <DropdownMenuItem>Change Password</DropdownMenuItem>
-                        <DropdownMenuItem>Change Profile Image</DropdownMenuItem>
-                        <DropdownMenuItem>Update Current Location</DropdownMenuItem>
-                    </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                </DropdownMenuSub>
-                </DropdownMenuGroup>
-
-                <DropdownMenuSeparator />
-
-                <DropdownMenuItem>
-                Log out
+            <DropdownMenuGroup>
+              <Link to="/favorites">
+                <DropdownMenuItem >
+                  <span>Favorites</span>
                 </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
-    </div>
-  )
-}
+              </Link>
+              <Link to="/mylistings">
+                <DropdownMenuItem >
+                  <span>My Listings</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link to="/profile">
+                <DropdownMenuItem >
+                  <span>Profile</span>
+                </DropdownMenuItem>
+              </Link>
+            </DropdownMenuGroup>
 
-export default DropDown
+            <DropdownMenuSeparator />
+
+            <DropdownMenuItem >
+              <span>Logout</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenuPortal>
+      </DropdownMenu>
+    </div>
+  );
+};
+
+export default DropDown;

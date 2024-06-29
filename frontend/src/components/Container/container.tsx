@@ -6,7 +6,7 @@ type PropsType = {
 
 const container = ({children} : PropsType) => {
   return (
-  <div className="border border-red-500 flex flex-col items-center w-4/5 p-2 font-roboto h-[82%]">
+  <div className="border border-red-500 flex flex-col items-center w-4/5 p-2 font-roboto">
     {children}
   </div>
   )}

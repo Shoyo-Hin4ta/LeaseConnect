@@ -8,7 +8,7 @@ interface ListingContainerType {
 const ListingContainer = ({children} : ListingContainerType) => {
   return (
     <div className="flex items-center justify-center w-screen">
-        <div className="mt-5 border border-red-600 w-[90%]">
+        <div className="flex flex-col justify-center items-center mt-5 border border-red-600 w-[90%]">
             {children}
         </div>
     </div>

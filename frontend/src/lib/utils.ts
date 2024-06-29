@@ -1,6 +1,3 @@
-import RegisterForm from "@/components/Register/RegisterForm"
-import RegisterForm2 from "@/components/Register/RegisterForm2"
-import RegisterForm3 from "@/components/Register/RegisterForm3"
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -22,3 +19,20 @@ export const steps = [
     step: 3,
     stepDesc : "Step 3",
   }]
+
+export const listingPropertySteps = [
+    {
+      step : 1,
+      stepDesc : "Step 1",
+    },
+    {
+      step : 2,
+      stepDesc : "Step 2",
+    },
+    { 
+      step: 3,
+      stepDesc : "Step 3",
+    },{
+      step : 4,
+      stepDesc : "Step 4",
+    }]

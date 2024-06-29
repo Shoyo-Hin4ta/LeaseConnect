@@ -8,6 +8,8 @@ import InputBox from "./InputBox"
 import { DateRangePicker } from "../ui/date-range-picker"
 import ListingFormButton from "./ListingFormButton"
 import CustomPriceInput from "./CustomPriceInput"
+import { next } from "@/appstore/stepperSlice"
+import { useDispatch } from "react-redux"
 
 export const CURRENCY_ARR = [
   {value: "usd", desc : "USD"},
@@ -31,6 +33,8 @@ const listingForm3Schema = z.object({
 
 const ListingForm3 = () => {
 
+  const dispatch = useDispatch();
+
 
   const listingForm3 = useForm<ListingTypes>({
     resolver : zodResolver(listingForm3Schema),
@@ -43,6 +47,7 @@ const ListingForm3 = () => {
   const {handleSubmit, control, setValue} =  listingForm3;
 
   const onSubmit = async(data) => {
+    dispatch(next());
     console.log(data)
   }
 

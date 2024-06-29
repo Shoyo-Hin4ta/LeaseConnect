@@ -8,6 +8,8 @@ import { Form } from '../ui/form';
 import ListingFormButton from './ListingFormButton';
 import RadioInput from './RadioInput';
 import InputBox from './InputBox';
+import { useDispatch } from 'react-redux';
+import { next } from '@/appstore/stepperSlice';
 
 
 export const stringsToOptions = (strings: string[], options: Option[]): Option[] => {
@@ -67,6 +69,9 @@ const listingForm2Schema = z.object({
 
 const ListingForm2 = () => {
 
+    const dispatch = useDispatch();
+
+
     const listingForm2 = useForm<ListingTypes>({
         resolver :zodResolver(listingForm2Schema),
         defaultValues: {
@@ -80,6 +85,7 @@ const ListingForm2 = () => {
     const { handleSubmit, control } = listingForm2;
 
     const onSubmit = async(data) => {
+        dispatch(next());
         console.log(data)
     }
     

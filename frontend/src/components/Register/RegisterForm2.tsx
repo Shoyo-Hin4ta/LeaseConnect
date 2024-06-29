@@ -29,24 +29,29 @@ const ACCEPTED_IMAGE_MIME_TYPES = [
 
 export const imageFormSchema = z.object({
   image: z
-    .any()
+    .instanceof(File)
     .refine(
-      (file) => file !== null,
-      "Please upload the image to proceed"
+      (file) => file !== null && file !== undefined,
+      {
+        message: "Please upload the image to proceed",
+      }
     )
     .refine(
-      (file) => file?.size <= MAX_FILE_SIZE,
-      `Max image size is 5MB.`
+      (file) => file.size <= MAX_FILE_SIZE,
+      {
+        message: `Max image size is 5MB.`,
+      }
     )
     .refine(
-      (file) => ACCEPTED_IMAGE_MIME_TYPES.includes(file?.type || ""),
-      "Only .jpg, .jpeg, .png and .webp formats are supported."
+      (file) => ACCEPTED_IMAGE_MIME_TYPES.includes(file.type),
+      {
+        message: "Only .jpg, .jpeg, .png and .webp formats are supported.",
+      }
     ),
 });
 
-const RegisterForm2 = ({currentStep , isCompleted} : {
+const RegisterForm2 = ({currentStep } : {
   currentStep : number,
-  isCompleted : boolean
 }) => {
 
   const dispatch = useDispatch();
@@ -105,11 +110,11 @@ const RegisterForm2 = ({currentStep , isCompleted} : {
               id="imageInput"
               props={{field : {accept : "image/*"}, css: "hidden"}}/>
               
-              <label htmlFor="imageInput" className="w-full h-[70%] block" >
-                <ImageContainer image={selectedImage}/>
+              <label htmlFor="imageInput" className="w-full block" >
+                <ImageContainer image={selectedImage} height="h-96"/>
               </label>
               
-              <RegisterButton currentStep={currentStep} isCompleted={isCompleted}/>
+              <RegisterButton currentStep={currentStep} />
               
           </form>
         </Form>
