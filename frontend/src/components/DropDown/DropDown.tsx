@@ -34,9 +34,12 @@ const DropDown = () => {
                             My Profile
                         </DropdownMenuItem>
                     </Link>
-                    <DropdownMenuItem>
-                        My Lisitings
-                    </DropdownMenuItem>
+                    <Link
+                    to='/mylistings'>
+                        <DropdownMenuItem>
+                            My Lisitings
+                        </DropdownMenuItem>
+                    </Link>
                 </DropdownMenuGroup>
 
                 <DropdownMenuGroup>

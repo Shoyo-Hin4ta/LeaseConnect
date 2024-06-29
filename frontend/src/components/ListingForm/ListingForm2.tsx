@@ -7,13 +7,24 @@ import { ListingTypes } from './ListingForm1';
 import { Form } from '../ui/form';
 import ListingFormButton from './ListingFormButton';
 import RadioInput from './RadioInput';
+import InputBox from './InputBox';
+
+
+export const stringsToOptions = (strings: string[], options: Option[]): Option[] => {
+    return strings.map(s => options.find(o => o.value === s) || { value: s, label: s });
+}
+
+// Helper function to convert Option[] to string[]
+export const optionsToStrings = (options: Option[]): string[] => {
+    return options.map(o => o.value);
+}
 
 export const UTIL_RADIO_ARR = [
     { value: "true", desc : "Yes"},
     { value: "false", desc : "No"},
 ]
 
-const UTILITIES: Option[] = [
+export const UTILITIES: Option[] = [
     { label: 'Water', value: 'water' },
     { label: 'Electricity', value: 'electricity' },
     { label: 'Gas', value: 'gas' },
@@ -21,14 +32,14 @@ const UTILITIES: Option[] = [
     { label: 'Trash', value: 'trash' },
 ]
   
-const AMENITIES: Option[] = [
+export const AMENITIES: Option[] = [
 { label: 'Parking', value: 'parking' },
 { label: 'Gym', value: 'gym' },
 { label: 'Pool', value: 'pool' },
 { label: 'In Unit Laundry', value: 'laundry' },
 ]
 
-const PREFERENCES: Option[] = [
+export const PREFERENCES: Option[] = [
 { label: 'No smoking', value: 'no_smoking' },
 { label: 'No drinking', value: 'no_drinking' },
 { label: 'No pets', value: 'no_pets' },
@@ -46,7 +57,12 @@ const listingForm2Schema = z.object({
         required_error: "Please select one",
       }),
     amenities : z.array(z.string()).optional(),
-    preferences : z.array(z.string()).optional()
+    preferences : z.array(z.string()).optional(),
+    description : z
+                .string()
+                .max(500, {
+                    message: "Bio must not be longer than 500 characters.",
+                }),
   })
 
 const ListingForm2 = () => {
@@ -56,7 +72,8 @@ const ListingForm2 = () => {
         defaultValues: {
             utilities: [],
             amenities: [],
-            preferences: []
+            preferences: [],
+            description : ""
           },
       })
 
@@ -67,14 +84,7 @@ const ListingForm2 = () => {
     }
     
     // Helper function to convert string[] to Option[]
-    const stringsToOptions = (strings: string[], options: Option[]): Option[] => {
-        return strings.map(s => options.find(o => o.value === s) || { value: s, label: s });
-    }
-
-    // Helper function to convert Option[] to string[]
-    const optionsToStrings = (options: Option[]): string[] => {
-        return options.map(o => o.value);
-    }
+    
 
     return (
         <div className="w-full flex flex-col justify-center items-center">
@@ -148,6 +158,17 @@ const ListingForm2 = () => {
                                 )}
                         />
 
+                        <InputBox
+                        name="description"
+                        label ="Lisitng Descriptiton"
+                        placeholder='You can enter anything you want to highlight the perks or something that was not mentioned. 
+                        Max char is 500'
+                        formControl={control}
+                        inputType='textbox'
+                        className='h-20 text-left'
+                        />
+
+                        
                         
                         <ListingFormButton />
 

@@ -9,8 +9,8 @@ import { useState } from "react";
 import ListingImageInput from "./ListingImageInput";
 import { Button } from "../ui/button";
 
-const MAX_FILE_SIZE = 1024 * 1024 * 5;
-const ACCEPTED_IMAGE_MIME_TYPES = [
+export const MAX_FILE_SIZE = 1024 * 1024 * 5;
+export const ACCEPTED_IMAGE_MIME_TYPES = [
   "image/jpeg",
   "image/jpg",
   "image/png",
@@ -102,6 +102,7 @@ const ListingForm4 = () => {
             <div>
               {imageFields.map((field, index) => (
                 <div key={field.id} className="my-2">
+                  
                   <ListingImageInput
                     name={`image.${index}`}
                     label="ListingImages"

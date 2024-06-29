@@ -15,14 +15,16 @@ type InputArrayType = {
 }
 
 interface RadioTypes extends ListingInputTypes{
-  inputArray : InputArrayType[]
+  inputArray : InputArrayType[],
+  defaultValue? : string | undefined
 }
 
 const RadioInput: React.FC<RadioTypes> = ({
     formControl,
     name,
     label,
-    inputArray
+    inputArray,
+    defaultValue=undefined
 }) => {
 
   return (
@@ -35,7 +37,7 @@ const RadioInput: React.FC<RadioTypes> = ({
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
-                  defaultValue={undefined}
+                  defaultValue={defaultValue}
                   className="flex"
                 >
                   {inputArray.map((item) => {

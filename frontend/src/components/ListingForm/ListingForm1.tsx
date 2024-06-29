@@ -30,6 +30,9 @@ export const BathroomInputArray = [
   { value: "3+", desc : "3+"},
   ]
 
+
+  
+
 export type ListingTypes = {
   title : string,
   propertyType : string,
@@ -48,7 +51,8 @@ export type ListingTypes = {
   amount : string,
   timePeriod : string,
   subleaseDuration : string,
-  image : (File | null)[]
+  image : (File | null)[],
+  description : string,
 }
 
 const listingForm1Schema = z.object({
@@ -84,7 +88,7 @@ const listingForm1Schema = z.object({
 
 })
 
-export const GENDER_ARRAY = [
+export const PROPERTY_ARRAY = [
   { value : "house", desc : "House" },
   { value : "studio", desc : "Studio" },
   { value : "apartment", desc : "Apartment" }
@@ -136,7 +140,7 @@ const ListingForm1 = () => {
                   formControl={control}
                   placeholder="Select property type"
                   label="Property Type"
-                  inputArray={GENDER_ARRAY}
+                  inputArray={PROPERTY_ARRAY}
                 />
 
               <div className="flex justify-between">

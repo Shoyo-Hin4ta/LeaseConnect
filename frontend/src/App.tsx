@@ -11,7 +11,9 @@ import Browse from './components/Browse/BrowsePage'
 import ListingPage from './components/ListingForm/ListingPage'
 import MessagePage from './components/Chat/MessagePage'
 import ProfilePage from './components/Profile/ProfilePage'
-import IndividualListingPage from './components/ListingPage/IndividualListingPage'
+import IndividualListingPage from './components/IndividualListingPage/IndividualListingPage'
+import MyListings from './components/OwnListings/MyListings'
+import EditListingPage from './components/OwnListings/EditListing/EditListingPage'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +25,9 @@ const router = createBrowserRouter(
       <Route path ='/messages' element = { < MessagePage/> } />
       <Route path ='/profilepage' element = { < ProfilePage/> } />
       <Route path ='/listing' element = { < IndividualListingPage/> } />
+      <Route path ='/mylistings' element = { < MyListings/> } />
+      <Route path ='/editlisting' element = { < EditListingPage/> } />
+
     </Route>
    
   )

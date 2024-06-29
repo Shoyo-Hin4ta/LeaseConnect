@@ -7,6 +7,7 @@ import SelectDrop from "./SelectDrop"
 import InputBox from "./InputBox"
 import { DateRangePicker } from "../ui/date-range-picker"
 import ListingFormButton from "./ListingFormButton"
+import CustomPriceInput from "./CustomPriceInput"
 
 export const CURRENCY_ARR = [
   {value: "usd", desc : "USD"},
@@ -54,36 +55,8 @@ const ListingForm3 = () => {
                 <Form {...listingForm3}>
                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 p-2">
 
-                      <div className="flex items-center justify-center gap-1">
-                        <div className="h-10 flex items-center">
-                          <SelectDrop
-                          placeholder="Currency"
-                          formControl={control}
-                          name="currency"
-                          inputArray={CURRENCY_ARR}
-                          className="rounded-none rounded-l-lg h-8 p-1"
-                          />
-                        </div>
-
-                        <div className="h-10 flex items-center  relative -top-1">
-                          <InputBox
-                          placeholder="Enter Amount"
-                          formControl={control}
-                          name="amount"
-                          className="rounded-none h-8 p-1 top text-center"
-                          />
-                        </div>
-                        
-                        <div className="h-10 flex items-center">
-                          <SelectDrop
-                          placeholder="Duration"
-                          formControl={control}
-                          name="timePeriod"
-                          inputArray={TIME_PERIOD_ARR}
-                          className="rounded-none rounded-r-lg h-8 p-1"
-                          />
-                        </div>
-                      </div>
+                      <CustomPriceInput
+                      control={control} />
 
                       <div className="flex flex-col gap-2">
                         <div className="text-md">

@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -6,29 +5,35 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Heart } from "lucide-react";
 import CardFooter from "./CardFooter/CardFoot"
 import CardCarousel from "./Carousel/CardCaraousel"
 
  
-export function ListingCard() {
+export function ListingCard({isMyListings = false} : {
+  isMyListings? : boolean
+}) {
   return (
-    <div className="relative">
-      <div className="absolute bottom-2 right-2 ">
+    <div className="relative  h-[500px]">
+
+      {!isMyListings && (<div className="absolute bottom-2 right-2 ">
           <Heart color="red" />
-      </div>
-      <Card id={`listing-id`} className="w-[24rem] h-[30rem] ">
-        {/* <CardHeader>
-          <CardTitle>Create project</CardTitle>
-          <CardDescription>Deploy your new project in one-click.</CardDescription>
-        </CardHeader> */}
-        <CardContent className="w-full h-3/5 ">
+      </div>)}
+
+      <Card id={`listing-id`} className="w-[24rem] h-[30rem] border border-cyan-300">
+
+        <CardHeader className="h-1/6">
+          <CardTitle>Title</CardTitle>
+          <CardDescription>Date | Price</CardDescription>
+        </CardHeader>
+
+        <CardContent className="w-full h-3/6 ">
             <CardCarousel />
         </CardContent>
-        
-        <CardFooter />
+
+        <div className="h-2/6">
+          <CardFooter isMyListings={isMyListings}/>
+        </div>
       </Card>
 
     </div>

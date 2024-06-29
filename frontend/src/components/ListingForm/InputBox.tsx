@@ -3,6 +3,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/
 import { Input } from "../ui/input"
 import { z } from "zod"
 import { ListingTypes, listingForm1Schema } from "./ListingForm1"
+import { Textarea } from "@/components/ui/textarea"
 
 
 export interface ListingInputTypes{
@@ -12,6 +13,7 @@ export interface ListingInputTypes{
     label? : string,
     id? : string,
     className? : string,
+    inputType? : "textbox" | "inputbox",
 }
 
 const InputBox: React.FC<ListingInputTypes> = ({
@@ -20,7 +22,8 @@ const InputBox: React.FC<ListingInputTypes> = ({
     placeholder,
     formControl,
     id,
-    className=""
+    className="",
+    inputType="inputbox"
 }) => {
   return (
     <FormField
@@ -28,13 +31,24 @@ const InputBox: React.FC<ListingInputTypes> = ({
           name={name}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{label}</FormLabel>
+              <FormLabel className="text-sm font-medium">{label}</FormLabel>
               <FormControl>
-                <Input 
-                placeholder={placeholder}
-                {...(id && { id })} 
-                className={`${className}`}
-                {...field} />
+                {inputType === "inputbox" ? (
+                  <Input 
+                  placeholder={placeholder}
+                  {...(id && { id })} 
+                  className={`${className}`}
+                  {...field} />
+                ) : (
+                  <Textarea
+                    placeholder={placeholder}
+                    {...(id && { id })} 
+                    className={`resize-none ${className}`}
+                    {...field}
+                />
+                )
+              
+              }
               </FormControl>
               <FormMessage />
             </FormItem>

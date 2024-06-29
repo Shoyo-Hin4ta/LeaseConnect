@@ -9,10 +9,10 @@ import ListingForm4 from "./ListingForm4"
 const ListingPage = () => {
   return (
     <ListingContainer>
-        {/* <ListingForm1 /> */}
+        <ListingForm1 />
         <ListingForm2 />
-        {/* <ListingForm3 /> */}
-        {/* <ListingForm4 /> */}
+        <ListingForm3 />
+        <ListingForm4 />
     </ListingContainer>
   ) 
 }
