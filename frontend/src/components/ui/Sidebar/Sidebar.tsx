@@ -5,27 +5,25 @@ import Filter from '../../FilterElements/Filter';
 const Sidebar = ({isActive, toggleSidebar}: {
     isActive : boolean,
     toggleSidebar : ()=> void 
-} ) => {
-
-
+}) => {
     return (
         <div
-          className={`overflow-y-auto absolute h-full transition-all duration-300 ease-in-out z-50
-                      ${isActive ? 'bg-gray-400 w-full overflow-hidden' : 'bg-white w-0'}`}
+          className={`fixed inset-y-0 left-0 z-50 w-80 min-w-[335px] bg-white dark:bg-gray-800 shadow-lg transform ${
+            isActive ? 'translate-x-0' : '-translate-x-full'
+          } transition-transform duration-300 ease-in-out overflow-y-auto`}
         >
-          <div
-            className={`p-2 transition-opacity duration-300 ease-in-out ${
-              isActive ? 'flex flex-col items-center justify-center' : 'hidden'
-            }`}
-          >
-            <div className='absolute right-5 top-8 ml-auto flex items-center text-sm'>
-              <X size={20} className="cursor-pointer" onClick={toggleSidebar} /> {/* Close Icon */}
-            </div>
-            {/* Filter items will go in here */}
+          <div className="p-4">
+            <button 
+              onClick={toggleSidebar}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+              <X size={24} />
+            </button>
+            <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Filters</h2>
             <Filter />
           </div>
         </div>
-      );
+    );
 }
 
 export default Sidebar

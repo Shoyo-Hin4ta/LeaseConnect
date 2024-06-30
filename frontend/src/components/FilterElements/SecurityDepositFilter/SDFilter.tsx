@@ -7,20 +7,23 @@ const SDFilter = ({ onSecurityDepositChange, onUtilitiesChange } : {
   onUtilitiesChange : (utilitiesIncluded: boolean) => void
 }) => {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 my-2 text-base">
-      <div className="flex gap-4 items-center">
-        <Label htmlFor="security-deposit-included">No Security Deposit</Label>
-        <Switch 
-          id="security-deposit-included" 
-          onCheckedChange={onSecurityDepositChange}
-        />
-      </div>
-      <div className="flex gap-4 items-center">
-        <Label htmlFor="utilities-included"> Utilities Included</Label>
-        <Switch 
-          id="utilities-included" 
-          onCheckedChange={onUtilitiesChange}
-        />
+    <div className="space-y-4">
+      <h3 className="font-semibold text-violet-800 dark:text-violet-200">Additional Options</h3>
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <Label htmlFor="security-deposit-included" className="text-sm">No Security Deposit</Label>
+          <Switch 
+            id="security-deposit-included" 
+            onCheckedChange={onSecurityDepositChange}
+          />
+        </div>
+        <div className="flex items-center justify-between">
+          <Label htmlFor="utilities-included" className="text-sm">Utilities Included</Label>
+          <Switch 
+            id="utilities-included" 
+            onCheckedChange={onUtilitiesChange}
+          />
+        </div>
       </div>
     </div>
   )

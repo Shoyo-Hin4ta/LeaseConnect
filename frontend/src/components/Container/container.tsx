@@ -1,14 +1,15 @@
 import { ReactNode } from "react"
 
 type PropsType = {
-    children : ReactNode;
+  children: ReactNode;
 }
 
-const container = ({children} : PropsType) => {
+const Container = ({ children }: PropsType) => {
   return (
-  <div className="border border-red-500 flex flex-col items-center w-4/5 p-2 font-roboto">
-    {children}
-  </div>
-  )}
+  <div className=" border border-indigo-200  dark:border-gray-700 flex flex-col items-center w-[90%] p-2 font-roboto rounded-lg shadow-lg bg-white dark:bg-gray-800">
+      {children}
+    </div>
+  )
+}
 
-export default container
+export default Container

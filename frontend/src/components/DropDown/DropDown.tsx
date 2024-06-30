@@ -14,13 +14,13 @@ import { Link } from 'react-router-dom';
 
 const DropDown = () => {
   return (
-    <div>
+
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className="flex items-center justify-center rounded-full hover:bg-gray-100">
-            <Menu size={24} />
-          </button>
-        </DropdownMenuTrigger>
+        <button className="flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
+          <Menu size={24} className="text-gray-600 dark:text-white" />
+        </button>
+      </DropdownMenuTrigger>
 
         <DropdownMenuPortal>
           <DropdownMenuContent className="" align='end'>
@@ -53,7 +53,7 @@ const DropDown = () => {
           </DropdownMenuContent>
         </DropdownMenuPortal>
       </DropdownMenu>
-    </div>
+
   );
 };
 

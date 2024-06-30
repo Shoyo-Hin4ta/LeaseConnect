@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button"
 import { CardFooter } from "@/components/ui/card"
 import CardButton from "../CardButton/CardButton"
 import { useNavigate } from "react-router-dom"
@@ -6,44 +5,50 @@ import { useNavigate } from "react-router-dom"
 const CardFoot = ({isMyListings = false} : {
   isMyListings? : boolean
 }) => {
-
   const navigate = useNavigate();
 
   return (
-    <CardFooter className="bottom-0 flex flex-col justify-between border  border-black  -mt-2">
-          
-              <div className="border border-red-500 w-full h-[55%]">
-                  <div className="flex justify-between ">
-                    <div className="w-5/6">
-                      <div className="whitespace-normal break-words overflow-hidden text-ellipsis">
-                        Address
-                      </div>
-                      <div className="">State, Country</div>
-                    </div>
-                    <div className="w-1/6 text-right">
-                      Price
-                    </div>
-                  </div>
-              </div>
-            
-            <div className="mt-2 w-full gap-2 flex flex-col h-[70%] border border-red-500">
-              <div className=" w-full my-1 overflow-x-auto">
-                Featuressssssssssssssssssssssssssssssssssadadasdadadasds
-              </div>
-              <div></div>
-              {isMyListings ? (
-                <div className="flex gap-5">
-                  <CardButton ButtonText="Edit" onClick={() => navigate('/editlisting')}/>
-                  <CardButton ButtonText="Remove Listing"/>
-                </div>
-              ) : (
-                <div>
-                  <CardButton ButtonText="Chat"/>
-                </div>
-              )}
-            </div>
-          
-        </CardFooter>
+    <CardFooter className="flex flex-col p-4">
+      <div className="w-full mb-4">
+        <div className="flex justify-between items-start">
+          <div className="flex-1">
+            <p className="font-semibold text-gray-800 dark:text-gray-200">Address</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">State, Country</p>
+          </div>
+          <div className="text-right">
+            <p className="font-bold text-lg text-violet-600 dark:text-violet-400">Price</p>
+          </div>
+        </div>
+      </div>
+      <div className="w-full mb-4">
+        <p className="text-sm text-gray-600 dark:text-gray-400 truncate">Features</p>
+      </div>
+      <div className="w-full flex justify-end">
+        {isMyListings ? (
+          <div className="space-x-2">
+            <CardButton 
+                ButtonText="Edit" 
+                onClick={() => navigate('/editlisting')} 
+                variant="default" 
+                size="sm"
+              />
+              <CardButton 
+                ButtonText="Remove Listing" 
+                variant="outline" 
+                size="sm" 
+                className="text-red-500 hover:bg-red-50 dark:hover:bg-red-900"
+              />
+          </div>
+        ) : (
+              <CardButton 
+                ButtonText="Chat" 
+                onClick={() => navigate('/editlisting')} 
+                variant="default" 
+                size="sm"
+              />        
+            )}
+      </div>
+    </CardFooter>
   )
 }
 

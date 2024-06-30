@@ -1,5 +1,5 @@
 import { RefObject, useEffect, useRef, useState } from "react";
-import { listingPropertySteps, steps } from "@/lib/utils";
+import { listingPropertySteps } from "@/lib/utils";
 
 type marginTypes = {
   marginLeft : number | undefined,
@@ -24,13 +24,13 @@ const Stepper = ({currentStep} : {
     // console.log(stepRef.current[steps.length-1]?.current?.offsetWidth);
     setMargins({
       marginLeft: ((stepRef.current[0]?.current?.offsetWidth)),
-      marginRight : ((stepRef.current[steps.length-1]?.current?.offsetWidth))
+      marginRight : ((stepRef.current[listingPropertySteps.length-1]?.current?.offsetWidth))
     })
   }, [stepRef]);
   
 
     const calulateProgressWidth = () => {
-      const val = ((currentStep-1)/ (steps.length-1)) * 100 
+      const val = ((currentStep-1)/ (listingPropertySteps.length-1)) * 100 
       console.log(`progress % ${val}`)
       if(val > 100){
         return 100;

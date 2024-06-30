@@ -3,23 +3,18 @@ import SearchBar from '../SearchBar/SearchBar';
 
 const BrowsePage = () => {
   return (
-    <div className='w-full '>
-        
-        {/* <div className='h-screen'></div> */}
-        {/* <ListingCard /> */}
-
-          {/* <Sidebar /> */}
-          <div className='z-20'>
-            <SearchBar />
-          </div>
-          <div className='flex flex-col items-center gap-5 mt-4 z-0'>
-            <ListingCard />
-            <ListingCard />
-            <ListingCard />          
-            <ListingCard />
-          </div>
-          
-  
+    <div className='w-full min-h-screen bg-gray-100 dark:bg-gray-900 overflow-x-hidden'>
+      <div className='sticky top-0 z-20'>
+        <SearchBar />
+      </div>
+      <div className='container mx-auto px-4 py-8'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+          <ListingCard />
+          <ListingCard />
+          <ListingCard />
+          <ListingCard />
+        </div>
+      </div>
     </div>
   )
 }

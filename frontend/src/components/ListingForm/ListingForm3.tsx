@@ -23,10 +23,21 @@ export const TIME_PERIOD_ARR = [
 ]
 
 
+const currencyRegex = /^\d+(\.\d{1,2})?$/;
 
 const listingForm3Schema = z.object({
   currency : z.enum(["usd", "inr"]),
-  amount : z.string(),
+  amount: z
+    .string({
+      required_error : "Amount is required"
+    })
+    .regex(currencyRegex, { message: "Not Valid amount" })
+    .refine((value) => {
+      const numberValue = parseFloat(value);
+      return !isNaN(numberValue) && numberValue > 0;
+    }, {
+      message: "Amount must be a positive number.",
+    }),
   timePeriod : z.enum(["day", "week", "month"]),
   subleaseDuration: z.string()
 })

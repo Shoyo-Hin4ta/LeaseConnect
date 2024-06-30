@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { DualRangeSlider } from "@/components/ui/dual-range-slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import FilterElementContainer from '../FilterElementContainer';
 
 interface PriceRangeFilterProps {
   onChange: (priceRange: { min: number; max: number }, pricePeriod: 'per_day' | 'per_week' | 'per_month') => void;
@@ -58,36 +57,33 @@ const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({ onChange }) => {
   };
 
   return (
-    <FilterElementContainer>
-      <div className="flex gap-4 items-center ">
-        Price Range Filter
-        <div>
-          <Select 
-            defaultValue="per_day"     
-            onValueChange={handlePricePeriodChange}>
-            <SelectTrigger className="h-6 py-2 text-sm">
-              <SelectValue placeholder="" />
-            </SelectTrigger>
-            <SelectContent className='text-sm'>
-              <SelectItem value="per_day">/ day</SelectItem>
-              <SelectItem value="per_week">/ week</SelectItem>
-              <SelectItem value="per_month">/ month</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+    <div className="space-y-4 w-full">
+      <div className="flex justify-between items-center">
+        <h3 className="font-semibold text-violet-800 dark:text-violet-200">Price Range</h3>
+        <Select 
+          defaultValue="per_day"     
+          onValueChange={handlePricePeriodChange}>
+          <SelectTrigger className="h-8 w-28">
+            <SelectValue placeholder="" />
+          </SelectTrigger>
+          <SelectContent className="h-20">
+            <SelectItem value="per_day">/ day</SelectItem>
+            <SelectItem value="per_week">/ week</SelectItem>
+            <SelectItem value="per_month">/ month</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
-
-      <div className="w-full space-y-5 px-0 mt-7">
+      <div className="w-full pl-4 pr-4"> {/* Added padding-left */}
         <DualRangeSlider
-          label={(value) => <span>{value}</span>}
+          label={(value) => <span className="text-sm">${value}</span>}
           value={getCurrentValues()}
           onValueChange={handleValuesChange}
-          className='text-sm'
+          className="py-4 w-full" // Changed back to w-full
           {...getSliderProps()}
         />
       </div>
-    </FilterElementContainer>
-    );
+    </div>
+  );
 };
 
 export default PriceRangeFilter;

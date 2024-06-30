@@ -102,6 +102,7 @@ const ListingForm4 = () => {
   const hasValidImage = selectedImages.some(img => img !== null);
   const allExistingFieldsFilled = selectedImages.every(img => img !== null);
 
+  console.log(selectedImages);
   return (
     <div className="w-full flex flex-col justify-center items-center">
       <div className="my-7">

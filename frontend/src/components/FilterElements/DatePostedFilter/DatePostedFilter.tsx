@@ -1,31 +1,26 @@
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import FilterElementContainer from "../FilterElementContainer";
-
 
 const DatePostedFilter = ({ onChange } : {
     onChange: (city: string) => void;
 }) => {
   return (
-   <FilterElementContainer>
-      <div>Date Posted</div>
-        <div>
-          <RadioGroup defaultValue="recently" className="flex" onValueChange={onChange}>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="recently" id="recently" />
-              <Label htmlFor="recently">Recently</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="three_days" id="three_days" />
-              <Label htmlFor="three_days">3 days</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="one_week" id="one_week" />
-              <Label htmlFor="one_week">1 week</Label>
-            </div>
-          </RadioGroup>
-        </div>
-   </FilterElementContainer>
+    <div className="space-y-4">
+      <h3 className="font-semibold text-violet-800 dark:text-violet-200">Date Posted</h3>
+      <RadioGroup defaultValue="recently" className="flex flex-wrap gap-2" onValueChange={onChange}>
+        {["Recently", "3 days", "1 week"].map((option) => (
+          <div key={option} className="flex items-center">
+            <RadioGroupItem value={option.toLowerCase().replace(' ', '_')} id={option.toLowerCase().replace(' ', '_')} className="peer sr-only" />
+            <Label
+              htmlFor={option.toLowerCase().replace(' ', '_')}
+              className="px-3 py-2 rounded-full border-2 border-violet-200 bg-white peer-checked:bg-violet-600 peer-checked:text-white hover:bg-violet-100 cursor-pointer transition-colors"
+            >
+              {option}
+            </Label>
+          </div>
+        ))}
+      </RadioGroup>
+    </div>
   )
 }
 

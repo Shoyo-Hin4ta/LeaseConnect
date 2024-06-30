@@ -1,4 +1,3 @@
-// import { HTMLInputTypeAttribute } from "react";
 import { Control, FieldPath } from "react-hook-form";
 import { 
     FormControl,
@@ -15,67 +14,57 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-  } from "@/components/ui/select"
+} from "@/components/ui/select"
 
 const formSchema = z.object({
-    gender : z.enum(["male", "female", "other"]),
+    gender: z.enum(["male", "female", "other"]),
 })
 
-
-// type InputValType = string;
-
-
-
-interface SignUpFormFieldProps{
-  name : FieldPath<z.infer<typeof formSchema>>;
-  label : string ,
-  props?: {
-    field?: React.InputHTMLAttributes<HTMLInputElement>;
-    css?: string;
-  };
-  formControl : Control<Inputs>,
-  id? : string,
+interface SelectInputProps {
+    name: FieldPath<z.infer<typeof formSchema>>;
+    label: string;
+    formControl: Control<Inputs>;
+    className?: string;
+    labelClassName?: string;
+    selectClassName?: string;
 }
 
-const SelectInput: React.FC<SignUpFormFieldProps> = ({
-  label, 
-  name, 
-  formControl,
-  } ) => {
-        return ( 
-            <>
-              <FormField
-                name={name}
-                control={formControl}
-                render={({ field }) => (
-                  <FormItem className="flex flex-col w-full items-center justify-center">
-                    <div className="flex w-full items-center justify-center">
-                      <FormLabel className="w-2/5 mt-2">{label}</FormLabel>
-                      <div className="w-[80%]">
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select your gender" />
-                        </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                        <SelectItem value="male">Male</SelectItem>
-                        <SelectItem value="female">Female</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
-                        </SelectContent>
-                        </Select>
-                      </div>
+const SelectInput: React.FC<SelectInputProps> = ({
+    label,
+    name,
+    formControl,
+    className = "",
+    labelClassName = "",
+    selectClassName = "",
+}) => {
+    return (
+        <FormField
+            name={name}
+            control={formControl}
+            render={({ field }) => (
+                <FormItem className={`flex flex-col w-full ${className}`}>
+                    <div className="flex w-full items-center justify-between">
+                        <FormLabel className={`w-1/3 ${labelClassName}`}>{label}</FormLabel>
+                        <div className="w-[100%]">
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                    <SelectTrigger className={`w-full ${selectClassName}`}>
+                                        <SelectValue placeholder="Select your gender" />
+                                    </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    <SelectItem value="male">Male</SelectItem>
+                                    <SelectItem value="female">Female</SelectItem>
+                                    <SelectItem value="other">Other</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
                     </div>
-                    
-                    {/* <FormDescription>
-                      Enter Full Name
-                    </FormDescription> */}
-                    <FormMessage className=""/>
+                    <FormMessage className="text-sm text-red-500 mt-1" />
                 </FormItem>
-              )}
-            />
-            </>
-        )
+            )}
+        />
+    )
 }
 
-export default SelectInput
+export default SelectInput;

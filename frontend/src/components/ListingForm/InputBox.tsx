@@ -30,7 +30,7 @@ const InputBox: React.FC<ListingInputTypes> = ({
           control={formControl}
           name={name}
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="relative">
               <FormLabel className="text-sm font-medium">{label}</FormLabel>
               <FormControl>
                 {inputType === "inputbox" ? (
@@ -50,8 +50,8 @@ const InputBox: React.FC<ListingInputTypes> = ({
               
               }
               </FormControl>
-              <FormMessage />
-            </FormItem>
+              <FormMessage className="absolute text-red-600 text-sm mt-1" />
+              </FormItem>
           )}
         />
   )

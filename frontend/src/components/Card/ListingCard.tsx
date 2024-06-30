@@ -9,37 +9,30 @@ import { Heart } from "lucide-react";
 import CardFooter from "./CardFooter/CardFoot"
 import CardCarousel from "./Carousel/CardCaraousel"
 
- 
 export function ListingCard({isMyListings = false} : {
   isMyListings? : boolean
 }) {
   return (
-    <div className="relative  h-[500px]">
-
-      {!isMyListings && (<div className="absolute bottom-2 right-2 ">
-          <Heart color="red" />
-      </div>)}
-
-      <Card id={`listing-id`} className="w-[24rem] h-[30rem] border border-cyan-300">
-
-        <CardHeader className="h-1/6">
-          <CardTitle>Title</CardTitle>
-          <CardDescription>Date | Price</CardDescription>
-        </CardHeader>
-
-        <CardContent className="w-full h-3/6 ">
-            <CardCarousel />
-        </CardContent>
-
-        <div className="h-2/6">
-          <CardFooter isMyListings={isMyListings}/>
+    <Card className="overflow-hidden transition-shadow duration-300 hover:shadow-xl">
+      <CardHeader>
+        <div className="flex justify-between items-center">
+          <div>
+            <CardTitle className="text-lg font-semibold">Title</CardTitle>
+            <CardDescription className="text-sm text-gray-500">Date | Price</CardDescription>
+          </div>
+          {!isMyListings && (
+            <button className="text-red-500 hover:text-red-600 transition-colors">
+              <Heart size={24} />
+            </button>
+          )}
         </div>
-      </Card>
-
-    </div>
-    
+      </CardHeader>
+      <CardContent className="p-0">
+        <CardCarousel />
+      </CardContent>
+      <CardFooter isMyListings={isMyListings}/>
+    </Card>
   )
 }
-
 
 export default ListingCard

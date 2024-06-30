@@ -57,38 +57,64 @@ export type ListingTypes = {
   description : string,
 }
 
+const titleRegex = /^[a-zA-Z0-9\s,.'-]{2,100}$/; // Example regex for title
+const streetAddressRegex = /^[a-zA-Z0-9\s,.'-]{5,100}$/; // Example regex for street address
+const cityStateCountryRegex = /^[a-zA-Z\s-]{2,50}$/; // Example regex for city, state, country
+const zipcodeRegex = /^[0-9]{5}(?:-[0-9]{4})?$/; // Example regex for US ZIP code
+
 const listingForm1Schema = z.object({
-  title: z.string().min(2, {
-    message: "Title can't be empty.",
-  }),
-  propertyType : z
-                .enum(["house", "apartment", "studio"], {
-                  required_error: "You need to select a property type.",
-                }),
-  bedroom : z
-            .string(),
-  bathroom : z
-            .string(),
-  streetAddress : z
-            .string(),
-  city : z.string({
-    required_error: "City is required",
-    invalid_type_error: "Name must be a string",
-  }),
-  state : z.string({
-    required_error: "State is required",
-    invalid_type_error: "Name must be a string",
-  }),
-  zipcode : z.string({
-    required_error: "ZipCode is required",
-    invalid_type_error: "Name must be a string",
-  }),
-  country : z.string({
-    required_error: "Country is required",
-    invalid_type_error: "Name must be a string",
+  title: z
+    .string()
+    .min(2, { message: "Title can't be empty." })
+    .max(100, { message: "Title can't exceed 100 characters." })
+    .regex(titleRegex, { message: "Title contains invalid characters." })
+    .transform((title) => title.trim()),
+
+  propertyType: z.enum(["house", "apartment", "studio"], {
+    required_error: "You need to select a property type.",
   }),
 
-})
+  bedroom: z
+    .string(),
+
+  bathroom: z
+    .string(),
+
+  streetAddress: z
+    .string()
+    .min(5, { message: "Street address must be at least 5 characters long." })
+    .max(100, { message: "Street address can't exceed 100 characters." })
+    .regex(streetAddressRegex, { message: "Street address contains invalid characters." })
+    .transform((address) => address.trim()),
+
+  city: z
+    .string()
+    .min(2, { message: "City is required." })
+    .max(50, { message: "City name can't exceed 50 characters." })
+    .regex(cityStateCountryRegex, { message: "City name contains invalid characters." })
+    .transform((city) => city.trim()),
+
+  state: z
+    .string()
+    .min(2, { message: "State is required." })
+    .max(50, { message: "State name can't exceed 50 characters." })
+    .regex(cityStateCountryRegex, { message: "State name contains invalid characters." })
+    .transform((state) => state.trim()),
+
+  zipcode: z
+    .string()
+    .min(5, { message: "Zip code is required." })
+    .max(10, { message: "Zip code can't exceed 10 characters." })
+    .regex(zipcodeRegex, { message: "Invalid zip code format." })
+    .transform((zipcode) => zipcode.trim()),
+
+  country: z
+    .string()
+    .min(2, { message: "Country is required." })
+    .max(50, { message: "Country name can't exceed 50 characters." })
+    .regex(cityStateCountryRegex, { message: "Country name contains invalid characters." })
+    .transform((country) => country.trim()),
+});
 
 export const PROPERTY_ARRAY = [
   { value : "house", desc : "House" },
@@ -104,11 +130,11 @@ const ListingForm1 = () => {
     resolver :zodResolver(listingForm1Schema),
     defaultValues: {
       title : "",
-      // streetAddress : "",
-      // state:"",
-      // city:"",
-      // zipcode:"",
-      // country:"",
+      streetAddress : "",
+      state:"",
+      city:"",
+      zipcode:"",
+      country:"",
     },
   })
 
