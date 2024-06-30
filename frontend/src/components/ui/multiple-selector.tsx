@@ -390,7 +390,7 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
             }}
           >
           
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap items-center gap-1">
             {selected.map((option) => {
               return (
                 <Badge
@@ -449,7 +449,8 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
               className={cn(
                 'flex-1 bg-transparent outline-none placeholder:text-muted-foreground',
                 {
-                  'w-full': hidePlaceholderWhenSelected,
+                  'w-auto min-w-[60px]': selected.length > 0,
+                  'w-full': selected.length === 0,
                   'px-3 py-2': selected.length === 0,
                   'ml-1': selected.length !== 0,
                 },

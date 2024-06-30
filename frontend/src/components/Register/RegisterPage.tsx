@@ -6,21 +6,8 @@ import RegisterForm2 from "./RegisterForm2";
 import RegisterForm3 from "./RegisterForm3";
 import { ReactNode } from "react"
 import Container from "../Container/container";
+import { steps } from "@/lib/utils";
 
-export const steps = [
-  {
-    step: 1,
-    stepDesc: "Personal Information",
-  },
-  {
-    step: 2,
-    stepDesc: "Additional Details",
-  },
-  {
-    step: 3,
-    stepDesc: "Review and Submit",
-  }
-]
 
 const RegisterPage = () => {
   const currentStep = useSelector((s: RootState) => s.stepper.currentStep);

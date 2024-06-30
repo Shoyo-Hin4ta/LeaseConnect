@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { z } from 'zod'
 import MultipleSelector, { Option } from '@/components/ui/multiple-selector';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,6 +10,7 @@ import RadioInput from './RadioInput';
 import InputBox from './InputBox';
 import { useDispatch } from 'react-redux';
 import { next } from '@/appstore/stepperSlice';
+import { toast } from '../ui/use-toast';
 
 
 export const stringsToOptions = (strings: string[], options: Option[]): Option[] => {
@@ -67,7 +68,9 @@ const listingForm2Schema = z.object({
                 }),
   })
 
-const ListingForm2 = () => {
+const ListingForm2 = ({ currentStep }: {
+  currentStep: number,
+}) =>{
 
     const dispatch = useDispatch();
 
@@ -84,106 +87,107 @@ const ListingForm2 = () => {
 
     const { handleSubmit, control } = listingForm2;
 
-    const onSubmit = async(data) => {
-        dispatch(next());
-        console.log(data)
-    }
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  const onSubmit = async(data) => {
+    setIsSubmitting(true);
+    console.log(data);
+    dispatch(next());
+    
+    setIsSubmitting(false);
+    toast({
+      title: "Form submitted successfully",
+      description: "Your information has been saved.",
+      duration: 3000,
+    });
+  }
     
     // Helper function to convert string[] to Option[]
     
 
     return (
-        <div className="w-full flex flex-col justify-center items-center">
-            <div>
-                Additional Details
-            </div>
-           <div className='w-full'>
-                <Form {...listingForm2}>
-                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 p-2">
-
-                        <RadioInput
-                            name="utilitiesIncludedInRent"
-                            formControl={control}
-                            label='Are Utilities Included In The Rent'
-                            inputArray={UTIL_RADIO_ARR}
-                            placeholder='Please Select...'
-                        />
-                        
-                        <Controller
-                        name="utilities"
-                        control={control}
-                        render={({field}) => (
-                            <MultipleSelector
-                                {...field}
-                                value={stringsToOptions(field.value, UTILITIES)}
-                                onChange={(newValue) => field.onChange(optionsToStrings(newValue))}
-                                defaultOptions={UTILITIES}
-                                placeholder="Select utilities..."
-                                emptyIndicator={
-                                    <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                                    No utilities found.
-                                    </p>
-                                }
-                            />
-                            )}
-                        />
-                        <Controller
-                            name="amenities"
-                            control={control}
-                            render={({field}) => (
-                                <MultipleSelector
-                                    {...field}
-                                    value={stringsToOptions(field.value, AMENITIES)}
-                                    onChange={(newValue) => field.onChange(optionsToStrings(newValue))}
-                                    defaultOptions={AMENITIES}
-                                    placeholder="Select amenities..."
-                                    emptyIndicator={
-                                        <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                                        No amentites found.
-                                        </p>
-                                    }
-                                />
-                                )}
-                        />
-                        <Controller
-                            name="preferences"
-                            control={control}
-                            render={({field}) => (
-                                <MultipleSelector
-                                    {...field}
-                                    value={stringsToOptions(field.value, PREFERENCES)}
-                                    onChange={(newValue) => field.onChange(optionsToStrings(newValue))}
-                                    defaultOptions={PREFERENCES}
-                                    placeholder="Select preferences..."
-                                    emptyIndicator={
-                                        <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                                        No utilities found.
-                                        </p>
-                                    }
-                                />
-                                )}
-                        />
-
-                        <InputBox
-                        name="description"
-                        label ="Lisitng Descriptiton"
-                        placeholder='You can enter anything you want to highlight the perks or something that was not mentioned. 
-                        Max char is 500'
-                        formControl={control}
-                        inputType='textbox'
-                        className='h-20 text-left'
-                        />
-
-                        
-                        
-                        <ListingFormButton />
-
-                    </form>
-                </Form>
-
-           </div>
+        <div className="w-full max-w-2xl mx-auto">
+          <h2 className="text-2xl font-semibold mb-6 text-violet-800 dark:text-violet-200">Additional Details</h2>
+          <Form {...listingForm2}>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <RadioInput
+                name="utilitiesIncludedInRent"
+                formControl={control}
+                label='Are Utilities Included In The Rent'
+                inputArray={UTIL_RADIO_ARR}
+                placeholder='Please Select...'
+              />
+              <Controller
+                name="utilities"
+                control={control}
+                render={({field}) => (
+                  <MultipleSelector
+                    {...field}
+                    value={stringsToOptions(field.value, UTILITIES)}
+                    onChange={(newValue) => field.onChange(optionsToStrings(newValue))}
+                    defaultOptions={UTILITIES}
+                    placeholder="Select utilities..."
+                    emptyIndicator={
+                      <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                        No utilities found.
+                      </p>
+                    }
+                  />
+                )}
+              />
+              <Controller
+                name="amenities"
+                control={control}
+                render={({field}) => (
+                  <MultipleSelector
+                    {...field}
+                    value={stringsToOptions(field.value, AMENITIES)}
+                    onChange={(newValue) => field.onChange(optionsToStrings(newValue))}
+                    defaultOptions={AMENITIES}
+                    placeholder="Select amenities..."
+                    emptyIndicator={
+                      <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                        No amenities found.
+                      </p>
+                    }
+                  />
+                )}
+              />
+              <Controller
+                name="preferences"
+                control={control}
+                render={({field}) => (
+                  <MultipleSelector
+                    {...field}
+                    value={stringsToOptions(field.value, PREFERENCES)}
+                    onChange={(newValue) => field.onChange(optionsToStrings(newValue))}
+                    defaultOptions={PREFERENCES}
+                    placeholder="Select preferences..."
+                    emptyIndicator={
+                      <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                        No preferences found.
+                      </p>
+                    }
+                  />
+                )}
+              />
+              <InputBox
+                name="description"
+                label="Listing Description"
+                placeholder='You can enter anything you want to highlight the perks or something that was not mentioned. Max char is 500'
+                formControl={control}
+                inputType='textbox'
+                className='h-32 text-left'
+              />
+              <ListingFormButton 
+              currentStep={currentStep} 
+              isSubmitting={isSubmitting}
+              className="w-full py-3  text-lg font-semibold transition-colors duration-200 bg-violet-600 hover:bg-violet-700 text-white dark:bg-violet-700 dark:hover:bg-violet-600"
+            />
+            </form>
+          </Form>
         </div>
-    )
+      );
 }
 
 export default ListingForm2

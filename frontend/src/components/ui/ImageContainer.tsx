@@ -3,11 +3,11 @@ import { Button } from './button';
 
 interface ImageContainerProps {
     image?: File | null;
-    onRemove?: () => void;
+    onRemove?: (event: React.MouseEvent) => void;
     width?: string;
     height?: string;
     isProfilePicture?: boolean;
-}
+  }
 
 const ImageContainer: React.FC<ImageContainerProps> = ({
     image = null,
@@ -36,25 +36,25 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
         ? 'w-48 h-64 sm:w-56 sm:h-72 md:w-64 md:h-80 mx-auto'
         : `${width} ${height}`;
 
-    return (
-        <div className={`relative ${containerClasses} rounded-lg border-2 border-violet-300 dark:border-violet-600 border-dashed overflow-hidden group transition-all duration-300 hover:border-violet-500 dark:hover:border-violet-400`}>
-            {image ? (
+        return (
+            <div className={`relative ${containerClasses} rounded-lg border-2 border-violet-300 dark:border-violet-600 border-dashed overflow-hidden group transition-all duration-300 hover:border-violet-500 dark:hover:border-violet-400`}>
+              {image ? (
                 <>
-                    <img
-                        src={preview || ''}
-                        alt={isProfilePicture ? "Selected Profile Picture" : "Selected Image"}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                    {onRemove && (
-                        <Button
-                            onClick={onRemove}
-                            className="absolute right-2 top-2 bg-white dark:bg-gray-800 text-violet-600 dark:text-violet-400 px-2 py-1 rounded shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        >
-                            Remove
-                        </Button>
-                    )}
+                  <img
+                    src={preview || ''}
+                    alt={isProfilePicture ? "Selected Profile Picture" : "Selected Image"}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  {onRemove && (
+                    <Button
+                      onClick={(e) => onRemove(e)}
+                      className="absolute right-2 top-2 bg-white dark:bg-gray-800 text-violet-600 dark:text-violet-400 px-2 py-1 rounded shadow-md transition-opacity duration-300"
+                    >
+                      Remove
+                    </Button>
+                  )}
                 </>
-            ) : (
+              ) : (
                 <div className="flex flex-col items-center justify-center h-full text-violet-500 dark:text-violet-400 p-4">
                     <div className="text-4xl font-thin mb-2">+</div>
                     <div className="text-center">
@@ -71,9 +71,4 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
 export default ImageContainer;
 
 
-{/* <ImageContainer 
-    image={selectedImage} 
-    onRemove={() => setSelectedImage(null)}
-    width="w-full"
-    height="h-48 md:h-64"
-/> */}
+

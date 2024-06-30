@@ -10,6 +10,8 @@ import ListingFormButton from "./ListingFormButton"
 import CustomPriceInput from "./CustomPriceInput"
 import { next } from "@/appstore/stepperSlice"
 import { useDispatch } from "react-redux"
+import { useState } from "react"
+import { toast } from "../ui/use-toast"
 
 export const CURRENCY_ARR = [
   {value: "usd", desc : "USD"},
@@ -42,7 +44,9 @@ const listingForm3Schema = z.object({
   subleaseDuration: z.string()
 })
 
-const ListingForm3 = () => {
+const ListingForm3 = ({ currentStep }: {
+  currentStep: number,
+}) =>{
 
   const dispatch = useDispatch();
 
@@ -57,52 +61,52 @@ const ListingForm3 = () => {
 
   const {handleSubmit, control, setValue} =  listingForm3;
 
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   const onSubmit = async(data) => {
+    setIsSubmitting(true);
+    console.log(data);
     dispatch(next());
-    console.log(data)
+    
+    setIsSubmitting(false);
+    toast({
+      title: "Form submitted successfully",
+      description: "Your information has been saved.",
+      duration: 3000,
+    });
   }
 
   return (
-    <div className="w-full flex flex-col justify-center items-center">
-          <div className="my-7">
-              Pricing 
+    <div className="w-full max-w-2xl mx-auto">
+      <h2 className="text-2xl font-semibold mb-6 text-violet-800 dark:text-violet-200">Pricing</h2>
+      <Form {...listingForm3}>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <CustomPriceInput control={control} />
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-violet-700 dark:text-violet-300">Sublease Period</label>
+            <Controller
+              control={control}
+              name="subleaseDuration"
+              render={({ field }) => (
+                <DateRangePicker
+                  onUpdate={(values) => {
+                    const fromDate = values.range.from.toISOString();
+                    const toDate = values.range.to ? values.range.to.toISOString() : '';
+                    field.onChange(`${fromDate} - ${toDate}`);
+                  }}
+                />
+              )}
+            />
           </div>
-           <div className='w-full'>
-                <Form {...listingForm3}>
-                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 p-2">
-
-                      <CustomPriceInput
-                      control={control} />
-
-                      <div className="flex flex-col gap-2">
-                        <div className="text-md">
-                          Sublease Period
-                        </div>
-
-                        <Controller
-                          control={control}
-                          name="subleaseDuration"
-                          render={({ field }) => (
-                            <DateRangePicker
-                              onUpdate={(values) => {
-                                const fromDate = values.range.from.toISOString();
-                                const toDate = values.range.to ? values.range.to.toISOString() : '';
-                                field.onChange(`${fromDate} - ${toDate}`);
-                              }}
-                            />
-                          )}
-                        />
-                      </div>
-
-                        
-                      <ListingFormButton />
-
-                    </form>
-                </Form>
-
-           </div>
-        </div>
-  )
+          <ListingFormButton 
+            currentStep={currentStep} 
+            isSubmitting={isSubmitting}
+            className="w-full py-3  text-lg font-semibold transition-colors duration-200 bg-violet-600 hover:bg-violet-700 text-white dark:bg-violet-700 dark:hover:bg-violet-600"
+          />
+        </form>
+      </Form>
+    </div>
+  );
 }
 
 export default ListingForm3

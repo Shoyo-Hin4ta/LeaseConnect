@@ -1,15 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { SubmitHandler, useForm } from "react-hook-form"
 import { z } from "zod"
 import { Form } from "../ui/form"
 import InputBox from "./InputBox"
 import SelectDrop from "./SelectDrop"
 import RadioInput from "./RadioInput"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { initAutocomplete } from "@/lib/autofillLisitng"
 import ListingFormButton from "./ListingFormButton"
 import { useDispatch } from "react-redux"
 import { next } from "@/appstore/stepperSlice"
+import { toast } from "../ui/use-toast"
 
 
 export const BedroomInputArray = [{
@@ -122,7 +123,11 @@ export const PROPERTY_ARRAY = [
   { value : "apartment", desc : "Apartment" }
 ]
 
-const ListingForm1 = () => {
+const ListingForm1 = ({ currentStep }: {
+  currentStep: number,
+}) =>{
+
+
 
   const dispatch = useDispatch();
 
@@ -140,9 +145,19 @@ const ListingForm1 = () => {
 
   const { handleSubmit, control, setValue } = listingForm1;
 
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   const onSubmit = async(data) => {
+    setIsSubmitting(true);
+    console.log(data);
     dispatch(next());
-    console.log(data)
+    
+    setIsSubmitting(false);
+    toast({
+      title: "Form submitted successfully",
+      description: "Your information has been saved.",
+      duration: 3000,
+    });
   }
 
   useEffect(() => {
@@ -152,100 +167,85 @@ const ListingForm1 = () => {
  
 
   return (
-      <div className="w-full flex flex-col justify-center items-center">
-          <div className="border">
-            Property Details
+    <div className="w-full max-w-2xl mx-auto">
+      <h2 className="text-2xl font-semibold mb-6 text-violet-800 dark:text-violet-200">Property Details</h2>
+      <Form {...listingForm1}>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <InputBox
+            name="title"
+            formControl={control}
+            placeholder="What are you subleasing..."
+            label="Listing Title"
+          />
+          <SelectDrop
+            name="propertyType"
+            formControl={control}
+            placeholder="Select property type"
+            label="Property Type"
+            inputArray={PROPERTY_ARRAY}
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <RadioInput
+              name="bedroom"
+              formControl={control}
+              label="Bedrooms"
+              inputArray={BedroomInputArray}
+              placeholder='Please Select...'
+            />
+            <RadioInput
+              name="bathroom"
+              formControl={control}
+              label="Bathrooms"
+              inputArray={BathroomInputArray}
+              placeholder='Please Select...'
+            />
           </div>
-          <div className="border w-full">
-            <Form {...listingForm1}>
-              <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 p-2">
-                <InputBox  
-                  name="title"
-                  formControl={control}
-                  placeholder="What are you subleasing..."
-                  label="Listing Title"
-                />
-
-                <SelectDrop
-                  name="propertyType"
-                  formControl={control}
-                  placeholder="Select property type"
-                  label="Property Type"
-                  inputArray={PROPERTY_ARRAY}
-                />
-
-              <div className="flex justify-between">
-                <RadioInput
-                  name="bedroom"
-                  formControl={control}
-                  placeholder="Number of bedroom in the property"
-                  label="Bedrooms"
-                  inputArray={BedroomInputArray}
-                />
-
-                <RadioInput
-                  name="bathroom"
-                  formControl={control}
-                  placeholder="Number of bathrooms in the property"
-                  label="Bathrooms"
-                  inputArray={BathroomInputArray}
-                />
-              </div>
-
-              <div className="">
-                <div className="mb-2">
-                  <InputBox  
-                    name="streetAddress"
-                    formControl={control}
-                    placeholder="Enter Street Address"
-                    label="Street Address"
-                    id="streetAddress"
-                  />
-                </div>
-                
-                <div className="grid gap-2 grid-cols-2">
-                  <InputBox  
-                    name="city"
-                    formControl={control}
-                    placeholder="Enter City"
-                    label="City"
-                    id="city"
-                  />
-
-                  <InputBox  
-                    name="state"
-                    formControl={control}
-                    placeholder="Enter State"
-                    label="State"
-                    id="state"
-                  />
-
-                  <InputBox  
-                    name="zipcode"
-                    formControl={control}
-                    placeholder="Enter Zipcode"
-                    label="ZipCode"
-                    id="zipcode"
-                  />
-
-                  <InputBox  
-                    name="country"
-                    formControl={control}
-                    placeholder="Enter Country"
-                    label="Country"
-                    id="country"
-                  />
-
-                </div>
-              </div>
-              <ListingFormButton />
-              </form>
-            </Form>
+          <InputBox
+            name="streetAddress"
+            formControl={control}
+            placeholder="Enter Street Address"
+            label="Street Address"
+            id="streetAddress"
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <InputBox
+              name="city"
+              formControl={control}
+              placeholder="Enter City"
+              label="City"
+              id="city"
+            />
+            <InputBox
+              name="state"
+              formControl={control}
+              placeholder="Enter State"
+              label="State"
+              id="state"
+            />
+            <InputBox
+              name="zipcode"
+              formControl={control}
+              placeholder="Enter Zipcode"
+              label="ZipCode"
+              id="zipcode"
+            />
+            <InputBox
+              name="country"
+              formControl={control}
+              placeholder="Enter Country"
+              label="Country"
+              id="country"
+            />
           </div>
-
-      </div>
-    
-  ) 
+          <ListingFormButton 
+          currentStep={currentStep} 
+          isSubmitting={isSubmitting}
+          className="w-full py-3  text-lg font-semibold transition-colors duration-200 bg-violet-600 hover:bg-violet-700 text-white dark:bg-violet-700 dark:hover:bg-violet-600"
+        />
+        </form>
+      </Form>
+    </div>
+  );
 }
 
 export default ListingForm1

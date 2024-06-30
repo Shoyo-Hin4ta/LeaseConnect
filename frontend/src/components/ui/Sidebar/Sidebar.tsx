@@ -7,8 +7,8 @@ const Sidebar = ({isActive, toggleSidebar}: {
     toggleSidebar : ()=> void 
 }) => {
     return (
-        <div
-          className={`fixed inset-y-0 left-0 z-50 w-80 min-w-[335px] bg-white dark:bg-gray-800 shadow-lg transform ${
+          <div
+          className={`fixed inset-y-0 left-0 z-[60] w-80 min-w-[335px] bg-white dark:bg-gray-800 shadow-lg transform ${
             isActive ? 'translate-x-0' : '-translate-x-full'
           } transition-transform duration-300 ease-in-out overflow-y-auto`}
         >

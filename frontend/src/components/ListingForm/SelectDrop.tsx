@@ -36,30 +36,28 @@ const SelectDrop: React.FC<SelectTypes> = ({
 }) => {
   return (
     <FormField
-      control={formControl}
-      name={name}
-      render={({ field, fieldState }) => (
-        <FormItem className="relative">
-          {label && <FormLabel>{label}</FormLabel>}
-          <Select onValueChange={field.onChange} defaultValue={defaultValue}>
-            <FormControl>
-              <SelectTrigger className={`w-full ${className}`}>
-                <SelectValue placeholder={placeholder} />
-              </SelectTrigger>
-            </FormControl>
-            <SelectContent>
-              {inputArray.map((item) => (
-                <SelectItem key={item.value} value={item.value}>{item.desc}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        
-          <FormMessage className="absolute text-red-600 text-sm mt-1" />
-            
-        </FormItem>
-      )}
+        control={formControl}
+        name={name}
+        render={({ field }) => (
+            <FormItem>
+                <FormLabel className="text-sm font-medium text-violet-700 dark:text-violet-300">{label}</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={defaultValue}>
+                    <FormControl>
+                        <SelectTrigger className={`w-full mt-1 border-gray-300 focus:border-violet-500 focus:ring-violet-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white ${className}`}>
+                            <SelectValue placeholder={placeholder} />
+                        </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                        {inputArray.map((item) => (
+                            <SelectItem key={item.value} value={item.value}>{item.desc}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+                <FormMessage className="text-sm text-red-500 dark:text-red-400" />
+            </FormItem>
+        )}
     />
-  )
+);
 }
 
 export default SelectDrop

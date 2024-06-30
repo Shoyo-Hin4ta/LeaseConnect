@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import UpdateField from './UpdateField';
-import { Pencil } from 'lucide-react';
+import { Pencil, User } from 'lucide-react';
 import { Button } from "../ui/button";
 import { Form, FormField } from "@/components/ui/form";
 import { isValidPhoneNumber } from "react-phone-number-input";
@@ -63,79 +63,79 @@ const ProfilePage = () => {
     };
 
     return (
-        <Form {...form}>
-            <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className='flex flex-col w-full p-2 border border-red-600'
-                onChange={handleChange}
-            >
-                <div className='my-2 mb-8 text-3xl'>Profile Page</div>
-                <div className='flex justify-between'>
-                    <div className='w-1/2 h-[300px] flex items-center justify-center'>
-                        <div className='h-[300px] w-[200px] bg-cyan-300'>
-                            Image
-                        </div>
-                    </div>
-                    <div className='w-[45%] flex flex-col gap-4'>
-                        {Object.keys(form.getValues()).map((field) => (
-                            !['city', 'state', 'country', 'zipcode'].includes(field) && (
-                                <FormField
-                                    key={field}
-                                    control={form.control}
-                                    name={field as keyof z.infer<typeof FormSchema>}
-                                    render={({ field: formField }) => (
-                                        <UpdateField
-                                            label={field.charAt(0).toUpperCase() + field.slice(1)}
-                                            id={field}
-                                            type={field === 'password' ? 'password' : 'text'}
-                                            inputType={field === 'gender' ? 'select' : field === 'mobile' ? 'phonenumber' : 'input'}
-                                            arr={field === 'gender' ? GenderArr : undefined}
-                                            isEditMode={editModes[field] || false}
-                                            setEditMode={(mode) => handleEditModeChange(field, mode)}
-                                            field={formField}
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto">
+                <h1 className="text-3xl font-bold text-violet-800 dark:text-violet-200 mb-8">Profile Page</h1>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} onChange={handleChange} className="space-y-8">
+                        <div className="flex flex-col md:flex-row gap-8">
+                            <div className="w-full md:w-1/3 flex flex-col items-center">
+                                <div className="w-48 h-48 bg-violet-200 dark:bg-violet-700 rounded-full flex items-center justify-center mb-4">
+                                    <User size={64} className="text-violet-600 dark:text-violet-300" />
+                                </div>
+                                <Button type="button" variant="outline" className="w-full">Change Photo</Button>
+                            </div>
+                            <div className="w-full md:w-2/3 space-y-6">
+                                {Object.keys(form.getValues()).map((field) => (
+                                    !['city', 'state', 'country', 'zipcode'].includes(field) && (
+                                        <FormField
+                                            key={field}
+                                            control={form.control}
+                                            name={field as keyof z.infer<typeof FormSchema>}
+                                            render={({ field: formField }) => (
+                                                <UpdateField
+                                                    label={field.charAt(0).toUpperCase() + field.slice(1)}
+                                                    id={field}
+                                                    type={field === 'password' ? 'password' : 'text'}
+                                                    inputType={field === 'gender' ? 'select' : field === 'mobile' ? 'phonenumber' : 'input'}
+                                                    arr={field === 'gender' ? GenderArr : undefined}
+                                                    isEditMode={editModes[field] || false}
+                                                    setEditMode={(mode) => handleEditModeChange(field, mode)}
+                                                    field={formField}
+                                                />
+                                            )}
                                         />
-                                    )}
-                                />
-                            )
-                        ))}
-                    </div>
-                </div>
+                                    )
+                                ))}
+                            </div>
+                        </div>
 
-                <div className='mt-10'>
-                    <div className="flex items-center justify-between">
-                        <h2>Current Address</h2>
-                        <Pencil 
-                            size={16} 
-                            onClick={() => setAddressEditMode(!addressEditMode)}
-                            className="cursor-pointer"
-                        />
-                    </div>
-                    <div className='grid grid-cols-2 gap-4 my-2'>
-                        {['city', 'state', 'country', 'zipcode'].map((field) => (
-                            <FormField
-                                key={field}
-                                control={form.control}
-                                name={field as keyof z.infer<typeof FormSchema>}
-                                render={({ field: formField }) => (
-                                    <UpdateField
-                                        label={field.charAt(0).toUpperCase() + field.slice(1)}
-                                        id={field}
-                                        addressField={true}
-                                        isEditMode={addressEditMode}
-                                        setEditMode={() => {}}
-                                        field={formField}
+                        <div className=" bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="text-xl font-semibold text-violet-700 dark:text-violet-300">Current Address</h2>
+                                <Button variant="ghost" size="sm" type="button" onClick={() => setAddressEditMode(!addressEditMode)}>
+                                    <Pencil size={16} className="mr-2" />
+                                    {addressEditMode ? 'Cancel' : 'Edit'}
+                                </Button>
+                            </div>
+                            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                                {['city', 'state', 'country', 'zipcode'].map((field) => (
+                                    <FormField
+                                        key={field}
+                                        control={form.control}
+                                        name={field as keyof z.infer<typeof FormSchema>}
+                                        render={({ field: formField }) => (
+                                            <UpdateField
+                                                label={field.charAt(0).toUpperCase() + field.slice(1)}
+                                                id={field}
+                                                addressField={true}
+                                                isEditMode={addressEditMode}
+                                                setEditMode={() => {}}
+                                                field={formField}
+                                            />
+                                        )}
                                     />
-                                )}
-                            />
-                        ))}
-                    </div>
-                </div>
-                
-                <Button type="submit" className="mt-4" disabled={!formChanged}>
-                    Save Changes
-                </Button>
-            </form>
-        </Form>
+                                ))}
+                            </div>
+                        </div>
+                        
+                        <Button type="submit" className="w-full" disabled={!formChanged}>
+                            Save Changes
+                        </Button>
+                    </form>
+                </Form>
+            </div>
+        </div>
     );
 };
 

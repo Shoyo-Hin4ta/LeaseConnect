@@ -21,7 +21,7 @@ const CustomPriceInput = ({control} : {
                           />
                         </div>
 
-                        <div className="h-10 flex items-center  relative -top-1">
+                        <div className="h-10 flex items-center  relative">
                           <InputBox
                           placeholder="Enter Amount"
                           formControl={control}

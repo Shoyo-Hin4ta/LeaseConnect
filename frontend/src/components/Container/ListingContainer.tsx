@@ -1,18 +1,15 @@
-import { ReactNode } from "react"
+import React, { ReactNode } from 'react';
 
-
-interface ListingContainerType {
-    children : ReactNode,
+interface ListingContainerProps {
+    children: ReactNode;
 }
 
-const ListingContainer = ({children} : ListingContainerType) => {
-  return (
-    <div className="flex items-center justify-center w-screen">
-        <div className="flex flex-col justify-center items-center mt-5 border border-red-600 w-[90%]">
+const ListingContainer: React.FC<ListingContainerProps> = ({ children }) => {
+    return (
+        <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mt-8">
             {children}
         </div>
-    </div>
-  )
-}
+    );
+};
 
-export default ListingContainer
+export default ListingContainer;

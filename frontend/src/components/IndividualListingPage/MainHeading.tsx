@@ -3,42 +3,35 @@ import { Button } from '../ui/button'
 
 const MainHeading = () => {
   return (
-    <section className="w-full bg-muted py-8 md:py-12">
-      <div className="container px-4 md:px-6 max-w-3xl mx-auto">
-        <div className="flex flex-col space-y-6">
+    <section className="w-full bg-white dark:bg-gray-800 py-8 md:py-12 shadow-md">
+      <div className="container px-4 md:px-6 max-w-6xl mx-auto">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Image */}
-          <div className="w-full aspect-video">
+          <div className="w-full lg:w-2/3 aspect-video">
             <img
               src="/placeholder.svg"
               alt="Property"
-              className="rounded-xl object-cover w-full h-full"
+              className="rounded-xl object-cover w-full h-full shadow-lg"
             />
           </div>
           
           {/* Content */}
-          <div className="space-y-6">
-            {/* Heading */}
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+          <div className="lg:w-1/3 space-y-6">
+            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-gray-900 dark:text-white">
               Cozy Mountain Retreat
             </h1>
             
-            {/* Description with scroll */}
-            <div className="h-48 overflow-y-auto pr-4">
-              <p className="text-muted-foreground text-lg">
+            <div className="h-48 overflow-y-auto pr-4 text-gray-600 dark:text-gray-300">
+              <p className="text-lg">
                 Experience the tranquility of the mountains in this charming retreat, perfect for a relaxing getaway.
                 This cozy hideaway offers breathtaking views, fresh mountain air, and a peaceful ambiance that will
-                help you unwind and reconnect with nature. Ideal for couples, families, or anyone seeking a serene
-                escape from the bustle of everyday life. Nestled in the heart of nature, this retreat provides an 
-                authentic mountain experience with modern comforts. Wake up to stunning vistas, spend your days 
-                exploring scenic trails, and unwind in the evenings by a cozy fireplace. Our retreat is designed 
-                to help you disconnect from the world and reconnect with what truly matters.
+                help you unwind and reconnect with nature.
               </p>
             </div>
             
-            {/* Buttons */}
             <div className="flex flex-wrap gap-4">
-              <Button size="lg">Enquire</Button>
-              <Button size="lg" variant="outline">View Ritik's Profile</Button>
+              <Button size="lg" className="bg-violet-600 hover:bg-violet-700 text-white">Enquire</Button>
+              <Button size="lg" variant="outline" className="text-violet-600 border-violet-600 hover:bg-violet-100 dark:text-violet-400 dark:border-violet-400 dark:hover:bg-violet-900">View Ritik's Profile</Button>
             </div>
           </div>
         </div>

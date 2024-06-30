@@ -23,16 +23,16 @@ export const steps = [
 export const listingPropertySteps = [
     {
       step : 1,
-      stepDesc : "Step 1",
+      stepDesc : "Property Details",
     },
     {
       step : 2,
-      stepDesc : "Step 2",
+      stepDesc : "Additional Information",
     },
     { 
       step: 3,
-      stepDesc : "Step 3",
+      stepDesc : "Select Preference",
     },{
       step : 4,
-      stepDesc : "Step 4",
+      stepDesc : "Upload Image",
     }]

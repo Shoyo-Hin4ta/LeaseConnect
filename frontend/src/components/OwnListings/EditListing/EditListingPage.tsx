@@ -12,7 +12,6 @@ import RadioInput from "@/components/ListingForm/RadioInput"
 import { AMENITIES, PREFERENCES, UTILITIES, UTIL_RADIO_ARR, optionsToStrings, stringsToOptions } from "@/components/ListingForm/ListingForm2"
 import MultipleSelector from "@/components/ui/multiple-selector"
 import { Label } from "@/components/ui/label"
-import CustomPriceInput from "@/components/ListingForm/CustomPriceInput"
 import { CURRENCY_ARR, TIME_PERIOD_ARR } from "@/components/ListingForm/ListingForm3"
 import { DateRangePicker } from "@/components/ui/date-range-picker"
 import { Plus, Trash } from 'lucide-react';
@@ -165,224 +164,218 @@ const EditListingPage = () => {
     }
 
     return (
-      <div className="flex flex-col min-h-[100dvh]">
-        <header className="bg-primary text-primary-foreground py-4 px-6">
-          <h1 className="text-2xl font-bold">123 Main St, Anytown USA</h1>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <header className="bg-white dark:bg-gray-800 shadow-sm">
+          <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+            <h1 className="text-2xl font-bold text-violet-800 dark:text-violet-200">Edit Listing</h1>
+          </div>
         </header>
-        
-        <main className="flex-1 grid gap-8 p-6 md:p-10 lg:p-12">
-          
-            <Form {...editListing}>
-              <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
-              <section>
-
-                <h2 className="text-xl font-bold mb-4">Property Details</h2>
-
-                  <InputBox
-                  name="title"
-                  formControl={control}
-                  placeholder="from backend"
-                  className="font-medium text-sm"
-                  label="Title"
-                  />
-
-                  <InputBox
-                  name="description"
-                  formControl={control}
-                  placeholder="from backend"
-                  className="font-medium text-sm"
-                  label="Edit Description"
-                  inputType="textbox"
-                  />
-
-                  <SelectDrop
-                    name="propertyType"
-                    formControl={control}
-                    placeholder="Select property type"
-                    label="Property Type"
-                    inputArray={PROPERTY_ARRAY}
-                    defaultValue="house"
-                  />
-
-                  <div className="grid grid-cols-2 gap-16">
-                    <SelectDrop
-                    placeholder="from backend"
-                    formControl={control}
-                    name="bedroom"
-                    inputArray={BedroomInputArray}
-                    className=""
-                    label="Bedrooms"
-                    // defaultValue="from backend"
-                    />
-
-                    <SelectDrop
-                    placeholder="from backend"
-                    formControl={control}
-                    name="bathroom"
-                    inputArray={BathroomInputArray}
-                    className=""
-                    label="Bathrooms"
-                    // defaultValue="from backend"
-                    />
-                  </div>
-
-
-
-
-                  <div className="grid gap-2">
-                    <h2 className="text-xl font-bold my-4">Address Details</h2>
-
-                    <InputBox
-                    placeholder="from backend"
-                    label="Address 1"
-                    id="streetAddress"
-                    formControl={control}
-                    name="streetAddress"
-                    />
-                    <div className="grid grid-cols-3 gap-2">
+    
+        <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+          <div className="px-4 py-6 sm:px-0">
+            <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+              <Form {...editListing}>
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+                  <div className="space-y-8 divide-y divide-gray-200 dark:divide-gray-700">
+                    <section className="space-y-6">
+                      <h2 className="text-xl font-bold text-violet-800 dark:text-violet-200">Property Details</h2>
+                      
                       <InputBox
-                      placeholder="from backend"
-                      label="City"
-                      id="city"
-                      formControl={control}
-                      name="city"
+                        name="title"
+                        formControl={control}
+                        placeholder="Property Title"
+                        label="Title"
                       />
-
+    
                       <InputBox
-                      placeholder="from backend"
-                      label="State"
-                      id="state"
-                      formControl={control}
-                      name="state"
+                        name="description"
+                        formControl={control}
+                        placeholder="Property Description"
+                        label="Description"
+                        inputType="textbox"
                       />
-
-                      <InputBox
-                      placeholder="from backend"
-                      label="Zipcode"
-                      id="zipcode"
-                      formControl={control}
-                      name="zipcode"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <h2 className="text-xl font-bold my-4">Other Details</h2>
-
-                    <RadioInput
-                            name="utilitiesIncludedInRent"
+    
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <SelectDrop
+                          name="propertyType"
+                          formControl={control}
+                          placeholder="Select property type"
+                          label="Property Type"
+                          inputArray={PROPERTY_ARRAY}
+                        />
+    
+                        <div className="grid grid-cols-2 gap-4">
+                          <SelectDrop
+                            placeholder="Bedrooms"
                             formControl={control}
-                            label='Are Utilities Included In The Rent'
-                            inputArray={UTIL_RADIO_ARR}
-                            placeholder='Please Select...'
-                            defaultValue="true"
-                        />
-
-                    <div className="grid gap-2 my-4">
-                      <Controller
-                              name="utilities"
-                              control={control}
-                              render={({ field }) => (
-                                  <MultipleSelector
-                                      {...field}
-                                      value={stringsToOptions(field.value, UTILITIES)}
-                                      onChange={(newValue) => field.onChange(optionsToStrings(newValue))}
-                                      defaultOptions={UTILITIES}
-                                      placeholder="Edit utilities..."
-                                      emptyIndicator={
-                                          <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                                              No utilities found.
-                                          </p>
-                                      }
-                                  />
-                              )}
-                        />
-
-                      <Controller
-                            name="amenities"
-                            control={control}
-                            render={({field}) => (
-                                <MultipleSelector
-                                    {...field}
-                                    value={stringsToOptions(field.value, AMENITIES)}
-                                    onChange={(newValue) => field.onChange(optionsToStrings(newValue))}
-                                    defaultOptions={AMENITIES}
-                                    placeholder="Edit amenities..."
-                                    emptyIndicator={
-                                        <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                                        No amentites found.
-                                        </p>
-                                    }
-                                />
-                                )}
-                        />
-                        <Controller
-                            name="preferences"
-                            control={control}
-                            render={({field}) => (
-                                <MultipleSelector
-                                    {...field}
-                                    value={stringsToOptions(field.value, PREFERENCES)}
-                                    onChange={(newValue) => field.onChange(optionsToStrings(newValue))}
-                                    defaultOptions={PREFERENCES}
-                                    placeholder="Edit preferences..."
-                                    emptyIndicator={
-                                        <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                                        No utilities found.
-                                        </p>
-                                    }
-                                />
-                                )}
-                        />
-                    </div>
-                    
-
-                    <div>
-                      <h2 className="text-l font-bold my-4">Edit Price Details</h2>
-
-                      <div className="flex items-center  gap-1">
-                        <div className="h-10 flex items-center">
-                          <SelectDrop
-                          placeholder="Currency"
-                          formControl={control}
-                          name="currency"
-                          inputArray={CURRENCY_ARR}
-                          className="rounded-none rounded-l-lg h-8 p-1"
-                          defaultValue='usd'
+                            name="bedroom"
+                            inputArray={BedroomInputArray}
+                            label="Bedrooms"
                           />
-                        </div>
-
-                        <div className="h-10 flex items-center  relative -top-1">
-                          <InputBox
-                          placeholder="from backend 100"
-                          formControl={control}
-                          name="amount"
-                          className="rounded-none h-8 p-1 top text-center"
-            
-                          />
-                        </div>
-                        
-                        <div className="h-10 flex items-center">
+    
                           <SelectDrop
-                          placeholder="Duration"
-                          formControl={control}
-                          name="timePeriod"
-                          inputArray={TIME_PERIOD_ARR}
-                          defaultValue="week"
-                          className="rounded-none rounded-r-lg h-8 p-1"
+                            placeholder="Bathrooms"
+                            formControl={control}
+                            name="bathroom"
+                            inputArray={BathroomInputArray}
+                            label="Bathrooms"
                           />
                         </div>
                       </div>
-                    </div>
-
-                    <div>
-                      <h2 className="text-l font-bold my-4">Edit Sublease Duration</h2>
+                    </section>
+    
+                    <section className="pt-6 space-y-6">
+                      <h2 className="text-xl font-bold text-violet-800 dark:text-violet-200">Address Details</h2>
                       
-                      <Controller
-                        control={control}
-                        name="subleaseDuration"
-                        render={({ field }) => (
-                          <DateRangePicker
+                      <InputBox
+                        placeholder="Street Address"
+                        label="Address"
+                        id="streetAddress"
+                        formControl={control}
+                        name="streetAddress"
+                      />
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <InputBox
+                          placeholder="City"
+                          label="City"
+                          id="city"
+                          formControl={control}
+                          name="city"
+                        />
+    
+                        <InputBox
+                          placeholder="State"
+                          label="State"
+                          id="state"
+                          formControl={control}
+                          name="state"
+                        />
+    
+                        <InputBox
+                          placeholder="Zipcode"
+                          label="Zipcode"
+                          id="zipcode"
+                          formControl={control}
+                          name="zipcode"
+                        />
+                      </div>
+                    </section>
+    
+                    <section className="pt-6 space-y-6">
+                      <h2 className="text-xl font-bold text-violet-800 dark:text-violet-200">Other Details</h2>
+    
+                      <RadioInput
+                        name="utilitiesIncludedInRent"
+                        formControl={control}
+                        label='Are Utilities Included In The Rent'
+                        inputArray={UTIL_RADIO_ARR}
+                        placeholder='Please Select...'
+                      />
+    
+                      <div className="space-y-4">
+                        <Controller
+                          name="utilities"
+                          control={control}
+                          render={({ field }) => (
+                            <MultipleSelector
+                              {...field}
+                              value={stringsToOptions(field.value, UTILITIES)}
+                              onChange={(newValue) => field.onChange(optionsToStrings(newValue))}
+                              defaultOptions={UTILITIES}
+                              placeholder="Edit utilities..."
+                              emptyIndicator={
+                                <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+                                  No utilities found.
+                                </p>
+                              }
+                            />
+                          )}
+                        />
+    
+                        <Controller
+                          name="amenities"
+                          control={control}
+                          render={({field}) => (
+                            <MultipleSelector
+                              {...field}
+                              value={stringsToOptions(field.value, AMENITIES)}
+                              onChange={(newValue) => field.onChange(optionsToStrings(newValue))}
+                              defaultOptions={AMENITIES}
+                              placeholder="Edit amenities..."
+                              emptyIndicator={
+                                <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+                                  No amenities found.
+                                </p>
+                              }
+                            />
+                          )}
+                        />
+    
+                        <Controller
+                          name="preferences"
+                          control={control}
+                          render={({field}) => (
+                            <MultipleSelector
+                              {...field}
+                              value={stringsToOptions(field.value, PREFERENCES)}
+                              onChange={(newValue) => field.onChange(optionsToStrings(newValue))}
+                              defaultOptions={PREFERENCES}
+                              placeholder="Edit preferences..."
+                              emptyIndicator={
+                                <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+                                  No preferences found.
+                                </p>
+                              }
+                            />
+                          )}
+                        />
+                      </div>
+    
+                      <div>
+                        <h3 className="text-lg font-medium text-violet-700 dark:text-violet-300 mb-4">Edit Price Details</h3>
+    
+                        <div className="flex items-stretch w-full">
+                          <div className="w-1/4">
+                            <SelectDrop
+                              placeholder="Currency"
+                              formControl={control}
+                              name="currency"
+                              inputArray={CURRENCY_ARR}
+                              className="rounded-l-md border-r"
+                              defaultValue='usd'
+                            />
+                          </div>
+    
+                          <div className="flex-grow">
+                            <InputBox
+                              placeholder="Amount"
+                              formControl={control}
+                              name="amount"
+                              className="rounded-none border-x-0 text-center"
+                            />
+                          </div>
+                          
+                          <div className="w-1/4">
+                            <SelectDrop
+                              placeholder="Per"
+                              formControl={control}
+                              name="timePeriod"
+                              inputArray={TIME_PERIOD_ARR}
+                              defaultValue="week"
+                              className="rounded-r-md border-l"
+                            />
+                          </div>
+                        </div>
+                      </div>
+    
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-medium text-violet-700 dark:text-violet-300">Sublease Duration</h3>
+                        <Controller
+                          control={control}
+                          name="subleaseDuration"
+                          render={({ field }) => (
+                            <DateRangePicker
                             onUpdate={(values) => {
                               const fromDate = values.range.from.toISOString();
                               const toDate = values.range.to ? values.range.to.toISOString() : '';
@@ -390,93 +383,86 @@ const EditListingPage = () => {
                             }}
                             initialDateFrom={from}
                             initialDateTo={to}
-                          />
-                        )}
-                      />
-                    </div>
-
-                  </div>
-
-              </section>
-
-              <section>
-
-              <h2 className="text-xl font-bold mb-4">Images</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {listingImages.map((image, index) => (
-                  <div key={index} className="relative group">
-                    {image ? (
-                      <>
-                        <img
-                          src={URL.createObjectURL(image)}
-                          alt={`Property Image ${index + 1}`}
-                          className="w-full aspect-[3/2] rounded-md object-cover"
-                        />
-                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="text-white"
-                            onClick={() => handleRemoveImage(index)}
-                          >
-                            <Trash className="w-5 h-5" />
-                          </Button>
-                        </div>
-                      </>
-                    ) : (
-                      <div className="relative group">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          type="button"
-                          className="w-full aspect-[3/2] rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300 focus:bg-gray-300 flex items-center justify-center"
-                          onClick={() => document.getElementById(`imageInput-${index}`)?.click()}
-                        >
-                          <Plus className="w-8 h-8" />
-                        </Button>
-                        <ListingImageInput
-                          name={`image.${index}`}
-                          label="ListingImages"
-                          formControl={control}
-                          placeholder="Upload Image"
-                          type="file"
-                          onChange={(file) => handleFileChange(file, index)}
-                          id={`imageInput-${index}`}
-                          props={{ field: { accept: "image/*" }, css: "hidden" }}
-                          currentImage={image}
+                            />
+                          )}
                         />
                       </div>
-                    )}
-                        {imgError && (
-                          <div className="flex items-center gap-2 p-2 mt-2 text-sm font-medium text-red-800 rounded-lg bg-red-100">
-                            <ExclamationTriangleIcon className="h-4 w-4" />
-                            <span>At least one image is required</span>
+                    </section>
+    
+                    <section className="pt-6 space-y-6">
+                      <h2 className="text-xl font-bold text-violet-800 dark:text-violet-200">Images</h2>
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {listingImages.map((image, index) => (
+                          <div key={index} className="relative group">
+                            {image ? (
+                              <>
+                                <img
+                                  src={URL.createObjectURL(image)}
+                                  alt={`Property Image ${index + 1}`}
+                                  className="w-full aspect-[3/2] rounded-md object-cover"
+                                />
+                                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="text-white"
+                                    onClick={() => handleRemoveImage(index)}
+                                  >
+                                    <Trash className="w-5 h-5" />
+                                  </Button>
+                                </div>
+                              </>
+                            ) : (
+                              <div className="relative group">
+                                <Button
+                                  variant="outline"
+                                  className="w-full aspect-[3/2] rounded-md bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 dark:focus:ring-violet-400"
+                                  onClick={() => document.getElementById(`imageInput-${index}`)?.click()}
+                                >
+                                  <Plus className="w-8 h-8" />
+                                </Button>
+                                <ListingImageInput
+                                  name={`image.${index}`}
+                                  label="ListingImages"
+                                  formControl={control}
+                                  placeholder="Upload Image"
+                                  type="file"
+                                  onChange={(file) => handleFileChange(file, index)}
+                                  id={`imageInput-${index}`}
+                                  props={{ field: { accept: "image/*" }, css: "hidden" }}
+                                  currentImage={image}
+                                />
+                              </div>
+                            )}
                           </div>
-                        )}             
+                        ))}
+                      </div>
+                      {imgError && (
+                        <div className="flex items-center gap-2 p-2 mt-2 text-sm font-medium text-red-800 rounded-lg bg-red-100 dark:bg-red-900 dark:text-red-200">
+                          <ExclamationTriangleIcon className="h-4 w-4" />
+                          <span>At least one image is required</span>
+                        </div>
+                      )}
+                    </section>
                   </div>
-                ))}
-                
-              </div>
-            </section>
-
-
-              <div className="rounded-lg bg-primary text-primary-foreground py-4 px-6 flex justify-end gap-2">
-                <Button variant="outline" className="text-black">Cancel</Button>
-                <Button type="submit" onClick={handleError}>Save Changes</Button>
-              </div>
-
-
-              </form>
-
-            </Form>
-
-
-          
-          
+    
+                  <div className="pt-5">
+                    <div className="flex justify-end gap-2">
+                      <Button variant="outline" type="button">
+                        Cancel
+                      </Button>
+                      <Button type="submit" onClick={handleError} className="bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-700 dark:hover:bg-violet-600">
+                        Save Changes
+                      </Button>
+                    </div>
+                  </div>
+                </form>
+              </Form>
+            </div>
+          </div>
         </main>
-        
       </div>
-    )
+    );
 }
 
 export default EditListingPage
