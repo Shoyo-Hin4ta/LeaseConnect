@@ -1,46 +1,50 @@
 import React, { useState } from 'react'
 import { Button } from "../ui/button"
 import BathAndFilter from "./BathAndBedFilter/BathAndBedFilter"
-import DatePostedFilter from "./DatePostedFilter/DatePostedFilter"
 import DateRangeFilter from "./DateRangeFilter/DateRangeFilter"
 import LocationInputFilter from "./LocationInputFilter/LocationInputFilter"
 import PreferencesFilter from "./PreferencesFilter/PreferencesFilter"
 import PriceRangeFilter from "./PriceRangeFilter/PriceRangeFilter"
 import SDFilter from "./SecurityDepositFilter/SDFilter"
+import SortByFilter, { SortByPriceOption, SortByTimeOption } from "./SortByFilter/SortByFilter"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
+import { DateRange } from '../ui/date-range-picker'
 
 interface FilterData {
   city: string;
-  datePosted: string;
   bedCount: string;
   bathCount: string;
-  priceRange: { min: number; max: number };
-  pricePeriod: 'per_day' | 'per_week' | 'per_month';
-  dateRange: { from: Date | undefined; to: Date | undefined };
+  priceRange: { min: number; max: number; period: 'per_day' | 'per_week' | 'per_month' };
+  dateRange: DateRange;
   preferences: string[];
   amenities: string[];
   securityDepositIncluded: boolean;
   utilitiesIncluded: boolean;
+  sortBy: {
+    time: SortByTimeOption;
+    price: SortByPriceOption;
+  };
 }
 
 const Filter: React.FC = () => {
   const [filterData, setFilterData] = useState<FilterData>({
     city: '',
-    datePosted: '',
     bedCount: '',
     bathCount: '',
-    priceRange: { min: 0, max: 200 },
-    pricePeriod: 'per_day',
-    dateRange: { from: undefined, to: undefined },
+    priceRange: { min: 0, max: 200, period: 'per_day' },
+    dateRange: { from: new Date(), to: new Date() },
     preferences: [],
     amenities: [],
     securityDepositIncluded: false,
-    utilitiesIncluded: false
+    utilitiesIncluded: false,
+    sortBy: {
+      time: '',
+      price: ''
+    }
   })
 
   const handleFilterClick = () => {
     console.log('Filter data:', filterData)
-    // Here you can use the filterData object to apply filters or send it to an API
   }
  
   return (
@@ -54,16 +58,8 @@ const Filter: React.FC = () => {
             <AccordionTrigger>Location</AccordionTrigger>
             <AccordionContent>
               <LocationInputFilter 
+                value={filterData.city}
                 onChange={(city: string) => setFilterData(prev => ({ ...prev, city }))}
-              />
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="date-posted">
-            <AccordionTrigger>Date Posted</AccordionTrigger>
-            <AccordionContent>
-              <DatePostedFilter 
-                onChange={(datePosted: string) => setFilterData(prev => ({ ...prev, datePosted }))}
               />
             </AccordionContent>
           </AccordionItem>
@@ -72,6 +68,8 @@ const Filter: React.FC = () => {
             <AccordionTrigger>Bedrooms & Bathrooms</AccordionTrigger>
             <AccordionContent>
               <BathAndFilter 
+                bedValue={filterData.bedCount}
+                bathValue={filterData.bathCount}
                 onBedChange={(bedCount: string) => setFilterData(prev => ({ ...prev, bedCount }))}
                 onBathChange={(bathCount: string) => setFilterData(prev => ({ ...prev, bathCount }))}
               />
@@ -82,25 +80,29 @@ const Filter: React.FC = () => {
             <AccordionTrigger>Price Range</AccordionTrigger>
             <AccordionContent>
               <PriceRangeFilter 
+                value={filterData.priceRange}
                 onChange={(priceRange: { min: number; max: number }, pricePeriod: 'per_day' | 'per_week' | 'per_month') => 
-                  setFilterData(prev => ({ ...prev, priceRange, pricePeriod }))}
+                  setFilterData(prev => ({ ...prev, priceRange: { ...priceRange, period: pricePeriod } }))}
               />
             </AccordionContent>
           </AccordionItem>
 
           <AccordionItem value="date-range">
-            <AccordionTrigger>Date Range</AccordionTrigger>
-            <AccordionContent>
-              <DateRangeFilter 
-                onChange={(dateRange: { from: Date | undefined; to: Date | undefined }) => setFilterData(prev => ({ ...prev, dateRange }))}
-              />
-            </AccordionContent>
-          </AccordionItem>
+          <AccordionTrigger>Date Range</AccordionTrigger>
+          <AccordionContent>
+            <DateRangeFilter 
+              value={filterData.dateRange}
+              onChange={(dateRange) => setFilterData(prev => ({ ...prev, dateRange }))}
+            />
+          </AccordionContent>
+        </AccordionItem>
 
           <AccordionItem value="preferences">
             <AccordionTrigger>Preferences & Amenities</AccordionTrigger>
             <AccordionContent>
               <PreferencesFilter 
+                preferencesValue={filterData.preferences}
+                amenitiesValue={filterData.amenities}
                 onPreferencesChange={(preferences: string[]) => setFilterData(prev => ({ ...prev, preferences }))}
                 onAmenitiesChange={(amenities: string[]) => setFilterData(prev => ({ ...prev, amenities }))}
               />
@@ -111,11 +113,24 @@ const Filter: React.FC = () => {
             <AccordionTrigger>Security Deposit & Utilities</AccordionTrigger>
             <AccordionContent>
               <SDFilter 
+                securityDepositValue={filterData.securityDepositIncluded}
+                utilitiesValue={filterData.utilitiesIncluded}
                 onSecurityDepositChange={(securityDepositIncluded: boolean) => setFilterData(prev => ({ ...prev, securityDepositIncluded }))}
                 onUtilitiesChange={(utilitiesIncluded: boolean) => setFilterData(prev => ({ ...prev, utilitiesIncluded }))}
               />
             </AccordionContent>
           </AccordionItem>
+
+          <AccordionItem value="sort-by">
+            <AccordionTrigger>Sort By</AccordionTrigger>
+            <AccordionContent>
+              <SortByFilter 
+                value={filterData.sortBy}
+                onChange={(sortBy) => setFilterData(prev => ({ ...prev, sortBy }))}
+              />
+            </AccordionContent>
+          </AccordionItem>
+
         </Accordion>
 
         <Button 

@@ -1,17 +1,33 @@
+import React, { useState } from 'react';
 import Header from '@/components/Header/Header'
 import { Outlet } from 'react-router-dom'
 import { Toaster } from './ui/toaster'
+import Sidebar from "@/components/ui/Sidebar/Sidebar";
+
+export type LayoutContextType = {
+  toggleSidebar: () => void;
+};
 
 const Layout = () => {
+  const [isActive, setIsActive] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsActive(!isActive);
+  };
+
+  const contextValue: LayoutContextType = { toggleSidebar };
+
   return (
-    <div className='w-screen min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 overflow-x-hidden'>
+    <div className='flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 border-4 border-red-700 '>
       <Header />
-      <main className='flex-grow'>
-        <Outlet />
+      <Sidebar isActive={isActive} toggleSidebar={toggleSidebar} />
+      <main className='flex-grow pt-14'>
+        <Outlet context={contextValue} />
       </main>
       <Toaster />
     </div>
   )
 }
 
-export default Layout
+export default Layout;
+

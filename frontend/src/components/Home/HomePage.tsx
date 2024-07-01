@@ -17,16 +17,20 @@ const HomePage = () => {
                 <p className="text-lg text-violet-100 sm:text-xl md:text-2xl dark:text-gray-300">
                   Connect with the perfect short-term housing solution for international students and professionals.
                 </p>
-                <div className="flex flex-wrap gap-4">
-                  <Button size="lg" className="bg-white text-violet-600 hover:bg-violet-50 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
-                    Browse Listings
-                  </Button>
-                  <Button size="lg" variant="outline" className="text-white border-white hover:bg-violet-500 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700">
-                    Register
-                  </Button>
-                  <Button size="lg" variant="outline" className="text-white border-white hover:bg-violet-500 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700">
-                    Login
-                  </Button>
+                <div className="flex flex-col gap-4">
+                  <div>
+                    <Button size="lg" className="bg-white text-violet-600 hover:bg-violet-50 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+                      Browse Listings
+                    </Button>
+                  </div>
+                  <div className='flex gap-4'>
+                    <Button size="lg" variant="outline" className="bg-violet-600 text-white border-white hover:bg-violet-500 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700">
+                      Register
+                    </Button>
+                    <Button size="lg" variant="outline" className="bg-violet-600 text-white border-white hover:bg-violet-500 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700">
+                      Login
+                    </Button>
+                  </div>
                 </div>
               </div>
               <form className="bg-white p-6 rounded-lg shadow-lg dark:bg-gray-800">

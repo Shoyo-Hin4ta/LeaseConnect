@@ -31,7 +31,9 @@ export interface DateRangePickerProps {
   /** Option for locale */
   locale?: string
   /** Option for showing compare feature */
-  showCompare?: boolean
+  showCompare?: boolean,
+
+  value? : string
 }
 
 const formatDate = (date: Date, locale: string = 'en-us'): string => {
@@ -56,7 +58,7 @@ const getDateAdjustedForTimezone = (dateInput: Date | string): Date => {
   }
 }
 
-interface DateRange {
+export interface DateRange {
   from: Date
   to: Date | undefined
 }
@@ -90,16 +92,15 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
   onUpdate,
   align = 'end',
   locale = 'en-US',
-  showCompare = true
+  showCompare = true,
+  value
 }): JSX.Element => {
-  const [isOpen, setIsOpen] = useState(false)
-
-  const [range, setRange] = useState<DateRange>({
+  const [isOpen, setIsOpen] = useState(false);
+  const [range, setRange] = useState<DateRange>(value || {
     from: getDateAdjustedForTimezone(initialDateFrom),
-    to: initialDateTo
-      ? getDateAdjustedForTimezone(initialDateTo)
-      : getDateAdjustedForTimezone(initialDateFrom)
-  })
+    to: initialDateTo ? getDateAdjustedForTimezone(initialDateTo) : undefined
+  });
+
   const [rangeCompare, setRangeCompare] = useState<DateRange | undefined>(
     initialCompareFrom
       ? {
@@ -110,6 +111,12 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
         }
       : undefined
   )
+
+  useEffect(() => {
+    if (value) {
+      setRange(value);
+    }
+  }, [value]);
 
   // Refs to store the values of range and rangeCompare when the date picker is opened
   const openedRangeRef = useRef<DateRange | undefined>()
@@ -333,6 +340,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
         }
         setIsOpen(open)
       }}
+
     >
       <PopoverTrigger asChild>
         <Button size={'lg'} variant="outline">
@@ -358,7 +366,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
           </div>
         </Button>
       </PopoverTrigger>
-      <PopoverContent align={align} className="w-auto -mt-52">
+      <PopoverContent align={align} className="w-auto -mt-52 " style={{ zIndex: 1000 }}>
        
         <div className="flex py-2">
           <div className="flex">

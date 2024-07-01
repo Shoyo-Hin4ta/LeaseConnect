@@ -1,49 +1,57 @@
+import React from 'react';
 import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
-const BathAndFilter = ({onBathChange, onBedChange} : {
-    onBedChange : (bedCount : string) => void,
-    onBathChange : (bathCount : string) => void
-}) => {
+interface BathAndFilterProps {
+  onBedChange: (bedCount: string) => void;
+  onBathChange: (bathCount: string) => void;
+  bedValue: string;
+  bathValue: string;
+}
+
+const BathAndFilter: React.FC<BathAndFilterProps> = ({ onBedChange, onBathChange, bedValue, bathValue }) => {
   return (
     <div className="space-y-4">
       <h3 className="font-semibold text-violet-800 dark:text-violet-200">Beds & Baths</h3>
       <div className="grid grid-cols-2 gap-4">
         <div>
           <Label className="mb-2 block text-sm font-medium">Beds</Label>
-          <RadioGroup defaultValue="" className="flex flex-wrap gap-2" onValueChange={onBedChange}>
+          <div className="flex flex-wrap gap-2">
             {["1", "2", "3", "4+"].map((value) => (
-              <div key={value} className="flex items-center">
-                <RadioGroupItem value={`${value}bed${value !== '1' ? 's' : ''}`} id={`${value}bed`} className="peer sr-only" />
-                <Label
-                  htmlFor={`${value}bed`}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-violet-200 bg-white peer-checked:bg-violet-600 peer-checked:text-white hover:bg-violet-100 cursor-pointer transition-colors"
-                >
-                  {value}
-                </Label>
-              </div>
+              <button
+                key={value}
+                onClick={() => onBedChange(value)}
+                className={`flex h-9 w-9 items-center justify-center rounded-full border-2 ${
+                  bedValue === value
+                    ? "bg-violet-600 text-white border-violet-600"
+                    : "border-violet-200 bg-white text-gray-900 hover:bg-violet-100"
+                } cursor-pointer transition-colors`}
+              >
+                {value}
+              </button>
             ))}
-          </RadioGroup>
+          </div>
         </div>
         <div>
           <Label className="mb-2 block text-sm font-medium">Baths</Label>
-          <RadioGroup defaultValue="" className="flex flex-wrap gap-2" onValueChange={onBathChange}>
+          <div className="flex flex-wrap gap-2">
             {["1", "2", "3+"].map((value) => (
-              <div key={value} className="flex items-center">
-                <RadioGroupItem value={`${value}bath${value !== '1' ? 's' : ''}`} id={`${value}bath`} className="peer sr-only" />
-                <Label
-                  htmlFor={`${value}bath`}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-violet-200 bg-white peer-checked:bg-violet-600 peer-checked:text-white hover:bg-violet-100 cursor-pointer transition-colors"
-                >
-                  {value}
-                </Label>
-              </div>
+              <button
+                key={value}
+                onClick={() => onBathChange(value)}
+                className={`flex h-9 w-9 items-center justify-center rounded-full border-2 ${
+                  bathValue === value
+                    ? "bg-violet-600 text-white border-violet-600"
+                    : "border-violet-200 bg-white text-gray-900 hover:bg-violet-100"
+                } cursor-pointer transition-colors`}
+              >
+                {value}
+              </button>
             ))}
-          </RadioGroup>
+          </div>
         </div>
       </div>
     </div>
   )
 }
 
-export default BathAndFilter
+export default BathAndFilter;

@@ -1,19 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Input } from "@/components/ui/input";
 import { Search, Menu } from 'lucide-react';
-import Sidebar from "../ui/Sidebar/Sidebar";
 import { Button } from '../ui/button';
+import { useOutletContext } from 'react-router-dom';
+import { LayoutContextType } from '../Layout';
 
 const SearchBar = () => {
-  const [isActive, setIsActive] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsActive(!isActive);
-  };
+  const { toggleSidebar } = useOutletContext<LayoutContextType>();
 
   return (
-    <div className="sticky top- z-50 bg-white dark:bg-gray-800 shadow-md">
-      <Sidebar isActive={isActive} toggleSidebar={toggleSidebar} />
+    <div className="sticky top-14 z-40 bg-white dark:bg-gray-800 shadow-md">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <Button variant="ghost" onClick={toggleSidebar} className="mr-2">
           <Menu className="h-6 w-6" />

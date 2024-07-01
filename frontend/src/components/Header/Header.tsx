@@ -8,7 +8,7 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   return (
-    <header className="w-full bg-white dark:bg-gray-900 shadow-md py-3">
+    <header className="fixed top-0 left-0 right-0 h-14 bg-white dark:bg-gray-900 z-50 flex items-center">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-2">
           <span className="font-bold text-xl text-violet-600 dark:text-violet-400">LeaseConnect</span>

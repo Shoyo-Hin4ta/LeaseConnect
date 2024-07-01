@@ -164,16 +164,11 @@ const EditListingPage = () => {
     }
 
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <header className="bg-white dark:bg-gray-800 shadow-sm">
-          <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-            <h1 className="text-2xl font-bold text-violet-800 dark:text-violet-200">Edit Listing</h1>
-          </div>
-        </header>
-    
-        <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-          <div className="px-4 py-6 sm:px-0">
-            <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+      <div className="h-full overflow-y-auto bg-white dark:bg-gray-900">
+      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <div className="px-4 py-6 sm:px-0">
+          <h1 className="text-2xl font-bold text-violet-800 dark:text-violet-200 mb-6">Edit Listing</h1>
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
               <Form {...editListing}>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
                   <div className="space-y-8 divide-y divide-gray-200 dark:divide-gray-700">
@@ -460,7 +455,7 @@ const EditListingPage = () => {
               </Form>
             </div>
           </div>
-        </main>
+        </div>
       </div>
     );
 }

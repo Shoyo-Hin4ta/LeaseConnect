@@ -1,17 +1,22 @@
 import React from 'react';
 import ListingCard from '../Card/ListingCard';
 import SearchBar from '../SearchBar/SearchBar';
+import { useOutletContext } from 'react-router-dom';
+import { LayoutContextType } from '../Layout';
 
 const BrowsePage = () => {
+  const { toggleSidebar } = useOutletContext<LayoutContextType>();
+
   return (
-    <div className='flex flex-col min-h-screen'>
+    <div className='flex flex-col h-full'>
       <SearchBar />
-      <div className='flex-grow container mx-auto px-4 py-8'>
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
-          {/* Add many ListingCards to ensure there's enough content to scroll */}
-          {[...Array(20)].map((_, index) => (
-            <ListingCard key={index} />
-          ))}
+      <div className='flex-grow '>
+        <div className='container mx-auto px-4 py-8'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+            {[...Array(20)].map((_, index) => (
+              <ListingCard key={index} />
+            ))}
+          </div>
         </div>
       </div>
     </div>

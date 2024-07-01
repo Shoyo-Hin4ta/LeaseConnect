@@ -4,13 +4,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 interface PriceRangeFilterProps {
   onChange: (priceRange: { min: number; max: number }, pricePeriod: 'per_day' | 'per_week' | 'per_month') => void;
+  value: { min: number; max: number; period: 'per_day' | 'per_week' | 'per_month' };
 }
 
-const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({ onChange }) => {
-  const [perDayValues, setPerDayValues] = useState<[number, number]>([10, 200]);
-  const [perWeekValues, setPerWeekValues] = useState<[number, number]>([100, 2000]);
-  const [perMonthValues, setPerMonthValues] = useState<[number, number]>([200, 4000]);
-  const [pricePeriod, setPricePeriod] = useState<'per_day' | 'per_week' | 'per_month'>('per_day');
+const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({ onChange, value }) => {
+  const [perDayValues, setPerDayValues] = useState<[number, number]>(value.period === 'per_day' ? [value.min, value.max] : [10, 200]);
+  const [perWeekValues, setPerWeekValues] = useState<[number, number]>(value.period === 'per_week' ? [value.min, value.max] : [100, 2000]);
+  const [perMonthValues, setPerMonthValues] = useState<[number, number]>(value.period === 'per_month' ? [value.min, value.max] : [200, 4000]);
+  const [pricePeriod, setPricePeriod] = useState<'per_day' | 'per_week' | 'per_month'>(value.period);
 
   const handleValuesChange = (newValues: number[]) => {
     if (pricePeriod === 'per_day') {
@@ -66,7 +67,7 @@ const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({ onChange }) => {
           <SelectTrigger className="h-8 w-28">
             <SelectValue placeholder="" />
           </SelectTrigger>
-          <SelectContent className="h-20">
+          <SelectContent className="h-20" style={{ zIndex: 1000 }}>
             <SelectItem value="per_day">/ day</SelectItem>
             <SelectItem value="per_week">/ week</SelectItem>
             <SelectItem value="per_month">/ month</SelectItem>

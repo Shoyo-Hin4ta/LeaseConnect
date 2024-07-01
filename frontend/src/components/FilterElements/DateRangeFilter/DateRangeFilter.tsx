@@ -1,10 +1,12 @@
 import React from 'react'
-import { DateRangePicker } from '@/components/ui/date-range-picker'
+import { DateRangePicker, DateRange } from '@/components/ui/date-range-picker'
 
+interface DateRangeFilterProps {
+  onChange: (dateRange: DateRange) => void;
+  value: DateRange;
+}
 
-const DateRangeFilter = ({ onChange } : {
-  onChange : (dateRange: { from: Date | undefined; to: Date | undefined }) => void,
-}) => {
+const DateRangeFilter: React.FC<DateRangeFilterProps> = ({ onChange, value }) => {
   return (
     <div className="space-y-4 w-full">
       <h3 className="font-semibold text-violet-800 dark:text-violet-200">Stay Dates</h3>
@@ -12,7 +14,8 @@ const DateRangeFilter = ({ onChange } : {
         onUpdate={(values) => onChange(values.range)}
         align="center"
         locale="en-GB"
-        showCompare={false}      
+        showCompare={false}
+        value={value}
       />
     </div>
   )
