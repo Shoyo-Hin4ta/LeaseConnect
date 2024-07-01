@@ -29,10 +29,13 @@ const ListingPage = () => {
 
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-gray-800 dark:to-gray-700 flex items-center justify-center font-roboto">
-        <div className=" flex flex-col items-center w-full max-w-4xl p-4 rounded-lg shadow-md bg-white dark:bg-gray-800">
-            <h2 className="text-3xl font-bold text-indigo-800 dark:text-gray-300 mb-6">{currentStepDesc}</h2>
-            <Stepper currentStep={currentStep} />
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-gray-800 dark:to-gray-700 p-4">
+            <div className="flex flex-col items-center justify-center w-full max-w-4xl bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                <h2 className="text-3xl font-bold text-center text-indigo-800 dark:text-gray-300 mb-6">
+                    {currentStepDesc}
+                </h2>
+                <Stepper currentStep={currentStep} />
+
             <Container>
             <div className="mt-10 w-full max-w-2xl mx-auto ">
                 {renderForm()}

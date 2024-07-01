@@ -73,7 +73,7 @@ const ProfilePage = () => {
                                 <div className="w-48 h-48 bg-violet-200 dark:bg-violet-700 rounded-full flex items-center justify-center mb-4">
                                     <User size={64} className="text-violet-600 dark:text-violet-300" />
                                 </div>
-                                <Button type="button" variant="outline" className="w-full">Change Photo</Button>
+                                <Button type="button" variant="outline" className="w-full dark:text-white">Change Photo</Button>
                             </div>
                             <div className="w-full md:w-2/3 space-y-6">
                                 {Object.keys(form.getValues()).map((field) => (

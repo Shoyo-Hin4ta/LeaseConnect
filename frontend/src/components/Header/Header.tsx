@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Heart, MessageSquare, CirclePlus, Menu } from 'lucide-react';
+import { Heart, MessageSquare, CirclePlus } from 'lucide-react';
 import DropDown from '../DropDown/DropDown';
 
 const Header = () => {
@@ -13,7 +13,6 @@ const Header = () => {
         <Link to="/" className="flex items-center space-x-2">
           <span className="font-bold text-xl text-violet-600 dark:text-violet-400">LeaseConnect</span>
         </Link>
-
         <nav className="flex items-center space-x-2 sm:space-x-4">
           {isLoggedIn ? (
             <>
@@ -24,7 +23,6 @@ const Header = () => {
                 </Button>
                 <DropDown />
               </div>
-
               {/* Desktop View */}
               <div className="hidden sm:flex items-center space-x-3">
                 <Button variant="ghost" size="sm" asChild className="text-gray-600 dark:text-gray-300 hover:bg-violet-100 dark:hover:bg-violet-800">

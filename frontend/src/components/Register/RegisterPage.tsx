@@ -1,45 +1,46 @@
-import { useSelector } from "react-redux";
-import RegisterForm from "./RegisterForm";
-import Stepper from "./Stepper";
-import { RootState } from "@/appstore/appStore";
-import RegisterForm2 from "./RegisterForm2";
-import RegisterForm3 from "./RegisterForm3";
-import { ReactNode } from "react"
-import Container from "../Container/container";
-import { steps } from "@/lib/utils";
-
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/appstore/appStore';
+import RegisterForm from './RegisterForm';
+import RegisterForm2 from './RegisterForm2';
+import RegisterForm3 from './RegisterForm3';
+import Stepper from './Stepper';
+import Container from '../Container/container';
+import { steps } from '@/lib/utils';
 
 const RegisterPage = () => {
-  const currentStep = useSelector((s: RootState) => s.stepper.currentStep);
+  const currentStep = useSelector((state: RootState) => state.stepper.currentStep);
 
-  const renderForm = (): ReactNode => {
+  const renderForm = (): React.ReactNode => {
     switch (currentStep) {
       case 1:
-        return <RegisterForm currentStep={currentStep} />
+        return <RegisterForm currentStep={currentStep} />;
       case 2:
-        return <RegisterForm2 currentStep={currentStep} />
+        return <RegisterForm2 currentStep={currentStep} />;
       case 3:
-        return <RegisterForm3 currentStep={currentStep} />
+        return <RegisterForm3 currentStep={currentStep} />;
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   const currentStepDesc = steps.find(step => step.step === currentStep)?.stepDesc;
 
   return (
-    <div className="h-full overflow-y-auto bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-gray-800 dark:to-gray-700 flex items-center justify-center font-roboto border-4 border-blue-700">
-      <div className=" flex flex-col items-center w-full max-w-4xl p-4 rounded-lg shadow-md bg-white dark:bg-gray-800">
-        <h2 className="text-3xl font-bold text-indigo-800 dark:text-gray-300 mb-6">{currentStepDesc}</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-gray-800 dark:to-gray-700 p-4">
+      <div className="flex flex-col items-center justify-center w-full max-w-4xl bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+        <h2 className="text-3xl font-bold text-center text-indigo-800 dark:text-gray-300 mb-6">
+          {currentStepDesc}
+        </h2>
         <Stepper currentStep={currentStep} />
         <Container>
-          <div className="mt-10 w-full max-w-2xl mx-auto ">
+          <div className="mt-8 max-w-2xl mx-auto">
             {renderForm()}
           </div>
         </Container>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default RegisterPage;

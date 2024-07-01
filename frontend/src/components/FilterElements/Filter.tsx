@@ -53,7 +53,7 @@ const Filter: React.FC = () => {
         <h2 className='text-xl font-semibold'>Filtering Options</h2>
       </div>
       <div className="p-4 space-y-4">
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion type="single" collapsible className="w-full dark:text-violet-300">
           <AccordionItem value="location">
             <AccordionTrigger>Location</AccordionTrigger>
             <AccordionContent>

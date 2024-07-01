@@ -18,7 +18,7 @@ const Layout = () => {
   const contextValue: LayoutContextType = { toggleSidebar };
 
   return (
-    <div className='flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 border-4 border-red-700 '>
+    <div className='dark flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100'>
       <Header />
       <Sidebar isActive={isActive} toggleSidebar={toggleSidebar} />
       <main className='flex-grow pt-14'>
