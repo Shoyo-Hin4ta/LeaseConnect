@@ -1,102 +1,59 @@
-export const userData = [
-  {
-      id: 1,
-      avatar: '/User1.png',
-      messages: [
-          {
-              id: 1,
-              avatar: '/User1.png',
-              name: 'Jane Doe',
-              message: 'Hey, Jakob',
-          },
-          {
-              id: 2,
-              avatar: '/LoggedInUser.jpg',
-              name: 'Jakob Hoeg',
-              message: 'Hey!',
-          },
-          {
-              id : 3,
-              avatar: '/User1.png',
-              name: 'Jane Doe',
-              message: 'How are you?',
-          },
-          {
-              id: 4,
-              avatar: '/LoggedInUser.jpg',
-              name: 'Jakob Hoeg',
-              message: 'I am good, you?',
-          },
-          {
-              id: 5,
-              avatar: '/User1.png',
-              name: 'Jane Doe',
-              message: 'I am good too!',
-          },
-          {
-              id: 6,
-              avatar: '/LoggedInUser.jpg',
-              name: 'Jakob Hoeg',
-              message: 'That is good to hear!'
-          },
-          {
-              id: 7,
-              avatar: '/User1.png',
-              name: 'Jane Doe',
-              message: 'How has your day been so far?',
-          },
-          {
-              id: 8,
-              avatar: '/LoggedInUser.jpg',
-              name: 'Jakob Hoeg',
-              message: 'It has been good. I went for a run this morning and then had a nice breakfast. How about you?',
-          },
-          {
-              id: 9,
-              avatar: '/User1.png',
-              name: 'Jane Doe',
-              message: 'I had a relaxing day. Just catching up on some reading.',
-          }
-      ],
-      name: 'Jane Doe',
-  },
-  {
-      id: 2,
-      avatar: '/User2.png',
-      name: 'John Doe',
-  },
-  {
-      id: 3,
-      avatar: '/User3.png',
-      name: 'Elizabeth Smith',
-  },
-  {
-      id: 4,
-      avatar: '/User4.png',
-      name: 'John Smith',
-  }
-];
-
-export type UserData = (typeof userData)[number];
-
-export const loggedInUserData = {
-  id: 5,
-  avatar: '/LoggedInUser.jpg',
-  name: 'Jakob Hoeg',
-};
-
-export type LoggedInUserData = (typeof loggedInUserData);
-
+// data.tsx
 export interface Message {
-  id: number;
-  avatar: string;
-  name: string;
-  message: string;
-}
-
-export interface User {
-  id: number;
-  avatar: string;
-  messages: Message[];
-  name: string;
-}
+    id: number;
+    sender: string;
+    content: string;
+    timestamp: string;
+  }
+  
+  export interface UserData {
+    id: number;
+    name: string;
+    avatar: string;
+    isOnline: boolean;
+    messages?: Message[];
+  }
+  
+  export const userData: UserData[] = [
+    {
+      id: 1,
+      name: 'Jane Doe',
+      avatar: '/User1.png',
+      isOnline: true,
+      messages: [
+        { id: 1, sender: 'Jane Doe', content: 'Hey, Jakob', timestamp: '2023-05-01T10:00:00Z' },
+        { id: 2, sender: 'Jakob Hoeg', content: 'Hey!', timestamp: '2023-05-01T10:01:00Z' },
+        { id: 3, sender: 'Jane Doe', content: 'How are you?', timestamp: '2023-05-01T10:02:00Z' },
+        { id: 4, sender: 'Jakob Hoeg', content: 'I am good, you?', timestamp: '2023-05-01T10:03:00Z' },
+        { id: 5, sender: 'Jane Doe', content: 'I am good too!', timestamp: '2023-05-01T10:04:00Z' },
+      ],
+    },
+    {
+      id: 2,
+      name: 'John Doe',
+      avatar: '/User2.png',
+      isOnline: false,
+      messages: [],
+    },
+    {
+      id: 3,
+      name: 'Elizabeth Smith',
+      avatar: '/User3.png',
+      isOnline: true,
+      messages: [],
+    },
+    {
+      id: 4,
+      name: 'John Smith',
+      avatar: '/User4.png',
+      isOnline: false,
+      messages: [],
+    },
+  ];
+  
+  export const loggedInUserData = {
+    id: 5,
+    name: 'Jakob Hoeg',
+    avatar: '/LoggedInUser.jpg',
+    isOnline: true,
+  };

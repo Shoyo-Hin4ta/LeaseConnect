@@ -1,133 +1,56 @@
-import { MoreHorizontal, SquarePen } from "lucide-react";
-import { cn } from "../../lib/utils";
-import { buttonVariants } from "../ui/button";
-import { Avatar, AvatarImage } from "../ui/avatar";
-import { Message } from "./data";
-import { Link } from "react-router-dom";
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-    TooltipProvider,
-  } from "@/components/ui/tooltip";
+import React from 'react';
+import { UserData } from './data';
+import { Avatar, AvatarImage } from '../ui/avatar';
+import { Button } from '../ui/button';
+import { ChevronLeft, X } from 'lucide-react';
+import { cn } from '../../lib/utils';
 
 interface SidebarProps {
-    isCollapsed: boolean;
-    links: {
-      name: string;
-      messages: Message[];
-      avatar: string;
-      variant: "grey" | "ghost";
-    }[];
-    onClick?: () => void;
-    isMobile: boolean;
-  }
+  users: UserData[];
+  selectedUser: UserData;
+  onSelectUser: (user: UserData) => void;
+  isOpen: boolean;
+  onClose: () => void;
+}
 
-  export function Sidebar({ links, isCollapsed, isMobile }: SidebarProps) {
-    return (
-      <div
-        data-collapsed={isCollapsed}
-        className="relative group flex flex-col h-full gap-4 p-2 data-[collapsed=true]:p-2 "
-      >
-        {!isCollapsed && (
-          <div className="flex justify-between p-2 items-center">
-            <div className="flex gap-2 items-center text-2xl">
-              <p className="font-medium">Chats</p>
-              <span className="text-zinc-300">({links.length})</span>
-            </div>
-  
-            <div>
-              <Link
-                to="#"
-                className={cn(
-                  buttonVariants({ variant: "ghost", size: "icon" }),
-                  "h-9 w-9"
-                )}
-              >
-                <MoreHorizontal size={20} />
-              </Link>
-  
-              <Link
-                to="#"
-                className={cn(
-                  buttonVariants({ variant: "ghost", size: "icon" }),
-                  "h-9 w-9"
-                )}
-              >
-                <SquarePen size={20} />
-              </Link>
-            </div>
-          </div> 
-        )}
-        <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
-          {links.map((link, index) =>
-            isCollapsed ? (
-              <TooltipProvider key={index}>
-                <Tooltip key={index} delayDuration={0}>
-                  <TooltipTrigger asChild>
-                    <Link
-                      to="#"
-                      className={cn(
-                        buttonVariants({ variant: link.variant, size: "icon" }),
-                        "h-11 w-11 md:h-16 md:w-16",
-                        link.variant === "grey" &&
-                          "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
-                      )}
-                    >
-                      <Avatar className="flex justify-center items-center">
-                        <AvatarImage
-                          src={link.avatar}
-                          alt={link.avatar}
-                          width={6}
-                          height={6}
-                          className="w-10 h-10 "
-                        />
-                      </Avatar>{" "}
-                      <span className="sr-only">{link.name}</span>
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent
-                    side="right"
-                    className="flex items-center gap-4"
-                  >
-                    {link.name}
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            ) : (
-              <Link
-                key={index}
-                to="#"
-                className={cn(
-                  buttonVariants({ variant: link.variant, size: "xl" }),
-                  link.variant === "grey" &&
-                    "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white shrink",
-                  "justify-start gap-4"
-                )}
-              >
-                <Avatar className="flex justify-center items-center">
-                  <AvatarImage
-                    src={link.avatar}
-                    alt={link.avatar}
-                    width={6}
-                    height={6}
-                    className="w-10 h-10 "
-                  />
-                </Avatar>
-                <div className="flex flex-col max-w-28">
-                  <span>{link.name}</span>
-                  {link.messages.length > 0 && (
-                    <span className="text-zinc-300 text-xs truncate ">
-                      {link.messages[link.messages.length - 1].name.split(" ")[0]}
-                      : {link.messages[link.messages.length - 1].message}
-                    </span>
-                  )}
-                </div>
-              </Link>
-            )
-          )}
-        </nav>
+const Sidebar: React.FC<SidebarProps> = ({ users, selectedUser, onSelectUser, isOpen, onClose }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="w-80 border-r h-full bg-white dark:bg-gray-800">
+      <div className="flex justify-between items-center p-4 border-b">
+        <h2 className="text-xl font-semibold">Chats</h2>
+        <div className="flex">
+          
+          <Button variant="ghost" size="icon" onClick={onClose}>
+            <X className="h-6 w-6" />
+          </Button>
+        </div>
       </div>
-    );
-  }
-  
+      <div className="overflow-y-auto h-[calc(100%-4rem)]">
+        {users.map((user) => (
+          <button
+            key={user.id}
+            className={cn(
+              "w-full p-3 flex items-center hover:bg-gray-100 dark:hover:bg-gray-700",
+              selectedUser.id === user.id && "bg-gray-100 dark:bg-gray-700"
+            )}
+            onClick={() => onSelectUser(user)}
+          >
+            <Avatar className="h-10 w-10 mr-3">
+              <AvatarImage src={user.avatar} alt={user.name} />
+            </Avatar>
+            <div className="text-left">
+              <p className="font-medium">{user.name}</p>
+              <p className="text-sm text-gray-500 truncate">
+                {user.messages?.[user.messages.length - 1]?.content}
+              </p>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Sidebar;

@@ -9,13 +9,13 @@ import { Provider } from 'react-redux'
 import store from './appstore/appStore'
 import Browse from './components/Browse/BrowsePage'
 import ListingPage from './components/ListingForm/ListingPage'
-import MessagePage from './components/Chat/MessagePage'
 import ProfilePage from './components/Profile/ProfilePage'
 import IndividualListingPage from './components/IndividualListingPage/IndividualListingPage'
 import MyListings from './components/OwnListings/MyListings'
 import EditListingPage from './components/OwnListings/EditListing/EditListingPage'
 import LoginPage from './components/SignIn/LoginPage'
 import ForgotPasswordPage from './components/SignIn/ForgotPasswordPage'
+import ChatComponent from './components/Chat/ChatComponent'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,7 +26,7 @@ const router = createBrowserRouter(
       <Route path='/forgot-password' element = { < ForgotPasswordPage />} />
       <Route path='/browse' element = { < Browse />} />
       <Route path ='/listingform' element = { < ListingPage/> } />
-      <Route path ='/messages' element = { < MessagePage/> } />
+      <Route path ='/messages' element = { < ChatComponent/> } />
       <Route path ='/profilepage' element = { < ProfilePage/> } />
       <Route path ='/listing' element = { < IndividualListingPage/> } />
       <Route path ='/mylistings' element = { < MyListings/> } />

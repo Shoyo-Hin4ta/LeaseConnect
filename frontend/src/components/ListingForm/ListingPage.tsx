@@ -36,11 +36,11 @@ const ListingPage = () => {
                 </h2>
                 <Stepper currentStep={currentStep} />
 
-            <Container>
+            
             <div className="mt-10 w-full max-w-2xl mx-auto ">
                 {renderForm()}
             </div>
-            </Container>
+           
         </div>
         </div>
     );

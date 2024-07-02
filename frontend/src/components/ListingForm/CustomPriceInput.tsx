@@ -9,7 +9,7 @@ const CustomPriceInput = ({control} : {
     control : Control<ListingTypes>,
 }) => {
   return (
-    <div className="flex items-center justify-center gap-1">
+    <div className="flex items-center justify-start gap-1 ">
                         <div className="h-10 flex items-center">
                           <SelectDrop
                           placeholder="Currency"

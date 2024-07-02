@@ -182,7 +182,8 @@ const ListingForm2 = ({ currentStep }: {
               <ListingFormButton 
               currentStep={currentStep} 
               isSubmitting={isSubmitting}
-              className="w-full py-3  text-lg font-semibold transition-colors duration-200 bg-violet-600 hover:bg-violet-700 text-white dark:bg-violet-700 dark:hover:bg-violet-600"
+              showPrevButton={true}
+              className="bg-violet-600 hover:bg-violet-700 text-white dark:bg-violet-700 dark:hover:bg-violet-600"
             />
             </form>
           </Form>

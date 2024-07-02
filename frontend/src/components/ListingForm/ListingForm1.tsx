@@ -12,7 +12,6 @@ import { useDispatch } from "react-redux"
 import { next } from "@/appstore/stepperSlice"
 import { toast } from "../ui/use-toast"
 
-
 export const BedroomInputArray = [{
   value : "1",
   desc : "1",
@@ -238,10 +237,11 @@ const ListingForm1 = ({ currentStep }: {
             />
           </div>
           <ListingFormButton 
-          currentStep={currentStep} 
-          isSubmitting={isSubmitting}
-          className="w-full py-3  text-lg font-semibold transition-colors duration-200 bg-violet-600 hover:bg-violet-700 text-white dark:bg-violet-700 dark:hover:bg-violet-600"
-        />
+            currentStep={currentStep} 
+            isSubmitting={isSubmitting}
+            showPrevButton={true}
+            className="bg-violet-600 hover:bg-violet-700 text-white dark:bg-violet-700 dark:hover:bg-violet-600"
+          />
         </form>
       </Form>
     </div>

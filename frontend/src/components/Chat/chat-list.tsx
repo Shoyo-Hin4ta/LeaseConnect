@@ -1,93 +1,55 @@
-import React, { useRef, useEffect } from "react";
-import { Message, UserData } from "./data";
-import { cn } from "../../lib/utils";
-import { Avatar, AvatarImage } from "../ui/avatar";
-import ChatBottombar from "./chat-bottombar";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useRef, useEffect } from 'react';
+import { Message, UserData } from './data';
+import { cn } from '../../lib/utils';
+import { Avatar, AvatarImage } from '../ui/avatar';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface ChatListProps {
-  messages?: Message[];
+  messages: Message[];
   selectedUser: UserData;
-  sendMessage: (newMessage: Message) => void;
-  isMobile: boolean;
 }
 
-export function ChatList({
-  messages,
-  selectedUser,
-  sendMessage,
-  isMobile
-}: ChatListProps) {
-  const messagesContainerRef = useRef<HTMLDivElement>(null);
+export function ChatList({ messages, selectedUser }: ChatListProps) {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
-    if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop =
-        messagesContainerRef.current.scrollHeight;
-    }
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   return (
-    <div className="w-full overflow-y-auto overflow-x-hidden h-full flex flex-col">
-      <div
-        ref={messagesContainerRef}
-        className="w-full overflow-y-auto overflow-x-hidden h-full flex flex-col"
-      >
-        <AnimatePresence>
-          {messages?.map((message, index) => (
-            <motion.div
-              key={index}
-              layout
-              initial={{ opacity: 0, scale: 1, y: 50, x: 0 }}
-              animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
-              exit={{ opacity: 0, scale: 1, y: 1, x: 0 }}
-              transition={{
-                opacity: { duration: 0.1 },
-                layout: {
-                  type: "spring",
-                  bounce: 0.3,
-                  duration: messages.indexOf(message) * 0.05 + 0.2,
-                },
-              }}
-              style={{
-                originX: 0.5,
-                originY: 0.5,
-              }}
+    <div className="flex-1 overflow-y-auto p-4">
+      <AnimatePresence>
+        {messages.map((message, index) => (
+          <motion.div
+            key={message.id}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            transition={{ duration: 0.3 }}
+            className={cn(
+              'flex items-end gap-2 mb-4',
+              message.name !== selectedUser.name ? 'justify-end' : 'justify-start'
+            )}
+          >
+            {message.name === selectedUser.name && (
+              <Avatar className="h-8 w-8">
+                <AvatarImage src={message.avatar} alt={message.name} />
+              </Avatar>
+            )}
+            <div
               className={cn(
-                "flex flex-col gap-2 p-4 whitespace-pre-wrap",
-                message.name !== selectedUser.name ? "items-end" : "items-start"
+                'px-4 py-2 rounded-lg max-w-[70%]',
+                message.name !== selectedUser.name
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-100 dark:bg-gray-800'
               )}
             >
-              <div className="flex gap-3 items-center">
-                {message.name === selectedUser.name && (
-                  <Avatar className="flex justify-center items-center">
-                    <AvatarImage
-                      src={message.avatar}
-                      alt={message.name}
-                      width={6}
-                      height={6}
-                    />
-                  </Avatar>
-                )}
-                <span className=" bg-accent p-3 rounded-md max-w-xs">
-                  {message.message}
-                </span>
-                {message.name !== selectedUser.name && (
-                  <Avatar className="flex justify-center items-center">
-                    <AvatarImage
-                      src={message.avatar}
-                      alt={message.name}
-                      width={6}
-                      height={6}
-                    />
-                  </Avatar>
-                )}
-              </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
-      <ChatBottombar sendMessage={sendMessage} isMobile={isMobile}/>
+              {message.message}
+            </div>
+          </motion.div>
+        ))}
+      </AnimatePresence>
+      <div ref={messagesEndRef} />
     </div>
   );
 }

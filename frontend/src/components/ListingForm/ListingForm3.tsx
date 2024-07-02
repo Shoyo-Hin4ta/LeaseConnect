@@ -77,10 +77,10 @@ const ListingForm3 = ({ currentStep }: {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <h2 className="text-2xl font-semibold mb-6 text-violet-800 dark:text-violet-200">Pricing</h2>
+    <div className="w-full max-w-2xl mx-auto ">
+      <h2 className="text-2xl font-semibold mb-6 text-violet-800 dark:text-violet-200 ">Pricing</h2>
       <Form {...listingForm3}>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 ">
           <CustomPriceInput control={control} />
           <div className="space-y-2">
             <label className="block text-sm font-medium text-violet-700 dark:text-violet-300">Sublease Period</label>
@@ -101,7 +101,8 @@ const ListingForm3 = ({ currentStep }: {
           <ListingFormButton 
             currentStep={currentStep} 
             isSubmitting={isSubmitting}
-            className="w-full py-3  text-lg font-semibold transition-colors duration-200 bg-violet-600 hover:bg-violet-700 text-white dark:bg-violet-700 dark:hover:bg-violet-600"
+            showPrevButton={true}
+            className="bg-violet-600 hover:bg-violet-700 text-white dark:bg-violet-700 dark:hover:bg-violet-600"
           />
         </form>
       </Form>

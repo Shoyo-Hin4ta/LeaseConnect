@@ -1,11 +1,22 @@
 import { CardFooter } from "@/components/ui/card"
 import CardButton from "../CardButton/CardButton"
 import { useNavigate } from "react-router-dom"
+import ConfirmationPopup from "@/components/Popups/Popup"
+import { useState } from "react"
 
 const CardFoot = ({isMyListings = false} : {
   isMyListings? : boolean
 }) => {
   const navigate = useNavigate();
+
+  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
+
+
+  const handleConfirm = () => {
+    // Handle the confirmation action
+    console.log('Action confirmed');
+    setIsPopupOpen(false);
+  };
 
   return (
     <CardFooter className="flex flex-col p-4">
@@ -36,13 +47,24 @@ const CardFoot = ({isMyListings = false} : {
                 ButtonText="Remove Listing" 
                 variant="outline" 
                 size="sm" 
-                className="text-red-500 hover:bg-red-50 dark:hover:bg-red-900"
+                onClick={() => setIsPopupOpen(true)} 
+                className="text-red-500 hover:bg-red-50 dark:hover:bg-red-900 bg-slate-50 dark:bg-slate-900"
               />
+
+            <ConfirmationPopup
+                    isOpen={isPopupOpen}
+                    onClose={() => setIsPopupOpen(false)}
+                    onConfirm={handleConfirm}
+                    title="Remove Listing"
+                    message="Are you sure you want to remove this listing? This action cannot be undone."
+                    confirmText="Yes, Remove"
+                    cancelText="Cancel"
+                  />
           </div>
         ) : (
               <CardButton 
                 ButtonText="Chat" 
-                onClick={() => navigate('/editlisting')} 
+                onClick={() => navigate('/messages')} 
                 variant="default" 
                 size="sm"
               />        

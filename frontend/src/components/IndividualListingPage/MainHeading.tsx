@@ -1,7 +1,10 @@
 import React from 'react'
 import { Button } from '../ui/button'
+import { useNavigate } from 'react-router-dom'
 
 const MainHeading = () => {
+
+  const navigate = useNavigate();
   return (
     <section className="w-full bg-white dark:bg-gray-800 py-8 md:py-12 shadow-md">
       <div className="container px-4 md:px-6 max-w-6xl mx-auto">
@@ -30,8 +33,8 @@ const MainHeading = () => {
             </div>
             
             <div className="flex flex-wrap gap-4">
-              <Button size="lg" className="bg-violet-600 hover:bg-violet-700 text-white">Enquire</Button>
-              <Button size="lg" variant="outline" className="text-violet-600 border-violet-600 hover:bg-violet-100 dark:text-violet-400 dark:border-violet-400 dark:hover:bg-violet-900">View Ritik's Profile</Button>
+              <Button onClick={() => navigate("/messages")} size="lg" className="bg-violet-600 hover:bg-violet-700 text-white">Enquire</Button>
+              <Button onClick={() => navigate("/profilepage")} size="lg" variant="outline" className="text-violet-600 border-violet-600 hover:bg-violet-100 dark:text-violet-400 dark:border-violet-400 dark:hover:bg-violet-900">View Ritik's Profile</Button>
             </div>
           </div>
         </div>

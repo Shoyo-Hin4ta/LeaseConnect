@@ -8,7 +8,6 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input"
 import { z } from "zod";
-import { Inputs } from "./Register/RegisterForm";
 
 const formSchema = z.object({
   name: z.string().trim().min(2, {

@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import stepperReducer from "./stepperSlice";
+import themeReducer from "./themeSlice";
 
 
 const store = configureStore({
     reducer : {
         stepper : stepperReducer,
+        theme : themeReducer
     }
 });
 

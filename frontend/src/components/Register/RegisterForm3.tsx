@@ -7,7 +7,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import Container from "../Container/container";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -81,46 +80,44 @@ const RegisterForm3 = ({ currentStep }: Form3Types) => {
   }
 
   return (
-      <div className="w-full max-w-md mx-auto">
-        <h2 className="text-2xl font-semibold mb-6 text-violet-800 dark:text-violet-200 text-center">
-          Address Information
-        </h2>
-        <Form {...addressForm}>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-            {['city', 'state', 'country', 'postcode'].map((field) => (
-              <FormField
-                key={field}
-                control={control}
-                name={field as keyof z.infer<typeof addressFormSchema>}
-                render={({ field: inputField }) => (
-                  <FormItem className="flex flex-col w-full">
-                    <div className="flex items-center w-full">
-                      <FormLabel className="w-1/3 text-violet-700 dark:text-violet-300">
-                        {field.charAt(0).toUpperCase() + field.slice(1)}
-                      </FormLabel>
-                      <FormControl className="w-2/3">
-                        <Input
-                          className="w-full bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:ring-2 focus:ring-violet-500 dark:focus:ring-violet-400"
-                          placeholder={`Enter ${field.charAt(0).toUpperCase() + field.slice(1)}`}
-                          id={field}
-                          {...inputField}
-                        />
-                      </FormControl>
-                    </div>
-                    <FormMessage className="text-sm text-red-500 mt-1" />
-                  </FormItem>
-                )}
-              />
-            ))}
-            <div className="mt-6">
-              <RegisterButton 
-                currentStep={currentStep} 
-                className="w-full py-3 text-lg font-semibold transition-colors duration-200 bg-violet-600 hover:bg-violet-700 text-white dark:bg-violet-700 dark:hover:bg-violet-600"
-              />
-            </div>
-          </form>
-        </Form>
-      </div>
+    <div className="w-full max-w-md mx-auto ">
+      <Form {...addressForm}>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          {['city', 'state', 'country', 'postcode'].map((field) => (
+            <FormField
+              key={field}
+              control={control}
+              name={field as keyof z.infer<typeof addressFormSchema>}
+              render={({ field: inputField }) => (
+                <FormItem className="flex flex-col w-full">
+                  <div className="flex items-center w-full">
+                    <FormLabel className="w-1/3 text-violet-700 dark:text-violet-300">
+                      {field.charAt(0).toUpperCase() + field.slice(1)}
+                    </FormLabel>
+                    <FormControl className="w-2/3">
+                      <Input
+                        className="w-full bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:ring-2 focus:ring-violet-500 dark:focus:ring-violet-400"
+                        placeholder={`Enter ${field.charAt(0).toUpperCase() + field.slice(1)}`}
+                        id={field}
+                        {...inputField}
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage className="text-sm text-red-500 mt-1" />
+                </FormItem>
+              )}
+            />
+          ))}
+          <div className="flex justify-center gap-4">
+          <RegisterButton 
+            currentStep={currentStep} 
+            showPrevButton={true}
+            className="bg-violet-600 hover:bg-violet-700 text-white dark:bg-violet-700 dark:hover:bg-violet-600"
+          />
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 };
 

@@ -27,8 +27,8 @@ const RegisterPage = () => {
   const currentStepDesc = steps.find(step => step.step === currentStep)?.stepDesc;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-gray-800 dark:to-gray-700 p-4">
-      <div className="flex flex-col items-center justify-center w-full max-w-4xl bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-gray-800 dark:to-gray-700 p-4 ">
+      <div className="flex flex-col items-center justify-center w-full max-w-4xl bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-36">
         <h2 className="text-3xl font-bold text-center text-indigo-800 dark:text-gray-300 mb-6">
           {currentStepDesc}
         </h2>

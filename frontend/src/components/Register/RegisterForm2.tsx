@@ -74,7 +74,6 @@ const RegisterForm2 = ({ currentStep }: { currentStep: number }) => {
     }
   };
 
-
   const handleRemove = (event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
@@ -84,9 +83,6 @@ const RegisterForm2 = ({ currentStep }: { currentStep: number }) => {
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <h2 className="text-2xl font-semibold mb-6 text-violet-800 dark:text-violet-200 text-center">
-        Upload Profile Image
-      </h2>
       <Form {...imageForm}>
         <form onSubmit={imageForm.handleSubmit(onSubmit)} className="space-y-6">
           <InputImage
@@ -114,13 +110,12 @@ const RegisterForm2 = ({ currentStep }: { currentStep: number }) => {
             </p>
           )}
           
-          <div className="mt-6">
-            <RegisterButton 
-              currentStep={currentStep} 
-              isSubmitting={isSubmitting} 
-              className="w-full py-3 text-lg font-semibold transition-colors duration-200 bg-violet-600 hover:bg-violet-700 text-white"
-            />
-          </div>
+          <RegisterButton 
+            currentStep={currentStep} 
+            isSubmitting={isSubmitting}
+            showPrevButton={true}
+            className="bg-violet-600 hover:bg-violet-700 text-white dark:bg-violet-700 dark:hover:bg-violet-600"
+          />
         </form>
       </Form>
     </div>
@@ -128,3 +123,4 @@ const RegisterForm2 = ({ currentStep }: { currentStep: number }) => {
 };
 
 export default RegisterForm2;
+

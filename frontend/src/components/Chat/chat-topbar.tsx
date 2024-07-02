@@ -1,51 +1,37 @@
 import React from 'react';
-import { Avatar, AvatarImage } from '../ui/avatar';
 import { UserData } from './data';
-import { Info, Phone, Video, Menu } from 'lucide-react';  // Import Menu icon
-import { cn } from '../../lib/utils';
-import { buttonVariants } from '../ui/button';
-import { Link } from 'react-router-dom';
+import { Avatar, AvatarImage } from '../ui/avatar';
+import { Button } from '../ui/button';
+import { ChevronRight, Phone, Video, Info } from 'lucide-react';
 
 interface ChatTopbarProps {
   selectedUser: UserData;
-  }
-
-export const TopbarIcons = [{ icon: Phone }, { icon: Video }, { icon: Info }];
-
-export default function ChatTopbar({selectedUser}: ChatTopbarProps) {
-  return (
-    <div className="w-full h-20 flex p-4 justify-between items-center border-b">
-        <div className="flex items-center gap-2">
-          <Avatar className="flex justify-center items-center">
-            <AvatarImage
-              src={selectedUser.avatar}
-              alt={selectedUser.name}
-              width={6}
-              height={6}
-              className="w-10 h-10 "
-            />
-          </Avatar>
-          <div className="flex flex-col">
-            <span className="font-medium">{selectedUser.name}</span>
-            <span className="text-xs">Active 2 mins ago</span>
-          </div>
-        </div>
-
-        <div>
-          {TopbarIcons.map((icon, index) => (
-            <Link
-              key={index}
-              to="#"
-              className={cn(
-                buttonVariants({ variant: "ghost", size: "icon" }),
-                "h-9 w-9",
-                "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
-              )}
-            >
-              <icon.icon size={20} className="text-muted-foreground" />
-            </Link>
-          ))}
-        </div>
-      </div>
-  )
+  isSidebarOpen: boolean;
+  toggleSidebar: () => void;
 }
+
+const ChatTopbar: React.FC<ChatTopbarProps> = ({ selectedUser, isSidebarOpen, toggleSidebar }) => {
+  return (
+    <div className="h-16 border-b flex items-center ">
+      {!isSidebarOpen && (
+        <Button variant="ghost" size="icon" onClick={toggleSidebar} className="mr-2">
+          <ChevronRight className="h-6 w-6" />
+        </Button>
+      )}
+      <Avatar className="h-10 w-10">
+        <AvatarImage src={selectedUser.avatar} alt={selectedUser.name} />
+      </Avatar>
+      <div className="ml-3 flex-1">
+        <h2 className="text-sm font-semibold">{selectedUser.name}</h2>
+        <p className="text-xs text-gray-500">{selectedUser.isOnline ? 'Online' : 'Offline'}</p>
+      </div>
+      <div className="flex">
+        <Button variant="ghost" size="icon"><Phone className="h-5 w-5" /></Button>
+        <Button variant="ghost" size="icon"><Video className="h-5 w-5" /></Button>
+        <Button variant="ghost" size="icon"><Info className="h-5 w-5" /></Button>
+      </div>
+    </div>
+  );
+};
+
+export default ChatTopbar;
