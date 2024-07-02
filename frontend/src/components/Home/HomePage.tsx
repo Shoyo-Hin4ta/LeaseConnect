@@ -2,6 +2,7 @@ import React from 'react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Slider } from '../ui/slider';
+import { Link } from 'react-router-dom';
 
 const HomePage = () => {
   return (
@@ -20,15 +21,21 @@ const HomePage = () => {
                 <div className="flex flex-col gap-4">
                   <div>
                     <Button size="lg" className="bg-white text-violet-600 hover:bg-violet-50 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
-                      Browse Listings
+                      <Link to="/browse">
+                        Browse Listings
+                      </Link>
                     </Button>
                   </div>
                   <div className='flex gap-4'>
                     <Button size="lg" variant="outline" className="bg-violet-600 text-white border-white hover:bg-violet-500 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700">
-                      Register
-                    </Button>
+                      <Link to="/register">
+                        Register
+                      </Link>
+                      </Button>
                     <Button size="lg" variant="outline" className="bg-violet-600 text-white border-white hover:bg-violet-500 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700">
-                      Login
+                      <Link to="/login">
+                        Login
+                      </Link>
                     </Button>
                   </div>
                 </div>

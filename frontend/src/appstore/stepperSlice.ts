@@ -5,7 +5,7 @@ export interface StateType{
     isCompleted : boolean;
 }
 
-const initialState : StateType = { currentStep : 3, isCompleted : false};
+const initialState : StateType = { currentStep : 1, isCompleted : false};
 
 const stepperSlice = createSlice({
     name: "trackStep",

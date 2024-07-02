@@ -14,12 +14,16 @@ import ProfilePage from './components/Profile/ProfilePage'
 import IndividualListingPage from './components/IndividualListingPage/IndividualListingPage'
 import MyListings from './components/OwnListings/MyListings'
 import EditListingPage from './components/OwnListings/EditListing/EditListingPage'
+import LoginPage from './components/SignIn/LoginPage'
+import ForgotPasswordPage from './components/SignIn/ForgotPasswordPage'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element = { <Layout /> } errorElement= {< ErrorPage /> }>
       <Route path='/' element = { <HomePage />} />
       <Route path='/register' element = { < RegisterPage />} />
+      <Route path='/login' element = { < LoginPage />} />
+      <Route path='/forgot-password' element = { < ForgotPasswordPage />} />
       <Route path='/browse' element = { < Browse />} />
       <Route path ='/listingform' element = { < ListingPage/> } />
       <Route path ='/messages' element = { < MessagePage/> } />

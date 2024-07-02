@@ -1,4 +1,4 @@
-import { Control, FieldPath } from "react-hook-form";
+import { Control, FieldPath, FieldValue, FieldValues } from "react-hook-form";
 import {
   FormControl,
   FormItem,
@@ -25,8 +25,8 @@ const formSchema = z.object({
     .transform((age) => Number(age)),
 })
 
-interface SignUpFormFieldProps {
-  name: FieldPath<z.infer<typeof formSchema>>;
+interface SignUpFormFieldProps<T extends FieldValues> {
+  name: FieldPath<T>;
   label: string,
   placeholder: string,
   type?: string,
@@ -34,14 +34,14 @@ interface SignUpFormFieldProps {
     field?: React.InputHTMLAttributes<HTMLInputElement>;
     css?: string;
   };
-  formControl: Control<Inputs>,
+  formControl: Control<T>,
   id?: string,
   className?: string,
   labelClassName?: string;
   inputClassName?: string;
 }
 
-const InputBox: React.FC<SignUpFormFieldProps> = ({
+const InputBox = <T extends FieldValues>({
   label,
   placeholder,
   name,
@@ -52,7 +52,7 @@ const InputBox: React.FC<SignUpFormFieldProps> = ({
   className,
   labelClassName = "",
   inputClassName = ""
-}) => {
+} : SignUpFormFieldProps<T>) => {
   return (
     <FormField
       name={name}
