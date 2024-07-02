@@ -67,7 +67,8 @@ const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({ onChange, value }) 
           <SelectTrigger className="h-8 w-28">
             <SelectValue placeholder="" />
           </SelectTrigger>
-          <SelectContent className="h-20" style={{ zIndex: 1000 }}>
+
+          <SelectContent className="h-20 bg-white dark:bg-gray-800 text-violet-800 dark:text-gray-300 border border-violet-200 dark:border-gray-700" style={{ zIndex: 1000 }}>
             <SelectItem value="per_day">/ day</SelectItem>
             <SelectItem value="per_week">/ week</SelectItem>
             <SelectItem value="per_month">/ month</SelectItem>

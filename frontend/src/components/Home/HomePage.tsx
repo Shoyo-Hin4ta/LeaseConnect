@@ -62,7 +62,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 ">
       <main>
         <section className="bg-violet-600 py-16 px-4 sm:px-6 lg:px-8 dark:bg-gray-800">
           <motion.div 

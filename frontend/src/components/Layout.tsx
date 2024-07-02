@@ -25,7 +25,7 @@ const Layout = () => {
     <div className= {`${currentTheme} flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100`}>
       <Header theme={currentTheme}/>
       <Sidebar isActive={isActive} toggleSidebar={toggleSidebar} />
-      <main className='flex-grow pt-14'>
+      <main className='flex-grow mt-14'>
         <Outlet context={contextValue} />
       </main>
       <Toaster />

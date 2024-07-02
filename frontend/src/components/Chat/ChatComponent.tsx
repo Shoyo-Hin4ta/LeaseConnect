@@ -1,17 +1,10 @@
 import React, { useState } from 'react';
-import { userData, UserData } from './data';
-import ChatTopbar from './chat-topbar';
+import { motion, AnimatePresence } from 'framer-motion';
+import { userData, UserData, Message } from './data';
+import ChatTopbar from './ChatTopbar';
 import ChatWindow from './ChatWindow';
-import ChatBottombar from './chat-bottombar';
-import Sidebar from './sidebar';
-
-
-interface Message {
-  id: number;
-  sender: string;
-  content: string;
-  timestamp: string;
-} 
+import ChatBottombar from './ChatBottombar';
+import Sidebar from './Sidebar';
 
 const loggedInUser: UserData = {
   id: 5,
@@ -40,18 +33,27 @@ const ChatComponent: React.FC = () => {
   const handleSelectUser = (user: UserData) => {
     setSelectedUser(user);
     setMessages(user.messages || []);
+    setIsSidebarOpen(false);
   };
 
   return (
-    <div className="flex h-[calc(100vh-3.5rem)] mt-14 bg-white dark:bg-gray-900">
+    <motion.div 
+      className="flex h-[calc(100vh-3.5rem)] bg-white dark:bg-gray-900"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <Sidebar
         users={userData}
         selectedUser={selectedUser}
         onSelectUser={handleSelectUser}
         isOpen={isSidebarOpen}
-        onClose={toggleSidebar}
+        onClose={() => setIsSidebarOpen(false)}
       />
-      <div className="flex flex-col flex-1">
+      <motion.div 
+        className="flex flex-col flex-1 overflow-hidden"
+        layout
+      >
         <ChatTopbar 
           selectedUser={selectedUser} 
           isSidebarOpen={isSidebarOpen}
@@ -59,8 +61,8 @@ const ChatComponent: React.FC = () => {
         />
         <ChatWindow messages={messages} currentUser={loggedInUser} />
         <ChatBottombar sendMessage={sendMessage} />
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
