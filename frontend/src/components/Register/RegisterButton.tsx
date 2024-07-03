@@ -49,7 +49,7 @@ const RegisterButton: React.FC<RegisterButtonProps> = ({
         <Button 
           type="submit" 
           disabled={isSubmitting}
-          // onClick={() => dispatch(next())}
+          onClick={() => dispatch(next())}
           className={`
             ${baseClassName} 
             ${isSubmitting ? disabledClassName : activeClassName}

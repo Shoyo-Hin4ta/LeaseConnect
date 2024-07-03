@@ -9,6 +9,7 @@ import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { Label } from '../ui/label';
 import DateRangeFilter from '../FilterElements/DateRangeFilter/DateRangeFilter';
 import { DateRange } from '../ui/date-range-picker';
+import Footer from '../Footer';
 
 const HomePage = () => {
   const [location, setLocation] = useState('');
@@ -86,13 +87,13 @@ const HomePage = () => {
                   Connect with the perfect short-term housing solution for international students and professionals.
                 </motion.p>
                 <motion.div className="flex flex-col gap-4" variants={itemVariants}>
-                  {/* <div>
+                  <div>
                     <Link to="/browse">
                       <Button size="lg" className="bg-white text-violet-600 hover:bg-violet-50 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">  
                         Browse Listings 
                       </Button>
                     </Link>
-                  </div> */}
+                  </div>
                   <div className='flex gap-4'>
                     <Link to="/register">
                       <Button size="lg" className="bg-white text-violet-600 hover:bg-violet-50 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
@@ -141,7 +142,7 @@ const HomePage = () => {
                           className="p-0"
                           onClick={() => setShowPriceOptions(!showPriceOptions)}
                         >
-                          <ChevronRight className={`h-5 w-5 transition-transform ${showPriceOptions ? 'rotate-90' : ''}`} />
+                          <ChevronRight className={`text-gray-600 dark:text-gray-400 h-5 w-5 transition-transform ${showPriceOptions ? 'rotate-90' : ''}`} />
                         </Button>
                       </div>
                     </div>
@@ -253,11 +254,7 @@ const HomePage = () => {
         </motion.section>
       </main>
 
-      <footer className="bg-violet-800 text-white py-8 dark:bg-gray-900">
-        <div className="container mx-auto px-4 text-center">
-          <p>&copy; 2024 Lease Connect. All rights reserved.</p>
-        </div>
-      </footer>
+    <Footer />
     </div>
   );
 };

@@ -9,15 +9,15 @@ export function cn(...inputs: ClassValue[]) {
 export const steps = [
   {
     step : 1,
-    stepDesc : "Step 1",
+    stepDesc : "Basic Information",
   },
   {
     step : 2,
-    stepDesc : "Step 2",
+    stepDesc : "Profile Image",
   },
   { 
     step: 3,
-    stepDesc : "Step 3",
+    stepDesc : "Your City",
   }]
 
 export const listingPropertySteps = [
@@ -31,8 +31,8 @@ export const listingPropertySteps = [
     },
     { 
       step: 3,
-      stepDesc : "Select Preference",
+      stepDesc : "Set Price and Date",
     },{
       step : 4,
-      stepDesc : "Upload Image",
+      stepDesc : "Upload Images",
     }]

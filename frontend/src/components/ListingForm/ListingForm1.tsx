@@ -6,7 +6,7 @@ import InputBox from "./InputBox"
 import SelectDrop from "./SelectDrop"
 import RadioInput from "./RadioInput"
 import { useEffect, useState } from "react"
-import { initAutocomplete } from "@/lib/autofillLisitng"
+import { initAutocomplete, loadGoogleMapsApi } from "@/lib/autofillListing"
 import ListingFormButton from "./ListingFormButton"
 import { useDispatch } from "react-redux"
 import { next } from "@/appstore/stepperSlice"
@@ -152,16 +152,23 @@ const ListingForm1 = ({ currentStep }: {
     dispatch(next());
     
     setIsSubmitting(false);
-    toast({
-      title: "Form submitted successfully",
-      description: "Your information has been saved.",
-      duration: 3000,
-    });
+    // toast({
+    //   title: "Form submitted successfully",
+    //   description: "Your information has been saved.",
+    //   duration: 3000,
+    // });
   }
 
   useEffect(() => {
-    window.initAutocomplete = () => initAutocomplete(setValue);
-    window.initAutocomplete();
+    loadGoogleMapsApi("abc")
+      .then(() => {
+        window.initAutocomplete = () => initAutocomplete(setValue);
+        window.initAutocomplete();
+      })
+      .catch((error) => {
+        console.error('Error loading Google Maps API:', error);
+        // Show an error message to the user
+      });
   }, [setValue]);
  
 

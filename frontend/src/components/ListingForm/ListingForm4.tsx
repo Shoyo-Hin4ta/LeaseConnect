@@ -111,11 +111,13 @@ const ListingForm4 = ({ currentStep }: { currentStep: number }) => {
 
     setSubmitAttempted(false);
     setIsSubmitting(false);
+
+    navigate('/browse');
     
     toast({
-      title: "Form submitted successfully",
+      title: "Listing Edited successfully",
       description: "Your information has been saved.",
-      duration: 3000,
+      duration: 2000,
     });
   };
 

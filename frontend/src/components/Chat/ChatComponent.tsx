@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { userData, UserData, Message } from './data';
 import ChatTopbar from './ChatTopbar';
 import ChatWindow from './ChatWindow';
@@ -38,7 +38,7 @@ const ChatComponent: React.FC = () => {
 
   return (
     <motion.div 
-      className="flex h-[calc(100vh-3.5rem)] bg-white dark:bg-gray-900"
+      className=" flex h-[calc(100vh-3.5rem)] bg-white dark:bg-gray-900 container mx-auto px-2 sm:px-4 lg:px-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

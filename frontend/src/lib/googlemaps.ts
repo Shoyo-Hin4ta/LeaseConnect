@@ -21,16 +21,21 @@ let address1Field: HTMLInputElement;
 // let address2Field: HTMLInputElement;
 let postalField: HTMLInputElement;
 
-// export function loadGoogleMapsApi(apiKey: string): void {
-//   if (document.getElementById('google-maps-script')) return; // Prevents loading the script multiple times
-
-//   const script = document.createElement('script');
-//   script.id = 'google-maps-script';
-//   script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initAutocomplete`;
-//   script.async = true;
-//   script.defer = true;
-//   document.body.appendChild(script);
-// }
+export function loadGoogleMapsApi(apiKey: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (document.getElementById('google-maps-script')) {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.id = 'google-maps-script';
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initAutocomplete&loading=async`;
+    script.async = true;
+    script.onerror = () => reject(new Error('Failed to load Google Maps API'));
+    script.onload = () => resolve();
+    document.body.appendChild(script);
+  });
+}
 
 // export interface AddressComponentType{
 //   city:string | undefined,

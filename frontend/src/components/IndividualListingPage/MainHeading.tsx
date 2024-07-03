@@ -12,7 +12,7 @@ const MainHeading = () => {
           {/* Image */}
           <div className="w-full lg:w-2/3 aspect-video">
             <img
-              src="/placeholder.svg"
+              src="https://images1.apartments.com/i2/nWbsAbHB7_rE-8P7pKn3OuQbo1UwP_IoW3pJ5AIG3TU/111/cortland-apartments-hagerstown-md-primary-photo.jpg"
               alt="Property"
               className="rounded-xl object-cover w-full h-full shadow-lg"
             />

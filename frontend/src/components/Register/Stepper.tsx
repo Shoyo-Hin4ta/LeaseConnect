@@ -26,7 +26,6 @@ const Stepper = ({ currentStep }: {
 
   const calulateProgressWidth = () => {
     const val = ((currentStep - 1) / (steps.length - 1)) * 100
-    console.log(`progress % ${val}`)
     if (val > 100) {
       return 100;
     }

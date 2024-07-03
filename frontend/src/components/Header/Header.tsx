@@ -73,9 +73,9 @@ const Header = ({theme} : {
                   </Link>
                 </Button>
                 <Button variant="ghost" size="sm" asChild className="text-gray-600 dark:text-gray-300 hover:bg-violet-100 dark:hover:bg-violet-800">
-                  <Link to="/favorites" className="flex items-center space-x-1">
+                  <Link to="/favourites" className="flex items-center space-x-1">
                     <Heart size={18} />
-                    <span>Favorites</span>
+                    <span>Favourites</span>
                   </Link>
                 </Button>
                 <DropDown />

@@ -37,12 +37,14 @@ const CardFoot = ({isMyListings = false} : {
       <div className="w-full flex justify-end">
         {isMyListings ? (
           <div className="space-x-2">
+
             <CardButton 
                 ButtonText="Edit" 
                 onClick={() => navigate('/editlisting')} 
                 variant="default" 
                 size="sm"
               />
+              
               <CardButton 
                 ButtonText="Remove Listing" 
                 variant="outline" 
@@ -62,12 +64,22 @@ const CardFoot = ({isMyListings = false} : {
                   />
           </div>
         ) : (
-              <CardButton 
-                ButtonText="Chat" 
-                onClick={() => navigate('/messages')} 
-                variant="default" 
-                size="sm"
-              />        
+          <div className="space-x-2">
+            <CardButton 
+              ButtonText="View" 
+              onClick={() => navigate('/listing')} 
+              variant="default" 
+              size="sm"
+              className="border border-violet-300 bg-white text-purple-600 hover:bg-violet-50 dark:border-violet-700 dark:bg-gray-800 dark:text-violet-400 dark:hover:bg-gray-700 transition-colors"
+            />
+            <CardButton 
+              ButtonText="Chat" 
+              onClick={() => navigate('/messages')} 
+              variant="default" 
+              size="sm"
+              className="bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-700 dark:hover:bg-violet-600 transition-colors"
+            />    
+          </div>    
             )}
       </div>
     </CardFooter>

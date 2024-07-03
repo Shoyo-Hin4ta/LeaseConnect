@@ -10,7 +10,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -22,18 +21,12 @@ const Gallery = () => {
   const [count, setCount] = useState(0)
 
   const images = [
-    '/one.png',
-    '/two.png',
-    '/User1.png',
-    '/User2.png',
-    '/User3.png',
-    '/User4.png',
+    "https://images1.apartments.com/i2/nWbsAbHB7_rE-8P7pKn3OuQbo1UwP_IoW3pJ5AIG3TU/111/cortland-apartments-hagerstown-md-primary-photo.jpg",
+    "https://images1.apartments.com/i2/nSlZe06JNVAKcZaq0dncFNjMlXwu36GQwu-ncneAnn0/117/sire-kingwood-kingwood-tx-building-photo.jpg",
   ]
 
   useEffect(() => {
-    if (!api) {
-      return
-    }
+    if (!api) return
     setCount(api.scrollSnapList().length)
     setCurrent(api.selectedScrollSnap() + 1)
     api.on("select", () => {
@@ -50,35 +43,30 @@ const Gallery = () => {
             <DialogTrigger asChild>
               <img
                 src={image}
-                width="300"
-                height="200"
                 alt={`Gallery image ${index + 1}`}
-                className="rounded-lg object-cover aspect-[3/2] hover:opacity-80 transition-opacity cursor-pointer"
+                className="w-full h-48 object-cover rounded-lg hover:opacity-80 transition-opacity cursor-pointer"
               />
             </DialogTrigger>
-            <DialogContent className="max-w-7xl h-[60vh] w-full p-6 bg-white dark:bg-gray-800 flex items-center justify-center">
-              <DialogHeader>
-                  <DialogTitle className="sr-only">Image Gallery</DialogTitle>
-                  <DialogDescription className="sr-only">
-                    Navigate through the image gallery using left and right arrows
-                  </DialogDescription>
+            <DialogContent className="max-w-4xl w-full p-0 bg-gray-400 ">
+              <DialogHeader className="sr-only">
+                <DialogTitle>Image Gallery</DialogTitle>
               </DialogHeader>
-              <Carousel setApi={setApi} className="w-full max-w-5xl mx-auto">
-              <CarouselContent className='object-center'>
+              <Carousel setApi={setApi} className="w-full ">
+                <CarouselContent>
                   {images.map((img, idx) => (
-                    <CarouselItem key={idx} className="flex items-center justify-center">
-                    <img 
-                      src={img} 
-                      alt={`Gallery image ${idx + 1}`} 
-                      className="max-w-full max-h-full object-contain"
-                    />
-                  </CarouselItem>
+                    <CarouselItem key={idx} className="flex items-center justify-center h-[80vh]">
+                      <img 
+                        src={img} 
+                        alt={`Gallery image ${idx + 1}`} 
+                        className="max-w-full max-h-full object-contain"
+                      />
+                    </CarouselItem>
                   ))}
                 </CarouselContent>
-                <CarouselPrevious className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black/50 text-white hover:bg-gray-800/70 z-10" />
-                <CarouselNext className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black/50 text-white hover:bg-gray-800/70 z-10" />
+                <CarouselPrevious className="absolute left-4 bg-black/50 text-white hover:bg-black/70" />
+                <CarouselNext className="absolute right-4 bg-black/50 text-white hover:bg-black/70" />
               </Carousel>
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-2 py-1 rounded">
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-2 py-1 rounded">
                 {current} / {count}
               </div>
             </DialogContent>

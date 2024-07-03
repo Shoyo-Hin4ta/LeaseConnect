@@ -53,7 +53,7 @@ const DropDown = () => {
 
           <DropdownMenuGroup className='lg:hidden'>
             <DropdownMenuItem asChild className="hover:bg-violet-50 dark:hover:bg-gray-700">
-              <Link to="/favorites">Favorites</Link>
+              <Link to="/favourites">Favourites</Link>
             </DropdownMenuItem>
           </DropdownMenuGroup>
 

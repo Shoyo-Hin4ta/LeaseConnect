@@ -69,11 +69,11 @@ const ListingForm3 = ({ currentStep }: {
     dispatch(next());
     
     setIsSubmitting(false);
-    toast({
-      title: "Form submitted successfully",
-      description: "Your information has been saved.",
-      duration: 3000,
-    });
+    // toast({
+    //   title: "Form submitted successfully",
+    //   description: "Your information has been saved.",
+    //   duration: 3000,
+    // });
   }
 
   return (

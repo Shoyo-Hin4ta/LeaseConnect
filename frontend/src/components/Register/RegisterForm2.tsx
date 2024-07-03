@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useToast } from "../ui/use-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -36,7 +35,6 @@ export const imageFormSchema = z.object({
 const RegisterForm2 = ({ currentStep }: { currentStep: number }) => {
   const dispatch = useDispatch();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [showError, setShowError] = useState<boolean>(false);
 
@@ -54,16 +52,9 @@ const RegisterForm2 = ({ currentStep }: { currentStep: number }) => {
     }
 
     setIsSubmitting(true);
-    console.log("submitted");
     console.log(data);
-    console.log(selectedImage);
     dispatch(next());
     setIsSubmitting(false);
-    toast({
-      title: "Image uploaded successfully",
-      description: "Your profile image has been updated.",
-      duration: 3000,
-    });
   };
 
   const handleFileChange = (file: File | null) => {
@@ -114,7 +105,7 @@ const RegisterForm2 = ({ currentStep }: { currentStep: number }) => {
             currentStep={currentStep} 
             isSubmitting={isSubmitting}
             showPrevButton={true}
-            className="bg-violet-600 hover:bg-violet-700 text-white dark:bg-violet-700 dark:hover:bg-violet-600"
+            className="w-full bg-violet-600 hover:bg-violet-700 text-white dark:bg-violet-700 dark:hover:bg-violet-600"
           />
         </form>
       </Form>
@@ -123,4 +114,3 @@ const RegisterForm2 = ({ currentStep }: { currentStep: number }) => {
 };
 
 export default RegisterForm2;
-

@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import { UserData } from './data';
 import { Avatar, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
-import { ChevronRight, Phone, Video, Info } from 'lucide-react';
+import { ChevronRight, Phone, Video, Info, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface ChatTopbarProps {
   selectedUser: UserData;
@@ -12,11 +13,15 @@ interface ChatTopbarProps {
 }
 
 const ChatTopbar: React.FC<ChatTopbarProps> = ({ selectedUser, isSidebarOpen, toggleSidebar }) => {
+  const navigate = useNavigate();
   return (
     <motion.div 
       className="h-16 min-h-[64px] border-b dark:border-gray-700 flex items-center px-4 bg-white dark:bg-gray-800"
       layout
     >
+      <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="mr-2">
+        <X className="h-6 w-6 dark:text-gray-300" />
+      </Button>
       {!isSidebarOpen && (
         <Button variant="ghost" size="icon" onClick={toggleSidebar} className="mr-2">
           <ChevronRight className="h-6 w-6 dark:text-gray-300" />

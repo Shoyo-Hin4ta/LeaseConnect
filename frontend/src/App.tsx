@@ -16,21 +16,24 @@ import EditListingPage from './components/OwnListings/EditListing/EditListingPag
 import LoginPage from './components/SignIn/LoginPage'
 import ForgotPasswordPage from './components/SignIn/ForgotPasswordPage'
 import ChatComponent from './components/Chat/ChatComponent'
+import FavouritePage from './components/Favourite/FavouritePage'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element = { <Layout /> } errorElement= {< ErrorPage /> }>
-      <Route path='/' element = { <HomePage />} />
-      <Route path='/register' element = { < RegisterPage />} />
-      <Route path='/login' element = { < LoginPage />} />
-      <Route path='/forgot-password' element = { < ForgotPasswordPage />} />
-      <Route path='/browse' element = { < Browse />} />
-      <Route path ='/listingform' element = { < ListingPage/> } />
-      <Route path ='/messages' element = { < ChatComponent/> } />
-      <Route path ='/profilepage' element = { < ProfilePage/> } />
-      <Route path ='/listing' element = { < IndividualListingPage/> } />
-      <Route path ='/mylistings' element = { < MyListings/> } />
-      <Route path ='/editlisting' element = { < EditListingPage/> } />
+      <Route path='/' element = { <HomePage />} errorElement= {< ErrorPage /> }/>
+      <Route path='/register' element = { < RegisterPage />} errorElement= {< ErrorPage /> }/>
+      <Route path='/login' element = { < LoginPage />} errorElement= {< ErrorPage /> }/>
+      <Route path='/forgot-password' element = { < ForgotPasswordPage />} errorElement= {< ErrorPage /> }/>
+      <Route path='/browse' element = { < Browse />} errorElement= {< ErrorPage /> }/>
+      <Route path ='/listingform' element = { < ListingPage/> } errorElement= {< ErrorPage /> }/>
+      <Route path ='/messages' element = { < ChatComponent/> } errorElement= {< ErrorPage /> }/>
+      <Route path ='/profilepage' element = { < ProfilePage/> } errorElement= {< ErrorPage /> }/>
+      <Route path ='/listing' element = { < IndividualListingPage/> } errorElement= {< ErrorPage /> }/>
+      <Route path ='/mylistings' element = { < MyListings/> } errorElement= {< ErrorPage /> }/>
+      <Route path ='/editlisting' element = { < EditListingPage/> } errorElement= {< ErrorPage /> }/>
+      <Route path ='/favourites' element = { < FavouritePage/> } errorElement= {< ErrorPage /> }/>
+
     </Route>
    
   )
