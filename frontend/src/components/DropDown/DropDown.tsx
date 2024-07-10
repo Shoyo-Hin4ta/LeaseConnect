@@ -11,31 +11,47 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Link, useNavigate } from 'react-router-dom';
 import ConfirmationPopup from '../Popups/Popup';
+import { useMutation } from '@apollo/client';
+import { LOGOUT_MUTATION } from '@/lib/queries';
+import { useDispatch } from 'react-redux';
+import { clearUser } from '@/appstore/userSlice';
 
 const DropDown = () => {
-  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const navigate = useNavigate();
+  const [logout] = useMutation(LOGOUT_MUTATION);
+  const dispatch = useDispatch();
 
-  const handleConfirm = useCallback(() => {
-    console.log('Logout confirmed');
-    // Perform logout action here
-    setIsPopupOpen(false);
-    // Navigate to home page or login page after logout
-    navigate('/');
-  }, [navigate]);
-
-  const handleLogoutClick = useCallback((event: React.MouseEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
+  const handleLogoutClick = useCallback(() => {
     setIsPopupOpen(true);
   }, []);
 
+  const handleConfirm = useCallback(async () => {
+    setIsLoggingOut(true);
+    try {
+      const response = await logout();
+      if (response.data.logout.success) {
+        dispatch(clearUser());
+        console.log(response.data.logout.message);
+        navigate('/', { replace: true });
+      } else {
+        console.error('Logout failed:', response.data.logout.message);
+      }
+    } catch (err) {
+      console.error('Logout error:', err);
+    } finally {
+      setIsLoggingOut(false);
+      setIsPopupOpen(false);
+    }
+  }, [logout, dispatch, navigate]);
+
   return (
-    <div className="relative">
+    <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button className="flex items-center justify-center rounded-full hover:bg-violet-100 dark:hover:bg-gray-700 p-2">
-            <Menu size={24} className=" dark:text-gray-300" />
+            <Menu size={24} className="dark:text-gray-300" />
           </button>
         </DropdownMenuTrigger>
 
@@ -69,28 +85,28 @@ const DropDown = () => {
           <DropdownMenuSeparator className="bg-violet-200 dark:bg-gray-700" />
 
           <DropdownMenuItem 
-            asChild
+            onSelect={handleLogoutClick}
             className="text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900"
           >
-            <div onClick={handleLogoutClick}>Logout</div>
+            Logout
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {isPopupOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <ConfirmationPopup
-            isOpen={isPopupOpen}
-            onClose={() => setIsPopupOpen(false)}
-            onConfirm={handleConfirm}
-            title="Logging Out!"
-            message="Are you sure you want to logout?"
-            confirmText="Yes"
-            cancelText="No"
-          />
-        </div>
+      <ConfirmationPopup
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+        onConfirm={handleConfirm}
+        title="Logging Out!"
+        message="Are you sure you want to logout?"
+        confirmText="Yes"
+        cancelText="No"
+      />
+
+      {isLoggingOut && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-[100]" />
       )}
-    </div>
+    </>
   );
 };
 

@@ -2,9 +2,9 @@ import { useRouteError, isRouteErrorResponse } from "react-router-dom";
 
 const ErrorPage = () => {
   const error = useRouteError() as Error;
-  console.error(error);
+  // console.error(error);
   return isRouteErrorResponse(error) ? (
-    <div>{error.data}</div>
+    <div>This page doesn't exist </div>
   ) : 
   <div>Something went wrong</div>
 };

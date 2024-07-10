@@ -6,12 +6,12 @@ import { Form } from "../ui/form";
 import ListingFormButton from "./ListingFormButton";
 import ImageContainer from "../ui/ImageContainer";
 import ListingImageInput from "./ListingImageInput";
-import { Button } from "../ui/button";
 import { useDispatch } from "react-redux";
 import { next, resetState, setIsComplete } from "@/appstore/stepperSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "../ui/use-toast";
 import { ListingTypes } from "./ListingForm1";
+import { gql, useMutation } from '@apollo/client';
 
 export const MAX_FILE_SIZE = 1024 * 1024 * 5;
 export const ACCEPTED_IMAGE_MIME_TYPES = [
@@ -21,29 +21,64 @@ export const ACCEPTED_IMAGE_MIME_TYPES = [
   "image/webp",
 ];
 
+const LISTING_DETAILS_MUTATION = gql`
+  mutation SignUp($listingDetails: ListingFormInput!, $listingImages: [Upload]!) {
+    createListing(listingDetails: $listingDetails, listingImages: $listingImages){
+    id
+    title
+    propertyType
+    bedroom
+    bathroom
+    location {
+      streetAddress
+      city
+      state
+      zipcode
+      country
+    }
+    utilitiesIncludedInRent
+    utilities
+    amenities
+    preferences
+    description
+    currency
+    amount
+    timePeriod
+    dailyRate
+    subleaseDuration {
+      from
+      to
+    }
+    numberOfDays
+    images
+    createdAt
+    updatedAt
+  }
+}
+`;
+
 const listingForm4Schema = z.object({
   image: z
-    .array(z.instanceof(File).nullable())
+    .array(z.instanceof(File))
     .min(1, "At least one image is required.")
-    .refine((files) => files.filter(Boolean).every(file => file instanceof File), {
-      message: "Each input must be a valid file.",
-    })
-    .refine((files) => files.filter(Boolean).every(file => file.size <= MAX_FILE_SIZE), {
+    .max(8, "Maximum 8 images allowed.")
+    .refine((files) => files.every(file => file.size <= MAX_FILE_SIZE), {
       message: "Max image size is 5MB.",
     })
-    .refine((files) => files.filter(Boolean).every(file => ACCEPTED_IMAGE_MIME_TYPES.includes(file.type)), {
+    .refine((files) => files.every(file => ACCEPTED_IMAGE_MIME_TYPES.includes(file.type)), {
       message: "Only .jpg, .jpeg, .png, and .webp formats are supported.",
     }),
 });
 
 const ListingForm4 = ({ currentStep }: { currentStep: number }) => {
-  const [imageFields, setImageFields] = useState([{ id: 1 }]);
-  const [selectedImages, setSelectedImages] = useState<(File | null)[]>([null]);
-  const [submitAttempted, setSubmitAttempted] = useState(false);
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [showImageError, setShowImageError] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [createListing, { loading, error }] = useMutation(LISTING_DETAILS_MUTATION);
+
 
   const listingForm4 = useForm<ListingTypes>({
     resolver: zodResolver(listingForm4Schema),
@@ -51,41 +86,16 @@ const ListingForm4 = ({ currentStep }: { currentStep: number }) => {
 
   const { handleSubmit, control, setValue } = listingForm4;
 
-  const handleFileChange = (file: File | null, index: number) => {
-    const newImages = [...selectedImages];
-    newImages[index] = file || newImages[index]; // Keep the previous image if no new file is selected
+  const handleFileChange = (files: File[]) => {
+    const newImages = [...selectedImages, ...files].slice(0, 8);
     setSelectedImages(newImages);
     setValue('image', newImages);
     setShowImageError(false);
   };
 
-  const addImageField = () => {
-    if (selectedImages.some(img => img === null)) {
-      setShowImageError(true);
-    } else if (imageFields.length < 8) {
-      const newId = Math.max(...imageFields.map(field => field.id)) + 1;
-      setImageFields([...imageFields, { id: newId }]);
-      setSelectedImages([...selectedImages, null]);
-      setValue('image', [...selectedImages, null]);
-      setShowImageError(false);
-    }
-  };
-
-  const handleRemoveImage = (index: number, event: React.MouseEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    setShowImageError(false);
+  const handleRemoveImage = (index: number) => {
     const newImages = selectedImages.filter((_, i) => i !== index);
-    const newImageFields = imageFields.filter((_, i) => i !== index);
-
-    if (newImages.length === 0) {
-      newImages.push(null);
-      newImageFields.push({ id: 1 });
-    }
-
     setSelectedImages(newImages);
-    setImageFields(newImageFields);
     setValue('image', newImages);
   };
 
@@ -93,32 +103,77 @@ const ListingForm4 = ({ currentStep }: { currentStep: number }) => {
 
   const onSubmit = async (data: ListingTypes) => {
     setIsSubmitting(true);
-    setSubmitAttempted(true);
 
-    if (selectedImages.every(img => img === null)) {
+    if (selectedImages.length === 0) {
       setShowImageError(true);
       setIsSubmitting(false);
       return;
     }
 
-    dispatch(next());
-    dispatch(setIsComplete(true));
     console.log(data);
-    navigate('/mylistings');
+
+    try{
+      const allData = JSON.parse(localStorage.getItem('listingData') || '{}');
+
+      // Combine all data
+      const combinedData  = {
+        ...allData,
+      };
+
+      const preparedImages = await Promise.all(selectedImages.map(async (image) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            resolve({
+              lastModified: image.lastModified,
+              name: image.name,
+              size: image.size,
+              type: image.type,
+              data: event?.target?.result
+            });
+          };
+          reader.onerror = (error) => reject(error);
+          reader.readAsDataURL(image);
+        });
+      }));
+      
+      const { data: responseData } = await createListing({
+        variables: {
+          listingDetails: combinedData,
+          listingImages: preparedImages,
+        },
+      });
+
+      console.log("Response:", responseData);
+
+      //send all the combined data to the backend
+      localStorage.removeItem('listingData');
+
+      toast({
+        title: "Listing Added successfully",
+        description: "Your listing has been saved.",
+        duration: 2000,
+      });
+
+      dispatch(next());
+      dispatch(setIsComplete(true));
+      setIsSubmitting(false);
+
+      navigate('/browse');
+
+    }catch (error) {
+      console.error('Error submitting listing:', error);
+      toast({
+        title: "Error submitting listing",
+        description: "Please try again later.",
+        duration: 2000,
+        variant: "destructive",
+      });
+    } 
 
     dispatch(setIsComplete(false));
     dispatch(resetState());
-
-    setSubmitAttempted(false);
-    setIsSubmitting(false);
-
-    navigate('/browse');
     
-    toast({
-      title: "Listing Edited successfully",
-      description: "Your information has been saved.",
-      duration: 2000,
-    });
   };
 
   return (
@@ -126,49 +181,41 @@ const ListingForm4 = ({ currentStep }: { currentStep: number }) => {
       <h2 className="text-2xl font-semibold mb-6 text-violet-800 dark:text-violet-200">Add Images</h2>
       <Form {...listingForm4}>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-4">
-            {imageFields.map((field, index) => (
-              <div key={field.id}>
-                <ListingImageInput
-                  name={`image.${index}`}
-                  label="Listing Images"
-                  formControl={control}
-                  placeholder="Upload Image"
-                  type="file"
-                  onChange={(file: File | null) => handleFileChange(file, index)}
-                  id={`imageInput-${field.id}`}
-                  props={{ field: { accept: "image/*" }, css: "hidden" }}
-                  currentImage={selectedImages[index]}
-                />
-                <label htmlFor={`imageInput-${field.id}`} className="block w-full cursor-pointer">
-                  <ImageContainer 
-                    image={selectedImages[index]} 
-                    onRemove={(event) => handleRemoveImage(index, event)}
-                    width="w-full"
-                    height="h-48 md:h-64"
-                  />
-                </label>
-              </div>
+          <ListingImageInput
+            name="image"
+            label="Listing Images"
+            formControl={control}
+            placeholder="Upload Images"
+            type="file"
+            onChange={handleFileChange}
+            id="imageInput"
+            props={{ field: { accept: "image/*" }, css: "hidden" }}
+            currentImages={selectedImages}
+          />
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {selectedImages.map((image, index) => (
+              <ImageContainer
+                key={index}
+                image={image}
+                onRemove={() => handleRemoveImage(index)}
+                width="w-full"
+                height="h-48"
+              />
             ))}
           </div>
-          <div>
-            <Button
-              onClick={addImageField}
-              disabled={imageFields.length >= 8 || selectedImages.some(img => img === null)}
-              type="button"
-              className="bg-violet-600 hover:bg-violet-700 text-white"
-            >
-              Add More Image
-            </Button>
-            {imageFields.length >= 8 && (
-              <p className="text-red-500 mt-2">Maximum number of images reached.</p>
-            )}
-            {showImageError && (
-              <p className="text-red-500 mt-2">Please fill all existing image containers before adding a new one.</p>
-            )}
-          </div>
-          {submitAttempted && selectedImages.every(img => img === null) && (
-            <p className="text-red-500">Please upload at least one image.</p>
+          {selectedImages.length < 8 && (
+            <label htmlFor="imageInput" className="block w-full cursor-pointer">
+              <ImageContainer 
+                width="w-full"
+                height="h-48"
+              />
+            </label>
+          )}
+          {selectedImages.length >= 8 && (
+            <p className="text-red-500 mt-2">Maximum number of images reached.</p>
+          )}
+          {showImageError && (
+            <p className="text-red-500 mt-2">Please upload at least one image.</p>
           )}
           <ListingFormButton 
             currentStep={currentStep} 

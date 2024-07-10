@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { DualRangeSlider } from '../ui/dual-range-slider';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
@@ -10,8 +10,19 @@ import { Label } from '../ui/label';
 import DateRangeFilter from '../FilterElements/DateRangeFilter/DateRangeFilter';
 import { DateRange } from '../ui/date-range-picker';
 import Footer from '../Footer';
+import { useMutation } from '@apollo/client';
+import { LOGOUT_MUTATION } from '@/lib/queries';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearUser, getIsAuthenticated, getUser } from '@/appstore/userSlice';
 
 const HomePage = () => {
+
+  const dispatch = useDispatch();
+  const user = useSelector(getUser);
+  const isAuthenticated = useSelector(getIsAuthenticated);
+
+
+  
   const [location, setLocation] = useState('');
   const [priceRange, setPriceRange] = useState({ min: 500, max: 2500 });
   const [pricePeriod, setPricePeriod] = useState<'per_day' | 'per_week' | 'per_month'>('per_day');
@@ -62,6 +73,27 @@ const HomePage = () => {
     }
   };
 
+  const [logout, { loading, error }] = useMutation(LOGOUT_MUTATION);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      const response = await logout();
+      console.log(response);
+      if (response.data.logout.success) {
+        dispatch(clearUser());
+        console.log(response.data.logout.message);
+        navigate('/');
+      }
+      else{
+        console.log(error);
+      }
+    } catch (err) {
+      console.error('Logout failed:', err);
+    }
+  };
+
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 ">
       <main>
@@ -74,6 +106,16 @@ const HomePage = () => {
           >
             <div className="grid gap-12 lg:grid-cols-[1fr_500px]">
               <motion.div className="space-y-6" variants={itemVariants}>
+                {isAuthenticated && (
+                  <motion.h2
+                    className="text-2xl font-bold text-white sm:text-3xl md:text-4xl"
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                  >
+                    Hi, {user?.name || 'there'}!
+                  </motion.h2>
+                )}
                 <motion.h1 
                   className="text-3xl font-bold text-white sm:text-4xl md:text-5xl lg:text-6xl"
                   variants={itemVariants}
@@ -95,16 +137,29 @@ const HomePage = () => {
                     </Link>
                   </div>
                   <div className='flex gap-4'>
-                    <Link to="/register">
-                      <Button size="lg" className="bg-white text-violet-600 hover:bg-violet-50 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+                    {isAuthenticated ? (
+                      <Button 
+                        size="lg" 
+                        className="border bg-violet-600 text-white border-white hover:bg-violet-500 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700"
+                        onClick={handleLogout}
+                        disabled={loading}
+                      >
+                        {loading ? 'Logging out...' : 'Logout'}
+                      </Button>
+                    ) : (
+                      <>
+                        <Link to="/register">
+                          <Button size="lg" className="bg-white text-violet-600 hover:bg-violet-50 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
                             Register
-                      </Button>
-                    </Link>
-                    <Link to="/login">
-                      <Button size="lg" variant="outline" className="bg-violet-600 text-white border-white hover:bg-violet-500 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700">
-                        Login
-                      </Button>
-                    </Link>
+                          </Button>
+                        </Link>
+                        <Link to="/login">
+                          <Button size="lg" variant="outline" className="bg-violet-600 text-white border-white hover:bg-violet-500 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700">
+                            Login
+                          </Button>
+                        </Link>
+                      </>
+                    )}
                   </div>
                 </motion.div>
               </motion.div>

@@ -34,7 +34,7 @@ const InputMobileNumber: React.FC<InputMobileNumberProps> = ({
         <FormItem className={`flex flex-col w-full ${className}`}>
           <div className="flex items-center justify-between w-full">
             <FormLabel className={`w-1/3 ${labelClassName}`}>{label}</FormLabel>
-            <FormControl className="w-2/3">
+            <FormControl className="">
               <PhoneInput
                 className={`w-full text-sm ${inputClassName}`}
                 placeholder={placeholder}

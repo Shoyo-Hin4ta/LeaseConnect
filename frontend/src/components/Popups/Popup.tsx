@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import ReactDOM from 'react-dom';
 import { Button } from "@/components/ui/button";
 
 interface ConfirmationPopupProps {
@@ -30,33 +21,35 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
   confirmText = "Yes",
   cancelText = "No",
 }) => {
-  return (
-    <AlertDialog open={isOpen} onOpenChange={onClose}>
-      <AlertDialogContent className="bg-white dark:bg-gray-800">
-        <AlertDialogHeader>
-          <AlertDialogTitle className="text-violet-800 dark:text-violet-200">{title}</AlertDialogTitle>
-          <AlertDialogDescription className="text-gray-600 dark:text-gray-400">
-            {message}
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel asChild>
-            <Button variant="outline" className="text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
-              {cancelText}
-            </Button>
-          </AlertDialogCancel>
-          <AlertDialogAction asChild>
-            <Button 
-              variant="default" 
-              className="bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-700 dark:hover:bg-violet-600"
-              onClick={onConfirm}
-            >
-              {confirmText}
-            </Button>
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+  if (!isOpen) return null;
+
+  return ReactDOM.createPortal(
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000]">
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-md w-full">
+        <h2 className="text-xl font-bold mb-4 text-violet-800 dark:text-violet-200">{title}</h2>
+        <p className="mb-6 text-gray-600 dark:text-gray-400">{message}</p>
+        <div className="flex justify-end space-x-4">
+          <Button
+            variant="outline"
+            onClick={onClose}
+            className="text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            {cancelText}
+          </Button>
+          <Button
+            variant="default"
+            onClick={() => {
+              onConfirm();
+              onClose();
+            }}
+            className="bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-700 dark:hover:bg-violet-600"
+          >
+            {confirmText}
+          </Button>
+        </div>
+      </div>
+    </div>,
+    document.body
   );
 };
 

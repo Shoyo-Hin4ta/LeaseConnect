@@ -54,6 +54,7 @@ export const typeDefs = `#graphql
         subleaseDuration: SubleaseDuration!
         numberOfDays: Int!
         images: [String]!
+        createdBy: ID!
         createdAt: String!
         updatedAt: String!
     }

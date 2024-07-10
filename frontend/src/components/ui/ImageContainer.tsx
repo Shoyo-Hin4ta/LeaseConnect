@@ -47,6 +47,7 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
                   />
                   {onRemove && (
                     <Button
+                      type='button'
                       onClick={(e) => onRemove(e)}
                       className="absolute right-2 top-2 bg-white dark:bg-gray-800 text-violet-600 dark:text-violet-400 px-2 py-1 rounded shadow-md transition-opacity duration-300"
                     >

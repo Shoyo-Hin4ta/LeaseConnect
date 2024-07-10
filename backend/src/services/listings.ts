@@ -4,10 +4,12 @@ import { v4 as uuidv4 } from 'uuid';
 import uploadOnCDN from '../utils/cloudinary';
 import { Listing } from '../models/listing.model';
 import moment from 'moment';
+import { Types } from 'mongoose';
+import { User } from '../models/user.model';
 
 
 class ListingService {
-    public static async createListing(payload: any, listingImages: any[]) {
+    public static async createListing(payload: any, listingImages: any[], currentUserID : Types.ObjectId) {
         try {
             // Check if a listing with the same address already exists
             const existingListing = await Listing.findOne({
@@ -27,7 +29,7 @@ class ListingService {
 
             // Parse the subleaseDuration string
             const [fromDate, toDate] = payload.subleaseDuration.split(' - ');
-
+ 
             // Calculate the number of days
             const start = moment(fromDate);
             const end = moment(toDate);
@@ -63,13 +65,20 @@ class ListingService {
                     to: new Date(toDate)
                 },
                 numberOfDays: numberOfDays,
-                images: imageUrls
+                images: imageUrls,
+                createdBy: currentUserID
             });
 
             // Save the listing
-            await newListing.save();
+            const savedListing = await newListing.save();
 
-            const createdListing = await Listing.findById(newListing._id);
+            await User.findByIdAndUpdate(
+                currentUserID,
+                { $push: { ownListings: savedListing._id } },
+                { new: true }
+            );
+
+            const createdListing = await Listing.findById(savedListing._id);
 
             if (!createdListing) {
                 throw new Error('Failed to retrieve created listing');

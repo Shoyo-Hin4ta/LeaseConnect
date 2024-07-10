@@ -4,6 +4,8 @@ import cors from 'cors';
 import dotenv from "dotenv";
 import connectDB from "./db";
 import createGraphQLServer from "./graphql";
+import cookieParser from 'cookie-parser';
+import UserService from "./services/users";
 
 dotenv.config({path : './.env'});
 
@@ -18,11 +20,11 @@ async function  init() {
         const app = express();
 
         app.use(cors({
-            origin: process.env.CORS_ORIGIN,
+            origin: 'http://localhost:5173',
             credentials : true
         }));
 
-
+        app.use(cookieParser());
         app.use(express.json({ limit: '20mb' }));
         app.use(express.urlencoded({ limit: '10mb', extended: true }));
         app.use(express.static("public"));
@@ -33,10 +35,20 @@ async function  init() {
         })
 
 
-
         app.use(
             '/graphql',
-            expressMiddleware(await createGraphQLServer()),
+            expressMiddleware(await createGraphQLServer(), {
+                context: async({req, res}) => {
+
+                    const currentUser = await UserService.getCurrentUser(req);
+
+                    return {
+                        req,
+                        res,
+                        currentUser
+                    }
+                }
+            }),
         );
 
 

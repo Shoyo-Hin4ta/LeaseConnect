@@ -9,18 +9,33 @@ import InputMobileNumber from "../InputMobileNumber";
 import RegisterButton from "./RegisterButton";
 import { useDispatch } from "react-redux";
 import { next } from "@/appstore/stepperSlice";
+import { updatePersonalInfo } from "@/appstore/registerFormDataSlice";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
-export const formSchema = z.object({
-  name: z.string().min(2, { message: "Username must be at least 2 characters long." })
-    .max(50, { message: "Username cannot exceed 50 characters." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
-  password: z.string().min(8, { message: "Password must be at least 8 characters long." })
+const formSchema = z.object({
+  name: z
+    .string()
+    .min(2, { message: "Username must be at least 2 characters long." })
+    .max(50, { message: "Username cannot exceed 50 characters." })
+    .transform((name) => name.trim()),
+  email: z
+    .string()
+    .email({ message: "Please enter a valid email address." })
+    .transform((email) => email.toLowerCase()),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters long." })
     .max(100, { message: "Password cannot exceed 100 characters." }),
-  age: z.string().refine((age) => !isNaN(parseInt(age)), { message: "Age must be a number." })
+  age: z.string()
+    .refine((age) => !isNaN(parseInt(age)), { message: "Age must be a number." })
     .refine((age) => parseInt(age) >= 18 && parseInt(age) <= 50, { message: "Age should be between 18 and 50." }),
   gender: z.enum(["male", "female", "other"], { message: "Please select one." }),
-  phone: z.string().min(1, { message: "Phone number is required" }),
-});
+  phone: z
+    .string()
+    .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
+})
+
+
 
 export type Inputs = z.infer<typeof formSchema>;
 
@@ -44,6 +59,7 @@ const RegisterForm = ({ currentStep }: { currentStep: number }) => {
     setIsSubmitting(true);
     console.log(data);
     dispatch(next());
+    dispatch(updatePersonalInfo(data));
     setIsSubmitting(false);
   };
 
@@ -101,7 +117,7 @@ const RegisterForm = ({ currentStep }: { currentStep: number }) => {
           formControl={form.control}
           label="Mobile Number"
           placeholder="Mobile Number"
-          className="w-full"
+          className=""
           labelClassName="text-violet-700 dark:text-violet-300"
           inputClassName="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:ring-2 focus:ring-violet-500 dark:focus:ring-violet-400"
         />

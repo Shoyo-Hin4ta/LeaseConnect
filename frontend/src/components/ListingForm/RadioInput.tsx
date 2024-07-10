@@ -36,14 +36,14 @@ const RadioInput: React.FC<RadioTypes> = ({
                         <RadioGroup
                             onValueChange={field.onChange}
                             defaultValue={defaultValue}
-                            className="flex flex-wrap gap-4"
+                            className="flex flex-wrap gap-4 items-center "
                         >
                             {inputArray.map((item) => (
                                 <FormItem key={item.value} className="flex items-center space-x-2">
                                     <FormControl>
                                         <RadioGroupItem 
                                             value={item.value} 
-                                            className="text-violet-600 focus:ring-violet-500 dark:focus:ring-violet-400"
+                                            className="mt-1 text-violet-600 focus:ring-violet-500 dark:focus:ring-violet-400"
                                         />
                                     </FormControl>
                                     <FormLabel className="font-normal text-gray-700 dark:text-gray-300">

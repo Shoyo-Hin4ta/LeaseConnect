@@ -54,11 +54,11 @@ export function loadGoogleMapsApi(apiKey: string): Promise<void> {
 
 
 export function initAutocomplete(
-  setValue: UseFormSetValue<{ city: string; state: string; country: string; postcode: string; }>
+  setValue: UseFormSetValue<{ city: string; state: string; country: string; zipcode: string; }>
 ){
   address1Field = document.querySelector("#city") as HTMLInputElement;
 //   address2Field = document.querySelector("#address2") as HTMLInputElement;
-  postalField = document.querySelector("#postcode") as HTMLInputElement;
+  postalField = document.querySelector("#zipcode") as HTMLInputElement;
 
   // Create the autocomplete object, restricting the search predictions to
   // addresses in the US and Canada.
@@ -78,12 +78,12 @@ export function initAutocomplete(
 }
 
 function fillInAddress(
-  setValue: UseFormSetValue<{ city: string; state: string; country: string; postcode: string; }>
+  setValue: UseFormSetValue<{ city: string; state: string; country: string; zipcode: string; }>
 ) {
   // Get the place details from the autocomplete object.
   const place = autocomplete.getPlace();
   // let address1 = "";
-  let postcode = "";
+  let zipcode = "";
 
   // const addressDetails: AddressComponentType = { ...defaultAddress };
 
@@ -110,12 +110,12 @@ function fillInAddress(
       // }
 
       case "postal_code": {
-        postcode = `${component.long_name}${postcode}`;
+        zipcode = `${component.long_name}${zipcode}`;
         break;
       }
 
       // case "postal_code_suffix": {
-      //   postcode = `${postcode}-${component.long_name}`;
+      //   zipcode = `${zipcode}-${component.long_name}`;
       //   break;
       // }
 
@@ -145,9 +145,9 @@ function fillInAddress(
   }
 
   // address1Field.value = address1;
-  postalField.value = postcode;
-  // addressDetails.zipcode = postcode;
-  setValue("postcode", postalField.value);
+  postalField.value = zipcode;
+  // addressDetails.zipcode = zipcode;
+  setValue("zipcode", postalField.value);
 
 
   // After filling the form with address components from the Autocomplete

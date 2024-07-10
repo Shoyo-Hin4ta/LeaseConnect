@@ -3,12 +3,9 @@ import ListingService from "../../services/listings";
 const queries = {}
 
 const mutations = {
-    createListing : async (parent : any, {listingDetails, listingImages} : any) => {
+    createListing : async (parent : any, {listingDetails, listingImages} : any, {currentUser} : any) => {
         try {
-            // You might want to check authentication here if required
-            // if (!context.user) throw new Error('You must be logged in to create a listing');
-
-            const createdListing = await ListingService.createListing(listingDetails, listingImages);
+            const createdListing = await ListingService.createListing(listingDetails, listingImages, currentUser?._id);
             return createdListing;
         } catch (error) {
             throw new Error(

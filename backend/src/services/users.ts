@@ -3,6 +3,20 @@ import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from '../models/user.model';
 import uploadOnCDN from '../utils/cloudinary';
+import { isValidObjectId, Types } from 'mongoose';
+import 'dotenv/config';
+import jwt, { JwtPayload } from "jsonwebtoken";
+import bcrypt from "bcrypt";
+
+interface LoginDetailType{
+    email : string,
+    password : string
+}
+
+interface DecodedToken{
+    _id : Types.ObjectId,
+    email : string
+}
 
 class UserService{
 
@@ -48,6 +62,93 @@ class UserService{
         }
     }
 
+    private static async createAccessAndRefreshToken(payload : string | Types.ObjectId){
+        const user = await this.findUser(payload);
+
+        if(!user){
+            throw "No user found";
+        }
+        
+        const accessToken = jwt.sign(
+            {
+                _id : user?._id,
+                email : user?.email
+            },
+            process.env.ACCESS_TOKEN_SECRET!,
+            {
+                expiresIn : process.env.ACCESS_TOKEN_EXPIRY,
+            }
+        )
+
+        const refreshToken = jwt.sign(
+            {
+                _id : user?._id,
+            },
+            process.env.REFRESH_TOKEN_SECRET!,
+            {
+                expiresIn : process.env.REFRESH_TOKEN_SECRET_EXPIRY,
+            }
+        )
+        
+        user.accessToken = accessToken;
+        user.refreshToken = refreshToken;
+
+        await user.save({validateBeforeSave : false})
+
+        return {accessToken, refreshToken, user}
+    }
+
+    public static async loginService(payload : LoginDetailType){
+        try {
+
+            const {email, password} = payload;
+            // Find user by email
+            const user = await this.findUser(email);
+
+            // If user doesn't exist, throw an error
+            if (!user) {
+                throw new Error('User not found');
+            }
+            const isPasswordValid =  await this.isPasswordCorrect(password, user.password);
+            if (!isPasswordValid) {
+                throw new Error('Invalid credentials');
+            }
+            
+            const { user: updatedUser } = await this.createAccessAndRefreshToken(user._id);
+
+            return updatedUser;
+
+        } catch (error) {
+            console.error('Login error:', error);
+            throw error;
+        }
+    }
+
+    public static async findUser(payload : string | Types.ObjectId){
+        try {
+            let user;
+    
+            if(isValidObjectId(payload)){
+                user = await User.findById(payload);
+            }else if(typeof payload === 'string' && payload.includes('@')){
+                user = await User.findOne({email : payload});
+            }else{
+                throw new Error('Invalid payload: must be a valid ObjectId or email address');
+            }
+
+            if(user){
+                // console.log(user);
+                return user
+            }else {
+                console.log('User not found');
+                return null;
+            }
+        } catch (error) {
+            console.error('Error finding user:', error);
+            throw error;
+        }
+    }
+
     private static async handleProfileImageUpload(profileImage: any): Promise<string> {
         const { name, type, data } = profileImage;
         
@@ -85,6 +186,70 @@ class UserService{
     private static async uploadOnCDN(localFile: string) {
         return await uploadOnCDN(localFile);
     }
+
+    private static async isPasswordCorrect(enteredPassword : string, passwordInDB : string){
+        return await bcrypt.compare(enteredPassword, passwordInDB);
+    };
+
+    public static decodeJWTToken(token: string): DecodedToken  {
+        const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!);
+        return decodedToken as DecodedToken;
+    }
+    
+    public static async getCurrentUser(req : any){
+        const accessToken = req.cookies?.accessToken;
+
+        if (!accessToken) {
+            return null
+        }
+
+        const decodedToken = this.decodeJWTToken(accessToken);
+
+        try {
+            const user = await this.findUser(decodedToken._id)
+            if(!user){
+                console.log("User not found. Login Again");
+                return null;
+            }
+            return user;
+
+        } catch (error) {
+            console.error("Error getting current user:", error);
+            return null;
+        }
+    }
+
+    public static async logoutService(userID : Types.ObjectId, res : any){
+        try {
+
+            const user = await User.findByIdAndUpdate(
+              userID,
+              {
+                $unset: { refreshToken: 1 } // This removes the refreshToken field
+              },
+              {
+                new: true
+              }
+            );
+      
+            if (!user) {
+              throw new Error('User not found');
+            }
+      
+            const options = {
+              httpOnly: true,
+            };
+      
+            res.clearCookie('accessToken', options);
+            res.clearCookie('refreshToken', options);
+      
+            return { message: 'User logged out successfully', success: true };
+          } catch (error) {
+            console.error('Logout error:', error);
+            throw error;
+          }
+    }
+
 
 }
 

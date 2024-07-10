@@ -1,21 +1,44 @@
-import React, { useState } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Heart, MessageSquare, CirclePlus, Sun, Moon } from 'lucide-react';
 import DropDown from '../DropDown/DropDown';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '@/appstore/themeSlice';
+import { clearUser, getIsAuthenticated, setUser } from '@/appstore/userSlice';
+import { CURRENT_USER_QUERY } from '@/lib/queries';
+import { useQuery } from '@apollo/client';
 
-const Header = ({theme} : {
-  theme : "light" | "dark"
-}) => {
 
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
+const Header = ({ theme }: { theme: "light" | "dark" }) => {
   const dispatch = useDispatch();
+  const isAuthenticated = useSelector(getIsAuthenticated);
+
+  const { loading, error, data } = useQuery(CURRENT_USER_QUERY, {
+    fetchPolicy: 'network-only',
+    errorPolicy: 'ignore',
+  });
+
+  useEffect(() => {
+    if (!loading) {
+      if (data?.getCurrentUser) {
+        dispatch(setUser(data.getCurrentUser));
+      } else if (!error) {
+        dispatch(clearUser());
+      }
+    }
+  }, [loading, data, error, dispatch]);
+  
   const handleToggleTheme = () => {
     dispatch(toggleTheme());
   };
+
+  // useEffect(() => {
+  //   if (user) {
+  //     // console.log(user);
+  //   }
+  // }, [user]);
 
   const ThemeToggle = () => (
     <Button
@@ -28,6 +51,10 @@ const Header = ({theme} : {
     </Button>
   );
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <header className="fixed top-0 left-0 right-0 h-14 bg-white dark:bg-gray-900 z-50 flex items-center">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
@@ -35,7 +62,7 @@ const Header = ({theme} : {
           <span className="font-bold text-xl text-violet-600 dark:text-violet-400">LeaseConnect</span>
         </Link>
         <nav className="flex items-center space-x-2 sm:space-x-4">
-          {isLoggedIn ? (
+        {isAuthenticated ? (
             <>
               {/* Mobile View */}
               <div className="flex items-center md:hidden">
@@ -80,8 +107,7 @@ const Header = ({theme} : {
                 </Button>
                 <DropDown />
               </div>
-            </>
-          ) : (
+            </>) : (
             <>
               <ThemeToggle />
               <Button variant="ghost" asChild className="hidden lg:flex text-gray-600 dark:text-gray-300 hover:bg-violet-100 dark:hover:bg-violet-800">
@@ -95,9 +121,9 @@ const Header = ({theme} : {
               </Button>
             </>
           )}
-        </nav>
-      </div>
-    </header>
+      </nav>
+    </div>
+  </header>
   );
 };
 

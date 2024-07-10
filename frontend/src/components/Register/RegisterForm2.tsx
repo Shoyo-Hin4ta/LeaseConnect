@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -17,7 +17,7 @@ const ACCEPTED_IMAGE_MIME_TYPES = [
   "image/webp",
 ];
 
-export const imageFormSchema = z.object({
+const imageFormSchema = z.object({
   image: z
     .instanceof(File)
     .nullable()
@@ -45,6 +45,13 @@ const RegisterForm2 = ({ currentStep }: { currentStep: number }) => {
     },
   });
 
+  useEffect(() => {
+    // Cleanup function
+    return () => {
+      localStorage.removeItem('selectedImage');
+    };
+  }, []);
+
   const onSubmit = async (data: z.infer<typeof imageFormSchema>) => {
     if (!selectedImage) {
       setShowError(true);
@@ -52,7 +59,20 @@ const RegisterForm2 = ({ currentStep }: { currentStep: number }) => {
     }
 
     setIsSubmitting(true);
-    console.log(data);
+    
+    // Store the image in localStorage
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      localStorage.setItem('selectedImage', JSON.stringify({
+        name: selectedImage.name,
+        type: selectedImage.type,
+        size: selectedImage.size,
+        lastModified: selectedImage.lastModified,
+        data: reader.result
+      }));
+    };
+    reader.readAsDataURL(selectedImage);
+
     dispatch(next());
     setIsSubmitting(false);
   };
@@ -70,6 +90,7 @@ const RegisterForm2 = ({ currentStep }: { currentStep: number }) => {
     event.stopPropagation();
     setSelectedImage(null);
     imageForm.setValue("image", null);
+    localStorage.removeItem('selectedImage');
   };
 
   return (

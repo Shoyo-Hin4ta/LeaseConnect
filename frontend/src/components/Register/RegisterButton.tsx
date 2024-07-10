@@ -2,7 +2,7 @@ import { steps } from "@/lib/utils"
 import { Button } from "../ui/button"
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/appstore/appStore";
-import { next, prev } from "@/appstore/stepperSlice";
+import { prev } from "@/appstore/stepperSlice";
 
 interface RegisterButtonProps {
   currentStep: number;
@@ -49,7 +49,7 @@ const RegisterButton: React.FC<RegisterButtonProps> = ({
         <Button 
           type="submit" 
           disabled={isSubmitting}
-          onClick={() => dispatch(next())}
+          // onClick={() => dispatch(next())}
           className={`
             ${baseClassName} 
             ${isSubmitting ? disabledClassName : activeClassName}

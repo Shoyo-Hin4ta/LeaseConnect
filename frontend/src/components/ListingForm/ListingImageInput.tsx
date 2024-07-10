@@ -19,8 +19,8 @@ interface InputImageProps {
     css?: string;
   };
   formControl: Control<ListingTypes>;
-  onChange: (file: File | null) => void;
-  currentImage?: File | null | undefined;
+  onChange: (files: File[]) => void;
+  currentImages?: File[];
 }
 
 const ListingImageInput: React.FC<InputImageProps> = ({ 
@@ -31,24 +31,22 @@ const ListingImageInput: React.FC<InputImageProps> = ({
   props, 
   onChange, 
   id,
-  currentImage = undefined
+  currentImages = []
 }) => {
   const { field } = useController({
     name,
     control: formControl,
-    defaultValue: currentImage,
+    defaultValue: currentImages,
   });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    if (file) {
-      console.log("File size:", file.size);
-      console.log("File type:", file.type);
-      onChange(file);
-      field.onChange(file);
+    const files = Array.from(e.target.files || []);
+    if (files.length > 0) {
+      onChange(files);
+      field.onChange(files);
     } else {
-      onChange(null);
-      field.onChange(null);
+      onChange([]);
+      field.onChange([]);
     }
   };
 
@@ -74,6 +72,7 @@ const ListingImageInput: React.FC<InputImageProps> = ({
                 ${props?.css}`}
               onChange={handleFileChange}
               ref={field.ref}
+              multiple
               {...props?.field}
             />
           </FormControl>

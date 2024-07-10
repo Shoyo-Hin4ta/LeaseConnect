@@ -133,11 +133,11 @@ const listingSchema = new Schema({
       message: 'At least one image is required'
     }
   },
-  // createdBy: { 
-  //   type: Schema.Types.ObjectId, 
-  //   ref: 'User', 
-  //   required: [true, 'User reference is required']
-  // }
+  createdBy: { 
+    type: Schema.Types.ObjectId, 
+    ref: 'User', 
+    required: [true, 'User reference is required']
+  }
 }, { timestamps: true });
 
 interface DurationType{

@@ -1,6 +1,7 @@
 import {Schema, model} from "mongoose";
 import bcrypt from "bcrypt";
 
+
 const userSchema = new Schema({
     name: { 
         type: String, 
@@ -40,7 +41,7 @@ const userSchema = new Schema({
       country: { 
         type: String 
         },
-      postcode: { 
+      zipcode: { 
         type: String 
         }
     },
@@ -49,7 +50,20 @@ const userSchema = new Schema({
     },
     refreshToken: {
       type: String
-    }
+    },
+    favoriteListings: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Listing'
+    }],
+    ownListings: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Listing'
+    }],
+    chats: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Chat'
+    }]
+    
   }, {timestamps : true})
 
 
@@ -64,5 +78,7 @@ userSchema.pre("save", async function(next) {
 userSchema.methods.isPasswordCorrect = async function(password: string){
     return await bcrypt.compare(password, this.password);
 };
+
+
 
 export const User = model("User", userSchema);

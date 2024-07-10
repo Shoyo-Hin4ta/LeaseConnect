@@ -4,7 +4,12 @@ import * as z from 'zod';
 import { Form } from '../ui/form';
 import InputBox from '../InputBox';
 import { Button } from '../ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useMutation } from '@apollo/client';
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/appstore/userSlice';
+import { LOGIN_MUTATION } from '@/lib/queries';
+
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address.' }),
@@ -22,9 +27,31 @@ const LoginPage = () => {
     },
   });
 
-  const onSubmit = (data: LoginInputs) => {
-    console.log(data);
+  const [logIn, { loading, error }] = useMutation(LOGIN_MUTATION);
+  const navigate = useNavigate();
+  // const { updateAuthStatus } = useAuth();
+  const dispatch = useDispatch();
+
+  const onSubmit = async (data: LoginInputs) => {
+
     // Handle login logic here
+    try {
+      const { data: responseData } = await logIn({
+        variables:{
+          input: data
+        }
+      })
+
+      console.log("Response:", responseData);
+      console.log("to browse");
+
+      dispatch(setUser(responseData.login));
+      navigate('/');
+
+    } catch (error) {
+        console.log("Error during sign up:", error.message);
+    }
+
   };
 
   return (

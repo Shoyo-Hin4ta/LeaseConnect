@@ -4,7 +4,7 @@ export const typeDefs = `#graphql
         city: String!
         state: String!
         country: String!
-        postcode: String!
+        zipcode: String!
     }
 
     input UserSignUpInput {
@@ -25,7 +25,7 @@ export const typeDefs = `#graphql
         city: String!
         state: String!
         country: String!
-        postcode: String!
+        zipcode: String!
     }
 
     type SignUpResponse {
@@ -37,7 +37,40 @@ export const typeDefs = `#graphql
         phone: String!
         profileImage: String!
         address: Address
-        createdAt: String!
-        updatedAt: String!
+    }
+
+    type LoginResponse {
+        id: ID!
+        name: String!
+        email: String!
+        age: String!
+        gender: String
+        phone: String!
+        profileImage: String!
+        address: Address
+    }
+
+    input LoginInput{
+        email:String!
+        password: String!
+    }
+
+
+    type CurrentUser{
+        id: ID!
+        name: String!
+        email: String!
+        age: String!
+        gender: String
+        phone: String!
+        profileImage: String!
+        address: Address
+    }
+
+    type LogoutResponse{
+        message: String!
+        success : Boolean!
     }
 `;
+
+// later add favourites list in the current User

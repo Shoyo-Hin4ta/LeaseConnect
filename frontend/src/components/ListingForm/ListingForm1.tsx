@@ -10,7 +10,7 @@ import { initAutocomplete, loadGoogleMapsApi } from "@/lib/autofillListing"
 import ListingFormButton from "./ListingFormButton"
 import { useDispatch } from "react-redux"
 import { next } from "@/appstore/stepperSlice"
-import { toast } from "../ui/use-toast"
+
 
 export const BedroomInputArray = [{
   value : "1",
@@ -149,27 +149,28 @@ const ListingForm1 = ({ currentStep }: {
   const onSubmit = async(data) => {
     setIsSubmitting(true);
     console.log(data);
+
+    const existingData = JSON.parse(localStorage.getItem('listingData') || '{}');
+    const updatedData = { ...existingData, ...data };
+    localStorage.setItem('listingData', JSON.stringify(updatedData));
+
     dispatch(next());
     
     setIsSubmitting(false);
-    // toast({
-    //   title: "Form submitted successfully",
-    //   description: "Your information has been saved.",
-    //   duration: 3000,
-    // });
   }
 
-  useEffect(() => {
-    loadGoogleMapsApi("abc")
-      .then(() => {
-        window.initAutocomplete = () => initAutocomplete(setValue);
-        window.initAutocomplete();
-      })
-      .catch((error) => {
-        console.error('Error loading Google Maps API:', error);
-        // Show an error message to the user
-      });
-  }, [setValue]);
+
+  // useEffect(() => {
+  //   loadGoogleMapsApi("abc")
+  //     .then(() => {
+  //       window.initAutocomplete = () => initAutocomplete(setValue);
+  //       window.initAutocomplete();
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error loading Google Maps API:', error);
+  //       // Show an error message to the user
+  //     });
+  // }, [setValue]);
  
 
   return (
