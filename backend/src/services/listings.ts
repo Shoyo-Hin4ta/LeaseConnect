@@ -170,6 +170,7 @@ class ListingService {
         try {
             const listing = await Listing
                                 .findById(listingID)
+                                .sort({ createdAt: -1 })
                                 .populate('createdBy')
                                 .exec();
             

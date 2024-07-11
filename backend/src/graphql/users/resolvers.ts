@@ -1,5 +1,6 @@
  // You'll need to install this package
 
+import { Types } from "mongoose";
 import UserService from "../../services/users";
 import 'dotenv/config';
 
@@ -58,6 +59,16 @@ const mutations = {
     logout : async(_ : any, parameters : any, {currentUser, res} : any) => {
         const LogoutResponse = await UserService.logoutService(currentUser?._id, res);
         return LogoutResponse;
+    },
+
+    addToFavourite : async(_ : any, {listingID} : {listingID : string | Types.ObjectId}, {currentUser} : any) => {
+        const updatedResponse = await UserService.addToFavouriteService(listingID, currentUser?._id);
+        return updatedResponse
+    },
+
+    removeFavourite :  async(_ : any, {listingID} : {listingID : string | Types.ObjectId}, {currentUser} : any) => {
+        const updatedResponse = await UserService.removeFavouriteService(listingID, currentUser?._id);
+        return updatedResponse
     }
 }
 

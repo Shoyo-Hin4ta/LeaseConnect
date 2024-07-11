@@ -250,6 +250,36 @@ class UserService{
           }
     }
 
+    public static async addToFavouriteService(listingID: string | Types.ObjectId, currentUserID : string | Types.ObjectId){
+        try {
+            const updatedResponse = await User.findByIdAndUpdate(
+                currentUserID,
+                { $push: { favoriteListings: listingID } },
+                { new: true }
+            );
+            console.log(updatedResponse?.favoriteListings);
+            // return updatedResponse;
+            return "Added To Favourites";
+        } catch (error : any) {
+            throw new Error(`Failed to add to favourites: ${error.message}`);
+        }
+    }
+
+    public static async removeFavouriteService(listingID: string | Types.ObjectId, currentUserID : string | Types.ObjectId){
+        try {
+            const updatedResponse = await User.findByIdAndUpdate(
+                currentUserID,
+                { $pull: { favoriteListings: listingID } },
+                { new: true }
+            );
+    
+            console.log(updatedResponse?.favoriteListings);
+            return "Removed the listing from favourites";
+        } catch (error : any) {
+            throw new Error(`Failed to remove favourites: ${error.message}`);
+        }
+    }
+
 
 }
 

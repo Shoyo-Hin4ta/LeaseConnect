@@ -85,6 +85,8 @@ export const typeDefs = `#graphql
         ownListings: [ID!]
         chats: [ID!]
     }
+
+    
 `;
 
 // later add favourites list in the current User

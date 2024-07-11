@@ -22,7 +22,10 @@ export const CORE_LISTING_FIELDS = gql`
             city
         },
         preferences,
-        numberOfDays
+        numberOfDays,
+        createdBy{
+            id
+        }
     }
 
 

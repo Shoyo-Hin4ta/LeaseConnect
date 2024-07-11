@@ -15,7 +15,8 @@ export const CURRENT_USER_QUERY = gql`
           state
           country
           zipcode
-        }
+        },
+        favoriteListings
     }
   }
 `;
@@ -46,7 +47,8 @@ export const LOGIN_MUTATION = gql`
           state
           country
           zipcode
-        }
+        },
+        favoriteListings
     }
   }
 `;

@@ -1,4 +1,4 @@
 export const queries = `#graphql
-    getCurrentUser : CurrentUser
+    getCurrentUser : User
 
 `
