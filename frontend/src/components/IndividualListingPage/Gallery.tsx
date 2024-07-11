@@ -15,15 +15,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 
-const Gallery = () => {
+const Gallery = ({ images }) => {
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
   const [count, setCount] = useState(0)
-
-  const images = [
-    "https://images1.apartments.com/i2/nWbsAbHB7_rE-8P7pKn3OuQbo1UwP_IoW3pJ5AIG3TU/111/cortland-apartments-hagerstown-md-primary-photo.jpg",
-    "https://images1.apartments.com/i2/nSlZe06JNVAKcZaq0dncFNjMlXwu36GQwu-ncneAnn0/117/sire-kingwood-kingwood-tx-building-photo.jpg",
-  ]
 
   useEffect(() => {
     if (!api) return
@@ -33,6 +28,10 @@ const Gallery = () => {
       setCurrent(api.selectedScrollSnap() + 1)
     })
   }, [api])
+
+  if (!images || images.length === 0) {
+    return null; // or return a placeholder component
+  }
 
   return (
     <div>

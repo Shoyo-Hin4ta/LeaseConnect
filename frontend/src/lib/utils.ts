@@ -36,3 +36,32 @@ export const listingPropertySteps = [
       step : 4,
       stepDesc : "Upload Images",
     }]
+
+
+export function formatValue(value: string): string {
+
+  const specialCases: { [key: string]: string } = {
+    'usd': 'USD',
+    'inr': 'INR',
+    'no_smoking': 'No Smoking',
+    'no_drinking': 'No Drinking',
+    'no_pets': 'No Pets',
+    'students_only': 'Students Only',
+    'working_only': 'Working Only',
+    'girls_only': 'Girls Only',
+    'eggeterian': 'Eggetarian',
+    'couples_only' : 'Couples Only'
+  };
+
+  if (value in specialCases) {
+    return specialCases[value];
+  }
+
+  // General case: capitalize each word and replace underscores with spaces
+  return value
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+}
+
+

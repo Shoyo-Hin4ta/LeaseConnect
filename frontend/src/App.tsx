@@ -25,6 +25,8 @@ const router = createBrowserRouter(
     <Route path='/' element={<Layout />} errorElement={<ErrorPage />}>
       <Route index element={<HomePage />} />
       <Route path='/browse' element={<Browse />} />
+      <Route path='/listing/:listingID' element={<IndividualListingPage />} />
+
       
       {/* Public Routes */}
       <Route element={<PublicRoute />}>
@@ -38,7 +40,6 @@ const router = createBrowserRouter(
         <Route path='/listingform' element={<ListingPage />} />
         <Route path='/messages' element={<ChatComponent />} />
         <Route path='/profilepage' element={<ProfilePage />} />
-        <Route path='/listing' element={<IndividualListingPage />} />
         <Route path='/mylistings' element={<MyListings />} />
         <Route path='/editlisting' element={<EditListingPage />} />
         <Route path='/favourites' element={<FavouritePage />} />

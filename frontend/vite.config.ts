@@ -8,6 +8,9 @@ export default defineConfig({
   plugins: [react(),
     envCompatible()
   ],
+  optimizeDeps: {
+    include: ['@react-spring/web', 'framer-motion', 'react-icons']
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

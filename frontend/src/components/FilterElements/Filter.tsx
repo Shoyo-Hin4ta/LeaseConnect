@@ -11,7 +11,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 import { DateRange } from '../ui/date-range-picker'
 
 interface FilterData {
-  city: string;
+  // city: string;
   bedCount: string;
   bathCount: string;
   priceRange: { min: number; max: number; period: 'per_day' | 'per_week' | 'per_month' };
@@ -28,7 +28,7 @@ interface FilterData {
 
 const Filter: React.FC = () => {
   const [filterData, setFilterData] = useState<FilterData>({
-    city: '',
+    // city: '',
     bedCount: '',
     bathCount: '',
     priceRange: { min: 0, max: 200, period: 'per_day' },
@@ -53,13 +53,24 @@ const Filter: React.FC = () => {
         <h2 className='text-xl font-semibold'>Filtering Options</h2>
       </div>
       <div className="p-4 space-y-4">
+
         <Accordion type="single" collapsible className="w-full dark:text-violet-300">
-          <AccordionItem value="location">
-            <AccordionTrigger>Location</AccordionTrigger>
+          {/* <AccordionItem value="location">
+            <AccordionTrigger>Locations</AccordionTrigger>
             <AccordionContent>
               <LocationInputFilter 
                 value={filterData.city}
                 onChange={(city: string) => setFilterData(prev => ({ ...prev, city }))}
+              />
+            </AccordionContent>
+          </AccordionItem> */}
+
+          <AccordionItem value="sort-by">
+            <AccordionTrigger>Sort By</AccordionTrigger>
+            <AccordionContent>
+              <SortByFilter 
+                value={filterData.sortBy}
+                onChange={(sortBy) => setFilterData(prev => ({ ...prev, sortBy }))}
               />
             </AccordionContent>
           </AccordionItem>
@@ -121,15 +132,7 @@ const Filter: React.FC = () => {
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="sort-by">
-            <AccordionTrigger>Sort By</AccordionTrigger>
-            <AccordionContent>
-              <SortByFilter 
-                value={filterData.sortBy}
-                onChange={(sortBy) => setFilterData(prev => ({ ...prev, sortBy }))}
-              />
-            </AccordionContent>
-          </AccordionItem>
+          
 
         </Accordion>
 

@@ -51,7 +51,9 @@ export const PREFERENCES: Option[] = [
 { label: 'Vegetarian', value: 'vegetarian' },
 { label: 'Eggeterian', value: 'eggeterian'},
 { label: 'Girls Only', value: 'girls_only'},
-{ label: 'Hygenine/Clean', value: 'cleanliness'}
+{ label: 'Hygenine/Clean', value: 'cleanliness'},
+{ label: 'Only Couples', value: 'couples_only'},
+
 ]
 
 const listingForm2Schema = z.object({

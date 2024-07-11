@@ -6,6 +6,7 @@ import { Listing } from '../models/listing.model';
 import moment from 'moment';
 import { Types } from 'mongoose';
 import { User } from '../models/user.model';
+import { ListingSeachType } from '../graphql/listings/resolvers';
 
 
 class ListingService {
@@ -134,6 +135,54 @@ class ListingService {
 
     private static async uploadOnCDN(localFile: string) {
         return await uploadOnCDN(localFile);
+    }
+
+    public static async getListings({city, state, country } :ListingSeachType) {
+        try {
+            let query: any = {};
+
+            if (!city && !state && !country) {
+                country = "USA";
+            }
+
+            if (city || state || country) {
+                if (city) query['location.city'] = new RegExp(city, 'i');
+                if (state) query['location.state'] = new RegExp(state, 'i');
+                if (country) query['location.country'] = new RegExp(country, 'i');
+            }
+
+            
+            const listings = await Listing.find(query)
+            .populate('createdBy')
+            .exec();
+
+
+            return listings;
+
+        } catch (error) {
+            console.log(`Error in get getListings function in Listing Services : ${error}`) ;
+            
+        }
+
+    }
+
+    public static async getIndividualListing(listingID : string | Types.ObjectId  ){
+        try {
+            const listing = await Listing
+                                .findById(listingID)
+                                .populate('createdBy')
+                                .exec();
+            
+            if(!listing){
+                throw new Error("No listing present with this ID or has been deleted.")
+            }
+
+            return listing
+
+        } catch (error) {
+            console.log(`Error in  getIndividualListing function in Listing Services : ${error}`) ;
+        }
+                                        
     }
 }
 

@@ -8,7 +8,7 @@ async function createGraphQLServer(){
     const gqlServer = new ApolloServer({
         typeDefs : `
                     scalar Upload
-                                        
+                    scalar DateTime             
                     ${User.typeDefs}
                     ${Listing.typeDefs}
                     

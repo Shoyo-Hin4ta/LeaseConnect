@@ -72,7 +72,7 @@ const listingSchema = new Schema({
   preferences: [{
     type: String,
     enum: {
-      values: ['no_smoking', 'no_drinking', 'no_pets', 'students_only', 'working_only', 'vegetarian', 'eggeterian', 'girls_only', 'cleanliness'],
+      values: ['no_smoking', 'no_drinking', 'no_pets', 'students_only', 'working_only', 'vegetarian', 'eggeterian', 'girls_only', 'cleanliness', 'couples_only'],
       message: '{VALUE} is not a valid preference'
     }
   }],

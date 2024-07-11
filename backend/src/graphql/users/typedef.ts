@@ -71,6 +71,20 @@ export const typeDefs = `#graphql
         message: String!
         success : Boolean!
     }
+
+    type User {
+        id: ID!
+        name: String!
+        email: String!
+        age: Int!
+        gender: String
+        phone: String!
+        profileImage: String!
+        address: Address
+        favoriteListings: [ID!]
+        ownListings: [ID!]
+        chats: [ID!]
+    }
 `;
 
 // later add favourites list in the current User
