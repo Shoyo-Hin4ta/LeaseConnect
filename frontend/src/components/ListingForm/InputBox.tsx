@@ -7,7 +7,7 @@ import { ListingTypes } from "./ListingForm1"
 export interface ListingInputTypes {
   name: FieldPath<ListingTypes>,
   formControl: Control<ListingTypes>,
-  placeholder: string,
+  placeholder?: string,
   label?: string,
   id?: string,
   className?: string,

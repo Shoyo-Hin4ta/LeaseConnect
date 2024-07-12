@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import { CORE_LISTING_FIELDS, CORE_INDIVIDUAL_LISTING_FIELDS } from './fragments';
+import { CORE_LISTING_FIELDS, CORE_INDIVIDUAL_LISTING_FIELDS, CORE_MY_LISTING_FIELDS } from './fragments';
 
 export const GET_LISTINGS = gql`
 
@@ -23,5 +23,15 @@ export const GET_INDIVIDUAL_LISTING = gql`
 
     }
     ${CORE_INDIVIDUAL_LISTING_FIELDS}
+`
 
+export const GET_MY_LISTINGS = gql`
+
+    query GetMyListings {
+        getMyListings {
+            ...CoreMyListingFields
+        }
+    }
+
+    ${CORE_MY_LISTING_FIELDS}
 `

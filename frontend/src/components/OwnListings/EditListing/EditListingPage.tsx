@@ -20,6 +20,7 @@ import { useState } from "react"
 import { ACCEPTED_IMAGE_MIME_TYPES, MAX_FILE_SIZE } from "@/components/ListingForm/ListingForm4"
 import { AlertCircle } from "lucide-react"
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
+import { useParams } from "react-router-dom"
 
 const MAX_IMAGES = 8;
 const MIN_IMAGES = 1;
@@ -79,6 +80,7 @@ const EditListingPageSchema = z.object({
 
 const EditListingPage = () => {
 
+  const { listingID } = useParams();
 
   const parseDateRange = (dateRangeString : string) => {
     const [from, to] = dateRangeString.split(' - ').map(date => new Date(date));
@@ -129,13 +131,13 @@ const EditListingPage = () => {
     const editListing = useForm<ListingTypes>({
       resolver : zodResolver(EditListingPageSchema),
       defaultValues : {
-        title : "From backend",
+        title : "Title From backend",
         city : "From backend",
         state : "From backend",
         country : "From backend",
         description : "from backend",
-        bathroom : "from backend",
-        bedroom : "from backend",
+        bathroom : "1",
+        bedroom : "2",
         zipcode : "zipcode f Backend",
         utilities: ['water', 'internet'], // Default selected utilities
         amenities: ['parking', 'gym'],    // Default selected amenities

@@ -9,4 +9,6 @@ export const mutations = `#graphql
 
     removeFavourite(listingID: ID!) : String
 
+    editProfile(editUserProfileData: EditUserProfileInput) : User
+
 `

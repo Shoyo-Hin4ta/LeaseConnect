@@ -18,6 +18,23 @@ interface DecodedToken{
     email : string
 }
 
+interface Address {
+    city: string;
+    state: string;
+    country: string;
+    zipcode: string;
+}
+
+interface UserProfile {
+    id: Types.ObjectId | string;
+    name: string;
+    email: string;
+    password: string;
+    gender: 'male' | 'female' | 'others';
+    phone: string;
+    address: Address;
+}
+
 class UserService{
 
     public static async createUser(payload : any, profileImage: any) {
@@ -277,6 +294,40 @@ class UserService{
             return "Removed the listing from favourites";
         } catch (error : any) {
             throw new Error(`Failed to remove favourites: ${error.message}`);
+        }
+    }
+
+    public static async editUserDataService(userData: UserProfile){
+        const { id, address, password, ...updateData } = userData;
+
+        if (!id) {
+            throw new Error('User ID is required');
+        }
+    
+        const user = await User.findById(id);
+        if (!user) {
+            throw new Error('User not found');
+        }
+    
+        Object.assign(user, updateData);
+    
+        user.address = {
+            city: address.city ?? user?.address?.city,
+            state: address.state ?? user?.address?.state,
+            country: address.country ?? user?.address?.country,
+            zipcode: address.zipcode ?? user?.address?.zipcode
+        };
+    
+        if (password && password.trim() !== '') {
+            user.password = password;
+        }
+    
+        try {
+            await user.save();
+            return user;
+        } catch (error) {
+            console.error('Error in editUserDataService:', error);
+            throw new Error('An error occurred while updating the user profile');
         }
     }
 

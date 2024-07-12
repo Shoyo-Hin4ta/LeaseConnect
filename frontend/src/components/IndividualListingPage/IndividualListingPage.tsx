@@ -1,4 +1,3 @@
-import React from 'react'
 import MainHeading from './MainHeading'
 import PropertyDetails from './PropertyDetails/PropertyDetails'
 import { useParams } from 'react-router-dom'

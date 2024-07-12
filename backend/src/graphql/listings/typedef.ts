@@ -132,4 +132,25 @@ export const typeDefs = `#graphql
         createdBy: User!
     }
 
+    type MyListing {
+        id: ID!
+        title: String!
+        propertyType: PropertyType!
+        bedroom: String!
+        bathroom: String!
+        location: Location!
+        utilitiesIncludedInRent: Boolean!
+        utilities: [Utility!]
+        amenities: [Amenity!]
+        preferences: [Preference!]
+        description: String
+        currency: Currency!
+        amount: Float!
+        timePeriod: TimePeriod!
+        dailyRate: Float!
+        subleaseDuration: SubleaseDuration!
+        numberOfDays: Int!
+        images: [String!]!
+    }
+
 `

@@ -185,6 +185,27 @@ class ListingService {
         }
                                         
     }
+
+    public static async getMyListings(currentUserID: Types.ObjectId) {
+        try {
+            const ownListings = await User.findById(currentUserID)
+                .populate('ownListings')
+                .select('ownListings')
+
+            
+    
+            if (!ownListings) {
+                return []; 
+            }
+    
+            // console.log(ownListings.ownListings);
+            return ownListings.ownListings;
+    
+        } catch (error) {
+            console.log(`Error in getMyListings function in Listing Services: ${error}`);
+            throw error;
+        }
+    }
 }
 
 export default ListingService;

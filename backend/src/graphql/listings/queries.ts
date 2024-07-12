@@ -4,4 +4,6 @@ export const queries = `#graphql
 
     getListings(city: String ,state: String, country:String) : [Listing!]!
 
+    getMyListings : [MyListing!]
+
 `

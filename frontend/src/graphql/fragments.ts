@@ -31,6 +31,33 @@ export const CORE_LISTING_FIELDS = gql`
 
 `
 
+
+export const CORE_MY_LISTING_FIELDS = gql`
+
+    fragment CoreMyListingFields on MyListing{
+        id,
+        title,
+        amount,
+        currency,
+        timePeriod,
+        subleaseDuration {
+            from
+            to
+        },
+        images,
+        dailyRate,
+        location {
+            streetAddress
+            state
+            country
+            city
+        },
+        preferences,
+        numberOfDays,
+    }
+
+`
+
 export const CORE_INDIVIDUAL_LISTING_FIELDS = gql`
     fragment CoreIndividualListingFields on Listing{
         amenities
@@ -68,4 +95,24 @@ export const CORE_INDIVIDUAL_LISTING_FIELDS = gql`
         numberOfDays
     }
 
+`
+
+export const EDIT_PROFILE_FIELDS = gql`
+
+    fragment CoreEditProfileListingFields on User{
+        id
+        name
+        email
+        age
+        gender
+        phone
+        profileImage
+        address{
+          city
+          state
+          country
+          zipcode
+        },
+        favoriteListings
+    }
 `

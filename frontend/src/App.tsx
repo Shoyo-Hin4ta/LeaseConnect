@@ -41,7 +41,7 @@ const router = createBrowserRouter(
         <Route path='/messages' element={<ChatComponent />} />
         <Route path='/profilepage' element={<ProfilePage />} />
         <Route path='/mylistings' element={<MyListings />} />
-        <Route path='/editlisting' element={<EditListingPage />} />
+        <Route path='/editlisting/:listingID' element={<EditListingPage />} />
         <Route path='/favourites' element={<FavouritePage />} />
       </Route>
     </Route>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -7,6 +7,13 @@ import { Pencil, User } from 'lucide-react';
 import { Button } from "../ui/button";
 import { Form, FormField } from "@/components/ui/form";
 import { isValidPhoneNumber } from "react-phone-number-input";
+import { useSelector, useDispatch } from 'react-redux';
+import { getUser, setUser } from '@/appstore/userSlice';
+import { useMutation } from '@apollo/client';
+import { EDIT_PROFILE_QUERY } from '@/graphql/mutations';
+import { useNavigate } from 'react-router-dom';
+import { toast, useToast } from "@/components/ui/use-toast";
+
 
 const GenderArr = [
     { value: "male", desc: "Male" },
@@ -17,9 +24,9 @@ const GenderArr = [
 const FormSchema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters"),
     email: z.string().email("Invalid email address"),
-    password: z.string().min(8, "Password must be at least 8 characters"),
+    password: z.string().optional(),
     gender: z.enum(["male", "female", "others"]),
-    mobile: z.string().refine(isValidPhoneNumber, { message: "Invalid phone number" }),
+    phone: z.string().refine(isValidPhoneNumber, { message: "Invalid phone number" }),
     city: z.string().min(2, "City must be at least 2 characters"),
     state: z.string().min(2, "State must be at least 2 characters"),
     country: z.string().min(2, "Country must be at least 2 characters"),
@@ -27,24 +34,78 @@ const FormSchema = z.object({
 });
 
 const ProfilePage = () => {
+
+    const [editProfile, {loading}] = useMutation(EDIT_PROFILE_QUERY);
+
     const [addressEditMode, setAddressEditMode] = useState(false);
     const [editModes, setEditModes] = useState<Record<string, boolean>>({});
     const [formChanged, setFormChanged] = useState(false);
 
+    const user = useSelector(getUser);
+    const dispatch = useDispatch();
+
+    const navigate = useNavigate();
+
+    const customResolver = async (values: any) => {
+        try {
+            // Validate with Zod schema
+            const validatedData = await FormSchema.parseAsync(values);
+
+            // If all validations pass
+            return {
+                values: validatedData,
+                errors: {}
+            };
+        } catch (error) {
+            // If Zod validation fails
+            if (error instanceof z.ZodError) {
+                const errors = error.errors.reduce((acc: any, curr) => {
+                    acc[curr.path[0]] = {
+                        type: 'custom',
+                        message: curr.message
+                    };
+                    return acc;
+                }, {});
+
+                return {
+                    values: {},
+                    errors
+                };
+            }
+            throw error;
+        }
+    };
+    
     const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema),
+        resolver: customResolver,
         defaultValues: {
-            name: 'Ritik Singh',
-            email: 'ritik224@gmail.com',
-            password: 'Password1',
-            gender: 'male',
-            mobile: '+91 7014737289',
-            city: 'Jersey City',
-            state: 'New Jersey',
-            country: 'United States',
-            zipcode: '07307'
+            name: user?.name || '',
+            email: user?.email || '',
+            password: user?.password || '',
+            gender: user?.gender || 'male',
+            phone: user?.phone || '',
+            city: user?.address?.city || '',
+            state: user?.address?.state || '',
+            country: user?.address?.country || '',
+            zipcode: user?.address?.zipcode || ''
         },
     });
+
+    useEffect(() => {
+        if (user) {
+            form.reset({
+                name: user.name,
+                email: user.email,
+                password: user.password,
+                gender: user.gender,
+                phone: user.phone,
+                city: user.address?.city,
+                state: user.address?.state,
+                country: user.address?.country,
+                zipcode: user.address?.zipcode,
+            });
+        }
+    }, [user, form]);
 
     const handleEditModeChange = (field: string, mode: boolean) => {
         setEditModes(prev => ({ ...prev, [field]: mode }));
@@ -54,13 +115,56 @@ const ProfilePage = () => {
         setFormChanged(true);
     };
 
-    const onSubmit = (data: z.infer<typeof FormSchema>) => {
-        console.log("Updated Profile Object:", data);
-        // Turn off all edit modes
-        setEditModes({});
-        setAddressEditMode(false);
-        setFormChanged(false);
+    const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+        const { city, state, country, zipcode, ...restData } = data;
+        
+        const userProfileData = {
+            id: user?.id,
+            ...restData,
+            address: {
+                city,
+                state,
+                country,
+                zipcode,
+            },
+        };
+
+        // console.log(userProfileData);
+        
+        try {
+
+            const { data : responseData} = await editProfile({
+                variables : {
+                    editUserProfileData: userProfileData
+                }
+            })
+
+            // console.log(responseData.editProfile);
+
+            dispatch(setUser(responseData.editProfile));
+            navigate('/browse')
+            // Turn off all edit modes
+            setEditModes({});
+            setAddressEditMode(false);
+            setFormChanged(false);
+            toast({
+                title: "Profile Updated",
+                description: "Your profile has been successfully updated.",
+                duration: 1000,
+            });
+            
+    
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            toast({
+                title: "Update Failed",
+                description: "There was an error updating your profile. Please try again.",
+                duration: 1000,
+            });
+        }
     };
+
+    if (!user) return null;
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
@@ -73,7 +177,7 @@ const ProfilePage = () => {
                                 <div className="w-48 h-48 bg-violet-200 dark:bg-violet-700 rounded-full flex items-center justify-center mb-4">
                                     <User size={64} className="text-violet-600 dark:text-violet-300" />
                                 </div>
-                                <Button type="button" variant="outline" className="w-full dark:text-white">Change Photo</Button>
+                                {/* <Button type="button" variant="outline" className="w-full dark:text-white">Change Photo</Button> */}
                             </div>
                             <div className="w-full md:w-2/3 space-y-6">
                                 {Object.keys(form.getValues()).map((field) => (
@@ -87,7 +191,7 @@ const ProfilePage = () => {
                                                     label={field.charAt(0).toUpperCase() + field.slice(1)}
                                                     id={field}
                                                     type={field === 'password' ? 'password' : 'text'}
-                                                    inputType={field === 'gender' ? 'select' : field === 'mobile' ? 'phonenumber' : 'input'}
+                                                    inputType={field === 'gender' ? 'select' : field === 'phone' ? 'phonenumber' : 'input'}
                                                     arr={field === 'gender' ? GenderArr : undefined}
                                                     isEditMode={editModes[field] || false}
                                                     setEditMode={(mode) => handleEditModeChange(field, mode)}
@@ -100,7 +204,7 @@ const ProfilePage = () => {
                             </div>
                         </div>
 
-                        <div className=" bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
                             <div className="flex items-center justify-between mb-4">
                                 <h2 className="text-xl font-semibold text-violet-700 dark:text-violet-300">Current Address</h2>
                                 <Button variant="ghost" size="sm" type="button" onClick={() => setAddressEditMode(!addressEditMode)}>
@@ -129,8 +233,12 @@ const ProfilePage = () => {
                             </div>
                         </div>
                         
-                        <Button type="submit" className="w-full" disabled={!formChanged}>
-                            Save Changes
+                        <Button 
+                            type="submit" 
+                            className="w-full" 
+                            disabled={!formChanged || loading}
+                        >
+                            {loading ? 'Saving...' : 'Save Changes'}
                         </Button>
                     </form>
                 </Form>

@@ -69,7 +69,22 @@ const mutations = {
     removeFavourite :  async(_ : any, {listingID} : {listingID : string | Types.ObjectId}, {currentUser} : any) => {
         const updatedResponse = await UserService.removeFavouriteService(listingID, currentUser?._id);
         return updatedResponse
+    },
+
+    editProfile: async (_: any, { editUserProfileData }: any, { currentUser }: any) => {
+        try {
+            if (currentUser.id === editUserProfileData.id) {
+                const updatedProfileData = await UserService.editUserDataService(editUserProfileData);
+                return updatedProfileData;
+            } else {
+                throw new Error('You are not allowed to edit this profile');
+            }
+        } catch (error) {
+            console.error('Error in editProfile resolver:', error);
+            throw new Error('An error occurred while updating the profile');
+        }
     }
+
 }
 
 

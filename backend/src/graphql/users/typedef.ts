@@ -86,7 +86,15 @@ export const typeDefs = `#graphql
         chats: [ID!]
     }
 
-    
+    input EditUserProfileInput{
+        id: ID!
+        name: String!
+        email: String!
+        password:String
+        gender: String!
+        phone: String!
+        address: AddressInput
+    }
 `;
 
 // later add favourites list in the current User

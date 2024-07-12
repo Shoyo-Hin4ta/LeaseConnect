@@ -16,7 +16,13 @@ const queries = {
     getIndividualListing: async(_:any, { listingID }: { listingID: string | Types.ObjectId }) => {
         const listing = await ListingService.getIndividualListing(listingID);
         return listing
-    }
+    },
+
+    getMyListings : async(_ : any,params : any, {currentUser}: {currentUser : any}) => {
+        const myListings = await ListingService.getMyListings(currentUser.id);
+        console.log(myListings);
+        return myListings
+    },
 }
 
 const mutations = {
