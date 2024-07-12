@@ -65,3 +65,7 @@ export function formatValue(value: string): string {
 }
 
 
+export const parseDateRange = (dateRangeString: string) => {
+  const [from, to] = dateRangeString.split(' - ').map(date => new Date(date));
+  return { from, to };
+};

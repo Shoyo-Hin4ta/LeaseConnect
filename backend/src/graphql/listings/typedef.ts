@@ -1,6 +1,6 @@
 export const typeDefs = `#graphql
 
-    
+
     input ListingFormInput {
         currency: String!
         amount: String!
@@ -151,6 +151,56 @@ export const typeDefs = `#graphql
         subleaseDuration: SubleaseDuration!
         numberOfDays: Int!
         images: [String!]!
+    }
+
+    input SubleaseDurationInput {
+        from: DateTime!
+        to: DateTime!
+    }
+
+
+    input EditListingFormInput {
+        currency: String!
+        amount: String!
+        timePeriod: String!
+        subleaseDuration: SubleaseDurationInput
+        title: String!
+        propertyType: String!
+        bedroom: String!
+        bathroom: String!
+        streetAddress: String!
+        city: String!
+        state: String!
+        zipcode: String!
+        country: String!
+        utilities: [String]
+        utilitiesIncludedInRent: String!
+        amenities: [String]
+        preferences: [String]
+        description: String
+  }
+
+
+  type EditListingFormResponse {
+        id: ID!
+        title: String!
+        propertyType: PropertyType!
+        bedroom: String!
+        bathroom: String!
+        location: Location!
+        utilitiesIncludedInRent: Boolean!
+        utilities: [Utility!]
+        amenities: [Amenity!]
+        preferences: [Preference!]
+        description: String
+        currency: Currency!
+        amount: Float!
+        timePeriod: TimePeriod!
+        dailyRate: Float!
+        subleaseDuration: SubleaseDuration!
+        numberOfDays: Int!
+        images: [String!]!
+        createdBy: ID!
     }
 
 `

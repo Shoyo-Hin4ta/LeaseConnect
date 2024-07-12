@@ -20,7 +20,6 @@ const queries = {
 
     getMyListings : async(_ : any,params : any, {currentUser}: {currentUser : any}) => {
         const myListings = await ListingService.getMyListings(currentUser.id);
-        console.log(myListings);
         return myListings
     },
 }
@@ -33,6 +32,18 @@ const mutations = {
         } catch (error) {
             throw new Error(
                 error instanceof Error ? error.message : 'An unknown error occurred'
+            );
+        }
+    },
+
+    editListing : async(parent: any, {listingID, createdBy, listingDetails, imagesURL, newImages} : any, {currentUser} : any) => {
+        console.log(listingID, createdBy, listingDetails, imagesURL, newImages);
+        try {
+            const editedListingResponse = await ListingService.editListings({listingID, createdBy, listingDetails, imagesURL, newImages});
+            return editedListingResponse;
+        } catch (error) {
+            throw new Error(
+                error instanceof Error ? error.message : 'An unknown error occurred while updating the listings'
             );
         }
     }

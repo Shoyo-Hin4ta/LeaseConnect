@@ -206,6 +206,79 @@ class ListingService {
             throw error;
         }
     }
+
+    public static async editListings(
+        {listingID,
+        createdBy,
+        listingDetails,
+        imagesURL,
+        newImages} : any
+    ) {
+        try {
+            const existingListing = await Listing.findById(listingID);
+            if (!existingListing) {
+                throw new Error('Listing not found');
+            }
+    
+            if (existingListing.createdBy.toString() !== createdBy) {
+                throw new Error('Unauthorized to edit this listing');
+            }
+            let newImageUrls: string[] = [];
+            if (newImages && newImages.length > 0) {
+                newImageUrls = await this.handleListingImagesUpload(newImages);
+            }
+    
+            const allImageUrls = [...imagesURL, ...newImageUrls];
+    
+            const fromDate = new Date(listingDetails.subleaseDuration.from);
+            const toDate = new Date(listingDetails.subleaseDuration.to);
+    
+            const numberOfDays = Math.ceil((toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24));
+    
+            const dailyRate = parseFloat(listingDetails.amount) / (listingDetails.timePeriod === 'month' ? 30 : listingDetails.timePeriod === 'week' ? 7 : 1);
+    
+            const updatedListing = {
+                title: listingDetails.title,
+                propertyType: listingDetails.propertyType,
+                bedroom: listingDetails.bedroom,
+                bathroom: listingDetails.bathroom,
+                location: {
+                    streetAddress: listingDetails.streetAddress,
+                    city: listingDetails.city,
+                    state: listingDetails.state,
+                    zipcode: listingDetails.zipcode,
+                    country: listingDetails.country
+                },
+                utilitiesIncludedInRent: listingDetails.utilitiesIncludedInRent === 'true',
+                utilities: listingDetails.utilities,
+                amenities: listingDetails.amenities,
+                preferences: listingDetails.preferences,
+                description: listingDetails.description,
+                currency: listingDetails.currency,
+                amount: parseFloat(listingDetails.amount),
+                timePeriod: listingDetails.timePeriod,
+                dailyRate: dailyRate,
+                subleaseDuration: {
+                    from: fromDate,
+                    to: toDate
+                },
+                numberOfDays: numberOfDays,
+                images: allImageUrls
+            };
+    
+            const savedListing = await Listing.findByIdAndUpdate(listingID, updatedListing, { new: true });
+    
+            if (!savedListing) {
+                throw new Error('Failed to update listing');
+            }
+    
+            return savedListing;
+    
+        } catch (error) {
+            console.error('Error updating listing:', error);
+            throw new Error('Listing update failed: ' + error);
+        }
+    }
 }
 
 export default ListingService;

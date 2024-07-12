@@ -3,13 +3,12 @@ import { GET_INDIVIDUAL_LISTING } from '../graphql/queries';
 
 
 
-const useGetIndividualListing = (listingID : string) => {
-    
-
-    const {loading, refetch, data, error} = useQuery(GET_INDIVIDUAL_LISTING,{
-        variables : {
+const useGetIndividualListing = (listingID: string) => {
+    const { loading, refetch, data, error } = useQuery(GET_INDIVIDUAL_LISTING, {
+        variables: {
             listingID
-        }
+        },
+        fetchPolicy: 'network-only'
     });
 
     return {

@@ -65,9 +65,10 @@ export const CORE_INDIVIDUAL_LISTING_FIELDS = gql`
         bathroom
         bedroom
         createdBy {
-        name
-        phone
-        email
+            name
+            phone
+            email
+            id
         }
         currency
         dailyRate
@@ -115,4 +116,39 @@ export const EDIT_PROFILE_FIELDS = gql`
         },
         favoriteListings
     }
+`
+
+export const CORE_EDIT_LISTING_FIELDS = gql`
+    fragment CoreEditListingFields on EditListingFormResponse{
+        amenities
+        amount
+        bathroom
+        bedroom
+        createdBy
+        currency
+        dailyRate
+        description
+        id
+        images
+        location {
+            city
+            country
+            state
+            streetAddress
+            zipcode
+        }
+        numberOfDays
+        preferences
+        propertyType
+        subleaseDuration {
+            from
+            to
+        }
+        timePeriod
+        title
+        utilitiesIncludedInRent
+        utilities
+        numberOfDays
+    }
+
 `

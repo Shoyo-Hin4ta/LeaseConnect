@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import { EDIT_PROFILE_FIELDS } from "./fragments";
+import { CORE_EDIT_LISTING_FIELDS, EDIT_PROFILE_FIELDS } from "./fragments";
 
 export const ADD_TO_FAVOURITE_QUERY = gql`
 
@@ -24,4 +24,13 @@ export const EDIT_PROFILE_QUERY = gql`
   }
 }
     ${EDIT_PROFILE_FIELDS}
+`
+
+export const EDIT_LISTING_QUERY = gql`
+    mutation EditListing($listingId: ID!, $createdBy: ID!, $listingDetails: EditListingFormInput, $imagesUrl: [String!], $newImages: [Upload!]) {
+        editListing(listingID: $listingId, createdBy: $createdBy, listingDetails: $listingDetails, imagesURL: $imagesUrl, newImages: $newImages) {
+         ...CoreEditListingFields
+    }
+}
+    ${CORE_EDIT_LISTING_FIELDS}
 `
