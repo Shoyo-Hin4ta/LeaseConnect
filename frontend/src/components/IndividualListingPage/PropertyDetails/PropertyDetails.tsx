@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button'
 import Gallery from '../Gallery'
 import { FaRegCalendarCheck,FaBed, FaBath, FaHome, FaCalendarAlt, FaMapMarkerAlt, FaListUl, FaBolt, FaSwimmingPool, FaDollarSign, FaCalendarDay } from 'react-icons/fa'
 import { RiMoneyDollarCircleLine } from 'react-icons/ri'
+import { useSelector } from 'react-redux'
+import { getIsAuthenticated } from '@/appstore/userSlice'
 
 
 const RupeeIcon = () => (
@@ -23,6 +25,7 @@ export const getCurrencyIcon = (currency : string) => {
 }
 
 const PropertyDetails = ({ listingData }) => {
+
   
   const formatValue = (value) => {
     const specialCases = {
@@ -50,21 +53,22 @@ const PropertyDetails = ({ listingData }) => {
       <h2 className="text-3xl font-bold tracking-tighter text-gray-900 dark:text-white">Property Details</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-base">
         <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-          <FaBed /> <span>{listingData.bedroom} Bedroom(s)</span>
+          <FaHome /> <span>{formatValue(listingData.propertyType)}</span>
         </div>
-        <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-          <FaBath /> <span>{listingData.bathroom} Bathroom(s)</span>
-        </div>
-        <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+        {/* <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
           <FaDollarSign />
           <span>{listingData.amount} / {formatValue(listingData.timePeriod)}</span>
-        </div>
+        </div> */}
         <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
           <FaCalendarDay />
           <span>Daily Rate: $ {listingData.dailyRate}</span>
         </div>
+        
         <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-          <FaHome /> <span>{formatValue(listingData.propertyType)}</span>
+          <FaBed /> <span>{listingData.bedroom} Bedroom(s)</span>
+        </div>
+        <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+          <FaBath /> <span>{listingData.bathroom} Bathroom(s)</span>
         </div>
       </div>
 
@@ -106,8 +110,11 @@ const PropertyDetails = ({ listingData }) => {
             {renderList(listingData.preferences, "Preferences not specified by the user")}
           </div>
           <div>
-            <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-200">
-              <FaBolt className="inline mr-2" /> Utilities
+            <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-200 flex items-center">
+              <FaBolt className="inline mr-2" /> Utilities 
+              <span className="text-sm font-normal ml-2 text-gray-600 dark:text-gray-400">
+                ({listingData.utilitiesIncludedInRent ? 'included' : 'not included'})
+              </span>
             </h3>
             {renderList(listingData.utilities, "Utilities not specified by the user")}
           </div>

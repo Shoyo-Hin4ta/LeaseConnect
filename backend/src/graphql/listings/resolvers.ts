@@ -70,7 +70,13 @@ const queries = {
     getFavouriteListings : async(_:any, params: any, {currentUser}: any) => {
         const favouriteListings = await ListingService.getFavouriteListings(currentUser.id);
         return favouriteListings;
+    },
+
+    removeMyListings : async(_:any, {listingID}: any, {currentUser}: any) => {
+        const response = await ListingService.removeMyListings(listingID, currentUser.id);
+        return response;
     }
+
 }
 
 const mutations = {

@@ -8,12 +8,14 @@ import { toggleTheme } from '@/appstore/themeSlice';
 import { clearUser, getIsAuthenticated, setUser } from '@/appstore/userSlice';
 import { CURRENT_USER_QUERY } from '@/lib/queries';
 import { useQuery } from '@apollo/client';
+import { RootState } from '@/appstore/appStore';
 
 
 
-const Header = ({ theme }: { theme: "light" | "dark" }) => {
+const Header = () => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(getIsAuthenticated);
+  const theme = useSelector((state: RootState) => state.theme.value);
 
   const { loading, error, data } = useQuery(CURRENT_USER_QUERY, {
     fetchPolicy: 'network-only',

@@ -211,7 +211,7 @@ class ListingService {
                 return []; 
             }
     
-            // console.log(ownListings.ownListings);
+            console.log(ownListings.ownListings);
             return ownListings.ownListings;
     
         } catch (error) {
@@ -291,7 +291,6 @@ class ListingService {
             throw new Error('Listing update failed: ' + error);
         }
     }
-
 
     public static async getSearchBasedListings({
         filteringConditions,
@@ -418,6 +417,55 @@ class ListingService {
         } catch (error) {
             console.log(`Error in getFavouriteListings function in Listing Services: ${error}`);
             throw error;
+        }
+    }
+
+    public static async removeMyListings(listingID: string, userID: string): Promise<string> {
+        try {
+            // Start a session for a transaction
+            const session = await User.startSession();
+            session.startTransaction();
+    
+            try {
+                // Find the listing by ID
+                const existingListing = await Listing.findById(listingID).session(session);
+    
+                // Check if the listing exists
+                if (!existingListing) {
+                    throw new Error('Listing not found');
+                }
+    
+                // Check if the user is authorized to remove this listing
+                if (existingListing.createdBy.toString() !== userID) {
+                    throw new Error('Unauthorized to remove this listing');
+                }
+    
+                // Remove the listing
+                await Listing.findByIdAndDelete(listingID).session(session);
+    
+                // Update the user document to remove the listing from ownListings
+                await User.findByIdAndUpdate(
+                    userID,
+                    { $pull: { ownListings: listingID } },
+                    { session }
+                );
+    
+                // Commit the transaction
+                await session.commitTransaction();
+                session.endSession();
+    
+                return 'Listing successfully removed';
+    
+            } catch (error) {
+                // If an error occurred, abort the transaction
+                await session.abortTransaction();
+                session.endSession();
+                throw error;
+            }
+    
+        } catch (error : any) {
+            console.error('Error removing listing:', error);
+            throw new Error('Listing removal failed: ' + error.message);
         }
     }
 }

@@ -58,3 +58,9 @@ export const GET_MY_FAVOURITE_LISTINGS = gql`
     }
     ${CORE_MY_LISTING_FIELDS}
 `
+
+export const REMOVE_MY_LISTING = gql`
+    query Query($listingID: ID!) {
+        removeMyListings(listingID: $listingID)
+    }
+`

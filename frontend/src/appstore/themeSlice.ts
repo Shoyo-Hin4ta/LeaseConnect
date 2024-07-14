@@ -6,20 +6,26 @@ interface ThemeState {
   value: ThemeType;
 }
 
+const getInitialTheme = (): ThemeType => {
+  const savedTheme = localStorage.getItem('theme') as ThemeType;
+  return savedTheme || "light";
+};
+
 const initialState: ThemeState = {
-  value: "light"
+  value: getInitialTheme()
 };
 
 const themeSlice = createSlice({
   name: "theme",
   initialState,
   reducers: {
-    // Toggle the theme between light and dark
     toggleTheme: (state) => {
       state.value = state.value === "light" ? "dark" : "light";
+      localStorage.setItem('theme', state.value);
     },
     setTheme: (state, action: PayloadAction<ThemeType>) => {
       state.value = action.payload;
+      localStorage.setItem('theme', action.payload);
     },
   },
 });

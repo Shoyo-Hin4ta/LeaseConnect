@@ -37,9 +37,9 @@ const HomePage = () => {
   const [showPriceOptions, setShowPriceOptions] = useState(false);
 
   const sliderRanges = {
-    per_day: { min: 10, max: 1000, step: 10 },
-    per_week: { min: 50, max: 5000, step: 50 },
-    per_month: { min: 200, max: 20000, step: 100 },
+    per_day: { min: 10, max: 200, step: 10 },
+    per_week: { min: 50, max: 1000, step: 10},
+    per_month: { min: 200, max: 5000, step: 100 },
   };
 
   useEffect(() => {
@@ -184,7 +184,7 @@ const HomePage = () => {
                 variants={itemVariants}
               >
                 <h2 className="text-2xl font-semibold mb-6 text-violet-800 dark:text-gray-300">Find Your Sublease</h2>
-                <div className="space-y-3">
+                <div className="space-y-3 dark:text-white">
                   <div>
                     <label htmlFor="location" className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
                       Location
@@ -193,7 +193,7 @@ const HomePage = () => {
                       id="location" 
                       type="text" 
                       placeholder="Enter a city or zip code" 
-                      className="w-full"
+                      className="w-full dark:border-gray-500"
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
                     />
@@ -251,7 +251,7 @@ const HomePage = () => {
                   <Button 
                     type="submit"
                     size="lg" 
-                    className="w-full bg-violet-600 text-white hover:bg-violet-700 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                    className="w-full bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-700 dark:text-gray-300 dark:hover:bg-gray-600"
                   >
                     Search
                   </Button>

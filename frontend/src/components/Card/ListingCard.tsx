@@ -12,17 +12,18 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getUser } from "@/appstore/userSlice";
 import { ADD_TO_FAVOURITE_QUERY, REMOVE_FAVOURITE_QUERY } from "@/graphql/mutations";
-import { useMutation } from "@apollo/client";
+import { ApolloQueryResult, OperationVariables, useMutation } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 // import { Listing } from "../../types/Listing";
 
-interface ListingCardProps {
+export interface ListingCardProps {
   listing: any;
   isMyListings?: boolean;
   isOwnListing? : boolean;
+  refetch?: (variables?: Partial<OperationVariables> | undefined) => Promise<ApolloQueryResult<any>>;
 }
 
-export function ListingCard({ listing, isMyListings = false, isOwnListing }: ListingCardProps) {
+export function ListingCard({ listing, isMyListings = false, isOwnListing, refetch }: ListingCardProps) {
   const { title, subleaseDuration, images, numberOfDays, id } = listing;
 
   const currentUser = useSelector(getUser);
@@ -101,7 +102,7 @@ export function ListingCard({ listing, isMyListings = false, isOwnListing }: Lis
       <CardContent className="p-0">
         <CardCarousel images={images} />
       </CardContent>
-      <CardFooter listing={listing} isMyListings={isMyListings}/>
+      <CardFooter listing={listing} isMyListings={isMyListings} refetch={refetch}/>
     </Card>
   )
 }

@@ -4,7 +4,7 @@ import ListingCard from '../Card/ListingCard';
 
 const MyListings = () => {
 
-  const {myListings, loading, error} = useGetMyListings();
+  const {myListings, loading, error, refetch} = useGetMyListings();
 
   if (loading) return <p>Loading...</p>;
   if (!myListings || myListings.length === 0) return <p> You haven't listed anything </p>;
@@ -20,6 +20,7 @@ const MyListings = () => {
               <ListingCard  key={myListing.id}   
                             listing={myListing} 
                             isMyListings={true}
+                            refetch={refetch}
               />
             ))}
         </div>

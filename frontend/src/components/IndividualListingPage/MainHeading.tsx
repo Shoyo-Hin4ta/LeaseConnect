@@ -1,14 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from '../ui/button'
 import { useNavigate } from 'react-router-dom'
-import { FaEnvelope, FaUser, FaBed, FaBath, FaDollarSign } from 'react-icons/fa'
+import { FaEnvelope, FaUser, FaBed, FaBath } from 'react-icons/fa'
 import { formatValue } from '@/lib/utils'
 import { FaHome, FaBuilding, FaWarehouse, FaStore } from 'react-icons/fa'
 import { getCurrencyIcon } from './PropertyDetails/PropertyDetails'
-
+import EnquirePopup from './EnquirePopup'
+import { useSelector } from 'react-redux'
+import { getIsAuthenticated, getUser } from '@/appstore/userSlice'
 
 const MainHeading = ({ listingData }) => {
   const navigate = useNavigate();
+  const [showPopup, setShowPopup] = useState(false);
+
+  const isUserAuthenticated = useSelector(getIsAuthenticated);
+
+  const user = useSelector(getUser);
+
+  console.log(user);
 
   const getPropertyTypeIcon = (propertyType) => {
     switch(propertyType.toLowerCase()) {
@@ -24,6 +33,39 @@ const MainHeading = ({ listingData }) => {
       default:
         return <FaHome className="mr-2" />;
     }
+  }
+
+  const handleEnquireClick = () => {
+    if (isUserAuthenticated) {
+      setShowPopup(true);
+    } else {
+      navigate('/login');
+    }
+  }
+
+  const handleProfileClick = () => {
+    if (user) {
+      navigate(`/public-profile/${listingData.createdBy.id}`, {
+        state: { 
+          userData: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            age: user.age,
+            gender: user.gender,
+            phone: user.phone,
+            profileImage: user.profileImage,
+            address: user.address
+          }
+        }
+      });
+    } else {
+      navigate('/login');
+    }
+  }
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
   }
 
   return (
@@ -69,16 +111,17 @@ const MainHeading = ({ listingData }) => {
             </div>
 
             <div className="flex flex-col gap-4">
-              <Button onClick={() => navigate("/messages")} size="lg" className="bg-violet-600 hover:bg-violet-700 text-white">
+              <Button onClick={handleEnquireClick} size="lg" className="bg-violet-600 hover:bg-violet-700 text-white">
                 <FaEnvelope className="mr-2" /> Enquire
               </Button>
-              <Button onClick={() => navigate("/profilepage")} size="lg" variant="outline" className="text-violet-600 border-violet-600 hover:bg-violet-100 dark:text-violet-400 dark:border-violet-400 dark:hover:bg-violet-900">
+              <Button onClick={handleProfileClick} size="lg" variant="outline" className="text-violet-600 border-violet-600 hover:bg-violet-100 dark:text-violet-400 dark:border-violet-400 dark:hover:bg-violet-900">
                 <FaUser className="mr-2" /> View {listingData.createdBy.name}'s Profile
               </Button>
             </div>
           </div>
         </div>
       </div>
+      {showPopup && <EnquirePopup listingData={listingData} onClose={handleClosePopup} />}
     </section>
   )
 }

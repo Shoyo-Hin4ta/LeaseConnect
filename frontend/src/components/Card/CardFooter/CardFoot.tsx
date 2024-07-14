@@ -5,20 +5,42 @@ import ConfirmationPopup from "@/components/Popups/Popup"
 import { useState } from "react"
 import { MapPin, DollarSign, List, IndianRupee } from "lucide-react"
 import { formatValue } from "@/lib/utils"
+import { REMOVE_MY_LISTING } from "@/graphql/queries"
 // import { Listing } from "../../../types/Listing"
+import { useLazyQuery } from '@apollo/client';
+import { ListingCardProps } from "../ListingCard"
 
-interface CardFootProps {
+
+
+interface CardFootProps extends ListingCardProps {
   listing: any;
   isMyListings?: boolean;
 }
 
-const CardFoot = ({ listing, isMyListings = false }: CardFootProps) => {
+const CardFoot = ({ listing, isMyListings = false, refetch }: CardFootProps) => {
   const navigate = useNavigate();
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
 
+  const [removeListing, { loading: removeLoading, error: removeError, data }] = useLazyQuery(REMOVE_MY_LISTING, {
+    onCompleted: (data) => {
+      console.log('Listing removed:', data.removeMyListings);
+      setIsPopupOpen(false);
+      if (refetch) {
+        refetch().then(() => {
+          console.log("Listings refetched");
+          navigate('/myListings');
+        });
+      } else {
+        navigate('/myListings');
+      }
+    },
+    onError: (error) => {
+      console.error('Error removing listing:', error);
+    }
+  });
+
   const handleConfirm = () => {
-    console.log('Action confirmed');
-    setIsPopupOpen(false);
+    removeListing({ variables: { listingID: listing.id } });
   };
 
   const { location, amount, currency, preferences, timePeriod } = listing;
@@ -80,9 +102,10 @@ const CardFoot = ({ listing, isMyListings = false }: CardFootProps) => {
               onConfirm={handleConfirm}
               title="Remove Listing"
               message="Are you sure you want to remove this listing? This action cannot be undone."
-              confirmText="Yes, Remove"
+              confirmText={removeLoading ? "Removing..." : "Yes, Remove"}
               cancelText="Cancel"
             />
+            {removeError && <p className="text-red-500 mt-2">Error: {removeError.message}</p>}
           </div>
         ) : (
           <div className="space-x-2">
@@ -90,18 +113,21 @@ const CardFoot = ({ listing, isMyListings = false }: CardFootProps) => {
               to={`/listing/${listing.id}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background border border-violet-300 bg-white text-purple-600 hover:bg-violet-50 dark:border-violet-700 dark:bg-gray-800 dark:text-violet-400 dark:hover:bg-gray-700 h-9 px-3"
+              // className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background border border-violet-300 bg-white text-purple-600 hover:bg-violet-50 dark:border-violet-700 dark:bg-gray-800 dark:text-violet-400 dark:hover:bg-gray-700 h-9 px-3"
+              className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background border border-violet-300 bg-violet-600 dark:bg-violet-700 text-white hover:bg-violet-50 dark:border-violet-700 dark:text-white dark:text-violet-400 dark:hover:bg-gray-700 h-9 px-3"
+
             >
               View
             </Link>
 
-            <CardButton 
+            {/* <CardButton 
               ButtonText="Chat" 
               onClick={() => navigate('/messages')} 
               variant="default" 
               size="sm"
               className="bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-700 dark:hover:bg-violet-600 transition-colors"
-            />    
+            />     */}
+
           </div>    
         )}
       </div>

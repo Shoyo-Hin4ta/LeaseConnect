@@ -175,8 +175,13 @@ const ProfilePage = () => {
                         <div className="flex flex-col md:flex-row gap-8">
                             <div className="w-full md:w-1/3 flex flex-col items-center">
                                 <div className="w-48 h-48 bg-violet-200 dark:bg-violet-700 rounded-full flex items-center justify-center mb-4">
-                                    <User size={64} className="text-violet-600 dark:text-violet-300" />
-                                </div>
+                                    {user?.profileImage ? (
+                                        <img src={user?.profileImage} alt={user?.name} className="w-48 h-48 rounded-full object-cover" />
+                                    ) : (
+                                        <div className="w-48 h-48 bg-violet-200 dark:bg-violet-700 rounded-full flex items-center justify-center">
+                                        <User size={64} className="text-violet-600 dark:text-violet-300" />
+                                        </div>
+                                    )}                                </div>
                                 {/* <Button type="button" variant="outline" className="w-full dark:text-white">Change Photo</Button> */}
                             </div>
                             <div className="w-full md:w-2/3 space-y-6">

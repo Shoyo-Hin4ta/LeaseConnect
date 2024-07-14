@@ -20,6 +20,7 @@ import FavouritePage from './components/Favourite/FavouritePage'
 import { ApolloProvider } from '@apollo/client'
 import { ProtectedRoute, PublicRoute } from './components/RouteGuards'
 import FilterPage from './components/FilterResultPage/FilterPage'
+import PublicProfilePage from './components/Profile/PublicProfilePage'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -39,6 +40,7 @@ const router = createBrowserRouter(
       {/* Protected Routes */}
       <Route element={<ProtectedRoute />}>
         <Route path='/listingform' element={<ListingPage />} />
+        <Route path="/public-profile/:userId"  element={<PublicProfilePage />} />
         <Route path='/messages' element={<ChatComponent />} />
         <Route path='/profilepage' element={<ProfilePage />} />
         <Route path='/mylistings' element={<MyListings />} />
