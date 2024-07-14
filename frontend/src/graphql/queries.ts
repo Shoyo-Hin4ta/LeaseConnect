@@ -47,3 +47,14 @@ export const GET_MY_LISTINGS = gql`
 
     ${CORE_MY_LISTING_FIELDS}
 `
+
+
+export const GET_MY_FAVOURITE_LISTINGS = gql`
+
+    query GetFavouriteListings {
+        getFavouriteListings {
+            ...CoreMyListingFields
+        }
+    }
+    ${CORE_MY_LISTING_FIELDS}
+`

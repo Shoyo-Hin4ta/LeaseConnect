@@ -39,7 +39,7 @@ class ListingService {
             const numberOfDays = end.diff(start, 'days');
 
             // Calculate daily rate
-            const dailyRate = parseFloat(payload.amount) / (payload.timePeriod === 'month' ? 30 : payload.timePeriod === 'week' ? 7 : 1);
+            const dailyRate = Number((parseFloat(payload.amount) / (payload.timePeriod === 'month' ? 30 : payload.timePeriod === 'week' ? 7 : 1)).toFixed(2));
 
             // Create new listing object
             const newListing = new Listing({
@@ -248,8 +248,7 @@ class ListingService {
     
             const numberOfDays = Math.ceil((toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24));
     
-            const dailyRate = parseFloat(listingDetails.amount) / (listingDetails.timePeriod === 'month' ? 30 : listingDetails.timePeriod === 'week' ? 7 : 1);
-    
+            const dailyRate = Number((parseFloat(listingDetails.amount) / (listingDetails.timePeriod === 'month' ? 30 : listingDetails.timePeriod === 'week' ? 7 : 1)).toFixed(2));    
             const updatedListing = {
                 title: listingDetails.title,
                 propertyType: listingDetails.propertyType,
@@ -397,6 +396,27 @@ class ListingService {
     
         } catch (error) {
             console.log(`Error in getSearchBasedListings function in Listing Services: ${error}`);
+            throw error;
+        }
+    }
+
+    public static async getFavouriteListings(currentUserID : Types.ObjectId){
+        try {
+            const favouriteListings = await User.findById(currentUserID)
+                                                .populate('favoriteListings')
+                                                .select('favoriteListings')
+
+            if(!favouriteListings){
+                return [];
+            }
+
+            console.log(favouriteListings.favoriteListings);
+
+            return favouriteListings.favoriteListings;
+
+            
+        } catch (error) {
+            console.log(`Error in getFavouriteListings function in Listing Services: ${error}`);
             throw error;
         }
     }

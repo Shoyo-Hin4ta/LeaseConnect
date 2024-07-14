@@ -68,8 +68,8 @@ export function ListingCard({ listing, isMyListings = false, isOwnListing }: Lis
   };
 
   return (
-    <Card  className="overflow-hidden transition-shadow duration-300 hover:shadow-xl">
-      <CardHeader>
+      <Card className="overflow-hidden transition-shadow duration-300 hover:shadow-xl">
+        <CardHeader className="p-4">
         <div className="flex justify-between items-center">
           <div>
             <CardTitle className="text-lg font-semibold">{title}</CardTitle>

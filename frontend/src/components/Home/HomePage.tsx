@@ -15,6 +15,13 @@ import { LOGOUT_MUTATION } from '@/lib/queries';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearUser, getIsAuthenticated, getUser } from '@/appstore/userSlice';
 
+
+interface PriceRange{
+  from : DateRange,
+  to: DateRange,
+  pricePeriod? : 'per_day' | 'per_week' | 'per_month'
+}
+
 const HomePage = () => {
 
   const dispatch = useDispatch();
@@ -26,7 +33,7 @@ const HomePage = () => {
   const [location, setLocation] = useState('');
   const [priceRange, setPriceRange] = useState({ min: 500, max: 2500 });
   const [pricePeriod, setPricePeriod] = useState<'per_day' | 'per_week' | 'per_month'>('per_day');
-  const [dateRange, setDateRange] = useState<DateRange>({ from: new Date(), to: new Date() });
+  const [dateRange, setDateRange] = useState<PriceRange>({ from: new Date(), to: new Date() });
   const [showPriceOptions, setShowPriceOptions] = useState(false);
 
   const sliderRanges = {
@@ -42,8 +49,16 @@ const HomePage = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    const searchData = { location, priceRange, pricePeriod, dateRange };
+    const searchData = { 
+      location, 
+      priceRange : {
+        ...priceRange,
+        period : pricePeriod
+      }, 
+      dateRange };
     console.log('Search data:', searchData);
+    navigate('/filterResultsPage', { state: { searchData } });
+
   };
 
   const handlePriceRangeChange = (newValues: number[]) => {

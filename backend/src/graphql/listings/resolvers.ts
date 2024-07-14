@@ -61,11 +61,16 @@ const queries = {
         page: number,
         limit:number
     }) => {
-        console.log(filteringConditions);
+        // console.log(filteringConditions);
         const searchedListings = await ListingService.getSearchBasedListings({filteringConditions, page, limit});
-        console.log(searchedListings);
+        // console.log(searchedListings);
         return searchedListings
     },
+
+    getFavouriteListings : async(_:any, params: any, {currentUser}: any) => {
+        const favouriteListings = await ListingService.getFavouriteListings(currentUser.id);
+        return favouriteListings;
+    }
 }
 
 const mutations = {

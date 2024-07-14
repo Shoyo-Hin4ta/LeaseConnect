@@ -1,8 +1,9 @@
 import { useQuery } from '@apollo/client';
 import { useState, useCallback, useEffect } from 'react';
 import { GET_LISTINGS } from '../graphql/queries';
+import { LIMIT } from '@/lib/constant';
 
-const limit = 1; // Adjust as needed
+const limit = LIMIT;
 
 const useGetListings = () => {
   const [variables, setVariables] = useState({});

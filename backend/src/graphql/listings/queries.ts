@@ -7,4 +7,6 @@ export const queries = `#graphql
     getMyListings : [MyListing!]
 
     getSearchBasedListings(filteringConditions: FilterListingInput, page:Int, limit: Int ) : ListingConnection
+
+    getFavouriteListings : [MyListing!]
 `

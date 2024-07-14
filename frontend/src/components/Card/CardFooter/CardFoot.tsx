@@ -25,18 +25,18 @@ const CardFoot = ({ listing, isMyListings = false }: CardFootProps) => {
 
   return (
     <CardFooter className="flex flex-col p-4">
-      <div className="w-full mb-4">
+      <div className="w-full mb-2">
         <div className="flex justify-between items-start">
-          <div className="flex-1">
-            <p className="font-semibold text-gray-800 dark:text-gray-200 flex items-center">
-              <MapPin size={16} className="mr-1" />
-              {location.streetAddress}
+          <div className="flex-1 truncate">
+            <p className="font-semibold text-gray-800 dark:text-gray-200 flex items-center truncate">
+              <MapPin size={16} className="mr-1 flex-shrink-0" />
+              <span className="truncate">{location.streetAddress}</span>
             </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
               {location.city}, {location.state}, {location.country}
             </p>
           </div>
-          <div className="text-right">
+          <div className="text-right ml-2">
             <p className="text-base font-bold text-violet-600 dark:text-violet-400 flex items-center justify-end">
               <DollarSign size={16} className="mr-1" />
               {amount} {formatValue(currency)} / {formatValue(timePeriod)}
@@ -44,11 +44,11 @@ const CardFoot = ({ listing, isMyListings = false }: CardFootProps) => {
           </div>
         </div>
       </div>
-      <div className="w-full mb-4">
+      <div className="w-full mb-2">
         <p className="text-xs text-gray-600 dark:text-gray-400 truncate flex items-center">
-          <List size={16} className="mr-1" />
-          {preferences.map((pref:string) => formatValue(pref)).join(', ')}
-          </p>
+          <List size={16} className="mr-1 flex-shrink-0" />
+          <span className="truncate">{preferences.map((pref:string) => formatValue(pref)).join(', ')}</span>
+        </p>
       </div>
       <div className="w-full flex justify-end">
         {isMyListings ? (

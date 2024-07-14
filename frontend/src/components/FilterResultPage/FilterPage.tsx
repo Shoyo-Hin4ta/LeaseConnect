@@ -7,8 +7,9 @@ import { useSelector } from 'react-redux';
 import { getUser } from '@/appstore/userSlice';
 import { useLocation } from 'react-router-dom';
 import SearchBar from '../SearchBar/SearchBar';
+import { LIMIT } from '@/lib/constant';
 
-const limit = 1; // Adjust as needed
+const limit = LIMIT;
 
 const FilterPage: React.FC = () => {
   const location = useLocation();

@@ -7,7 +7,7 @@ const MyListings = () => {
   const {myListings, loading, error} = useGetMyListings();
 
   if (loading) return <p>Loading...</p>;
-  if (!myListings) return <p> You haven't listed anything </p>;
+  if (!myListings || myListings.length === 0) return <p> You haven't listed anything </p>;
   if (error) return <p>Error: {error.message}</p>;
 
 

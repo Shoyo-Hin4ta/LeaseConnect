@@ -19,6 +19,7 @@ import { clearUser } from '@/appstore/userSlice';
 const DropDown = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+
   const navigate = useNavigate();
   const [logout] = useMutation(LOGOUT_MUTATION);
   const dispatch = useDispatch();

@@ -67,21 +67,21 @@ const Header = ({ theme }: { theme: "light" | "dark" }) => {
               {/* Mobile View */}
               <div className="flex items-center md:hidden">
                 <ThemeToggle />
-                <Button variant="ghost" size="icon" asChild className="text-gray-600 dark:text-gray-300 hover:bg-violet-100 dark:hover:bg-violet-800">
+                {/* <Button variant="ghost" size="icon" asChild className="text-gray-600 dark:text-gray-300 hover:bg-violet-100 dark:hover:bg-violet-800">
                   <Link to="/messages">
                     <MessageSquare size={20} />
                   </Link>
-                </Button>
+                </Button> */}
                 <DropDown />
               </div>
               {/* Tablet View */}
               <div className="hidden md:flex lg:hidden items-center">
                 <ThemeToggle />
-                  <Button variant="ghost" size="icon" className="text-gray-600 dark:text-gray-300 hover:bg-violet-100 dark:hover:bg-violet-800">
+                  {/* <Button variant="ghost" size="icon" className="text-gray-600 dark:text-gray-300 hover:bg-violet-100 dark:hover:bg-violet-800">
                     <Link to="/messages">
                       <MessageSquare size={20} />
                     </Link>                
-                  </Button>
+                  </Button> */}
                 <DropDown />
               </div>
               {/* Desktop View */}
@@ -93,12 +93,12 @@ const Header = ({ theme }: { theme: "light" | "dark" }) => {
                     <span>Add Listing</span>
                   </Link>
                 </Button>
-                <Button variant="ghost" size="sm" asChild className="text-gray-600 dark:text-gray-300 hover:bg-violet-100 dark:hover:bg-violet-800">
+                {/* <Button variant="ghost" size="sm" asChild className="text-gray-600 dark:text-gray-300 hover:bg-violet-100 dark:hover:bg-violet-800">
                   <Link to="/messages" className="flex items-center space-x-1">
                     <MessageSquare size={18} />
                     <span>Messages</span>
                   </Link>
-                </Button>
+                </Button> */}
                 <Button variant="ghost" size="sm" asChild className="text-gray-600 dark:text-gray-300 hover:bg-violet-100 dark:hover:bg-violet-800">
                   <Link to="/favourites" className="flex items-center space-x-1">
                     <Heart size={18} />

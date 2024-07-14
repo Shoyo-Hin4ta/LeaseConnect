@@ -233,4 +233,7 @@ export const typeDefs = `#graphql
         price: String
     }
 
+
+    
+
 `
