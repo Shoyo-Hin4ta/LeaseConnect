@@ -1,15 +1,48 @@
 import { Types } from "mongoose";
 import ListingService from "../../services/listings";
+import { LIMIT } from "../../utils/constants";
 
 export interface ListingSeachType{
     city : string,
     state : string,
-    country : string
+    country : string,
+    page?: number, 
+    limit?: number 
 }
 
+export interface FilterListingInput {
+    location?: string;
+    bedCount?: string;
+    bathCount?: string;
+    priceRange?: { min: number; max: number };
+    dateRange?: { from: Date; to: Date };
+    preferences?: string[];
+    amenities?: string[];
+    utilitiesIncluded?: boolean;
+    sortBy?: { time?: string; price?: string };
+}
+
+interface PriceRange {
+    min: number;
+    max: number;
+    period: string;
+}
+
+interface SortBy {
+    time?: string;
+    price?: string;
+}
+
+interface SubleaseDurationInput {
+    from: Date;
+    to: Date;
+}
+
+
+
 const queries = {
-    getListings : async(_ : any, { city, state, country } : ListingSeachType) => {
-        const listings = await ListingService.getListings({city, state, country});
+    getListings : async(_ : any, { city, state, country, page, limit } : ListingSeachType) => {
+        const listings = await ListingService.getListings({city, state, country, page, limit});
         return listings
     },
 
@@ -21,6 +54,17 @@ const queries = {
     getMyListings : async(_ : any,params : any, {currentUser}: {currentUser : any}) => {
         const myListings = await ListingService.getMyListings(currentUser.id);
         return myListings
+    },
+
+    getSearchBasedListings  : async(_ : any,{filteringConditions,page=1,limit=LIMIT} : {
+        filteringConditions : FilterListingInput, 
+        page: number,
+        limit:number
+    }) => {
+        console.log(filteringConditions);
+        const searchedListings = await ListingService.getSearchBasedListings({filteringConditions, page, limit});
+        console.log(searchedListings);
+        return searchedListings
     },
 }
 

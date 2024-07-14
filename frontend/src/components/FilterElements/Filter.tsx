@@ -9,43 +9,78 @@ import SDFilter from "./SecurityDepositFilter/SDFilter"
 import SortByFilter, { SortByPriceOption, SortByTimeOption } from "./SortByFilter/SortByFilter"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
 import { DateRange } from '../ui/date-range-picker'
+import { useLazyQuery, useQuery } from '@apollo/client'
+import { GET_SEARCH_LISTINGS } from '@/graphql/queries'
+import { useNavigate, useOutletContext } from 'react-router-dom'
+import { LayoutContextType } from '../Layout'
+
 
 interface FilterData {
-  // city: string;
+  location: string;
   bedCount: string;
   bathCount: string;
   priceRange: { min: number; max: number; period: 'per_day' | 'per_week' | 'per_month' };
   dateRange: DateRange;
   preferences: string[];
   amenities: string[];
-  securityDepositIncluded: boolean;
-  utilitiesIncluded: boolean;
+  // securityDepositIncluded: boolean;
+  utilitiesIncluded: boolean | null;
   sortBy: {
     time: SortByTimeOption;
     price: SortByPriceOption;
   };
 }
 
-const Filter: React.FC = () => {
+interface FilterProps {
+  toggleSidebar: () => void;
+}
+
+const Filter: React.FC<FilterProps> = ({toggleSidebar}) => {
+
+
   const [filterData, setFilterData] = useState<FilterData>({
-    // city: '',
+    location: '',
     bedCount: '',
     bathCount: '',
     priceRange: { min: 0, max: 200, period: 'per_day' },
     dateRange: { from: new Date(), to: new Date() },
     preferences: [],
     amenities: [],
-    securityDepositIncluded: false,
-    utilitiesIncluded: false,
+    // securityDepositIncluded: false,
+    utilitiesIncluded: null,
     sortBy: {
       time: '',
       price: ''
     }
   })
 
+  const navigate = useNavigate();
+  
+
   const handleFilterClick = () => {
     console.log('Filter data:', filterData)
+    toggleSidebar();
+    navigate('/filterResultsPage', { state: { filterData } });
+
   }
+
+  const handleResetClick = () => {
+    setFilterData({
+      location: '',
+      bedCount: '',
+      bathCount: '',
+      priceRange: { min: 0, max: 200, period: 'per_day' },
+      dateRange: { from: new Date(), to: new Date() },
+      preferences: [],
+      amenities: [],
+      // securityDepositIncluded: false,
+      utilitiesIncluded: null,
+      sortBy: {
+        time: '',
+        price: ''
+      }
+    });
+  };
  
   return (
     <div className="w-full max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
@@ -55,15 +90,15 @@ const Filter: React.FC = () => {
       <div className="p-4 space-y-4">
 
         <Accordion type="single" collapsible className="w-full dark:text-violet-300">
-          {/* <AccordionItem value="location">
+          <AccordionItem value="location">
             <AccordionTrigger>Locations</AccordionTrigger>
             <AccordionContent>
               <LocationInputFilter 
-                value={filterData.city}
-                onChange={(city: string) => setFilterData(prev => ({ ...prev, city }))}
+                value={filterData.location}
+                onChange={(location: string) => setFilterData(prev => ({ ...prev, location }))}
               />
             </AccordionContent>
-          </AccordionItem> */}
+          </AccordionItem>
 
           <AccordionItem value="sort-by">
             <AccordionTrigger>Sort By</AccordionTrigger>
@@ -121,12 +156,12 @@ const Filter: React.FC = () => {
           </AccordionItem>
 
           <AccordionItem value="security-deposit">
-            <AccordionTrigger>Security Deposit & Utilities</AccordionTrigger>
+            <AccordionTrigger>Utilities Included</AccordionTrigger>
             <AccordionContent>
               <SDFilter 
-                securityDepositValue={filterData.securityDepositIncluded}
+                // securityDepositValue={filterData.securityDepositIncluded}
                 utilitiesValue={filterData.utilitiesIncluded}
-                onSecurityDepositChange={(securityDepositIncluded: boolean) => setFilterData(prev => ({ ...prev, securityDepositIncluded }))}
+                // onSecurityDepositChange={(securityDepositIncluded: boolean) => setFilterData(prev => ({ ...prev, securityDepositIncluded }))}
                 onUtilitiesChange={(utilitiesIncluded: boolean) => setFilterData(prev => ({ ...prev, utilitiesIncluded }))}
               />
             </AccordionContent>
@@ -136,12 +171,21 @@ const Filter: React.FC = () => {
 
         </Accordion>
 
-        <Button 
-          className="w-full bg-violet-600 hover:bg-violet-700 text-white transition-colors duration-200"
-          onClick={handleFilterClick}
-        >
-          Apply Filters
-        </Button>
+        <div className='grid grid-cols-2 gap-2'>
+          <Button 
+              className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 transition-colors duration-200"
+              onClick={handleResetClick}
+            >
+              Reset Filters
+          </Button>
+          <Button 
+            className="w-full bg-violet-600 hover:bg-violet-700 text-white transition-colors duration-200"
+            onClick={handleFilterClick}
+          >
+            Apply Filters
+          </Button>
+          
+        </div>
       </div>
     </div>
   )

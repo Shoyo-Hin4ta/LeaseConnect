@@ -38,15 +38,15 @@ const Gallery = ({ images }) => {
       <h2 className="text-2xl font-bold tracking-tighter text-gray-900 dark:text-white mb-4">Gallery</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {images.map((image, index) => (
-          <Dialog key={index}>
-            <DialogTrigger asChild>
+          <Dialog key={index} >
+            <DialogTrigger asChild >
               <img
                 src={image}
                 alt={`Gallery image ${index + 1}`}
                 className="w-full h-48 object-cover rounded-lg hover:opacity-80 transition-opacity cursor-pointer"
               />
             </DialogTrigger>
-            <DialogContent className="max-w-4xl w-full p-0 bg-gray-400 ">
+            <DialogContent className="max-w-4xl w-full p-0 bg-gray-400 text-white">
               <DialogHeader className="sr-only">
                 <DialogTitle>Image Gallery</DialogTitle>
               </DialogHeader>

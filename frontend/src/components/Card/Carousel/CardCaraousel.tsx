@@ -6,11 +6,17 @@ interface CardCarouselProps {
 
 const CardCarousel = ({ images }: CardCarouselProps) => {
   return (
-    <Carousel className="w-full aspect-[4/3]">
+    <Carousel className="w-full aspect-[4/3] overflow-clip">
       <CarouselContent>
         {images.map((image, index) => (
-          <CarouselItem key={index}>
-            <img src={image} alt={`Listing image ${index + 1}`} className="w-full h-full object-cover" />
+          <CarouselItem key={index} className="h-full">
+            <div className="w-full h-full">
+              <img 
+                src={image} 
+                alt={`Listing image ${index + 1}`} 
+                className="w-full h-full object-cover"
+              />
+            </div>
           </CarouselItem>
         ))}
       </CarouselContent>

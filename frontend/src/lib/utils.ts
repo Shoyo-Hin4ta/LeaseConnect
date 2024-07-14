@@ -69,3 +69,11 @@ export const parseDateRange = (dateRangeString: string) => {
   const [from, to] = dateRangeString.split(' - ').map(date => new Date(date));
   return { from, to };
 };
+
+export const tabs = [
+  { id: 'city', label: 'City' },
+  { id: 'state', label: 'State' },
+  { id: 'country', label: 'Country' },
+  { id: 'all', label: 'All Listings' }
+];
+

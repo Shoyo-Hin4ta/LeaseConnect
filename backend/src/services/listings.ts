@@ -6,8 +6,10 @@ import { Listing } from '../models/listing.model';
 import moment from 'moment';
 import { Types } from 'mongoose';
 import { User } from '../models/user.model';
-import { ListingSeachType } from '../graphql/listings/resolvers';
+import { FilterListingInput, ListingSeachType } from '../graphql/listings/resolvers';
+import { LIMIT } from '../utils/constants';
 
+import { FilterQuery } from 'mongoose';
 
 class ListingService {
     public static async createListing(payload: any, listingImages: any[], currentUserID : Types.ObjectId) {
@@ -137,7 +139,8 @@ class ListingService {
         return await uploadOnCDN(localFile);
     }
 
-    public static async getListings({city, state, country } :ListingSeachType) {
+    public static async getListings({city, state, country, page=1, limit=LIMIT } :ListingSeachType) {
+        console.log(page, limit)
         try {
             let query: any = {};
 
@@ -151,13 +154,23 @@ class ListingService {
                 if (country) query['location.country'] = new RegExp(country, 'i');
             }
 
+            const skip = ( page-1 ) * limit;
             
             const listings = await Listing.find(query)
             .populate('createdBy')
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit + 1)
             .exec();
 
+            const totalCount = await Listing.countDocuments(query);
+            const hasNextPage = listings.length > limit;
 
-            return listings;
+            return {
+                listings: listings.slice(0, limit),
+                totalCount,
+                hasNextPage
+            };
 
         } catch (error) {
             console.log(`Error in get getListings function in Listing Services : ${error}`) ;
@@ -277,6 +290,114 @@ class ListingService {
         } catch (error) {
             console.error('Error updating listing:', error);
             throw new Error('Listing update failed: ' + error);
+        }
+    }
+
+
+    public static async getSearchBasedListings({
+        filteringConditions,
+        page = 1,
+        limit = LIMIT
+    }: {
+        filteringConditions: FilterListingInput;
+        page: number;
+        limit: number;
+    }) {
+        try {
+            const query: FilterQuery<typeof Listing> = {};
+    
+            // Location handling
+            if (filteringConditions.location) {
+                const locationRegex = new RegExp(filteringConditions.location, 'i');
+                query['$or'] = [
+                    { 'location.streetAddress': locationRegex },
+                    { 'location.city': locationRegex },
+                    { 'location.state': locationRegex },
+                    { 'location.zipcode': locationRegex },
+                    { 'location.country': locationRegex }
+                ];
+            }
+    
+            // Bed and Bath count
+            if (filteringConditions.bedCount) query.bedroom = filteringConditions.bedCount;
+            if (filteringConditions.bathCount) query.bathroom = filteringConditions.bathCount;
+    
+            // Price range
+            if (filteringConditions.priceRange) {
+                query.dailyRate = {
+                    $gte: filteringConditions.priceRange.min,
+                    $lte: filteringConditions.priceRange.max
+                };
+            }
+    
+            // Date range
+            if (filteringConditions.dateRange) {
+                query.$and = [
+                    { 'subleaseDuration.from': { $lte: filteringConditions.dateRange.to } },
+                    { 'subleaseDuration.to': { $gte: filteringConditions.dateRange.from } }
+                ];
+            }
+    
+            // Preferences and Amenities
+            if (filteringConditions.preferences && filteringConditions.preferences.length > 0) {
+                query.preferences = { $all: filteringConditions.preferences };
+            }
+            if (filteringConditions.amenities && filteringConditions.amenities.length > 0) {
+                query.amenities = { $all: filteringConditions.amenities };
+            }
+    
+            // Utilities included
+            if (filteringConditions.utilitiesIncluded !== undefined && filteringConditions.utilitiesIncluded !== null) {
+                query.utilitiesIncludedInRent = filteringConditions.utilitiesIncluded;
+            }
+    
+            const skip = (page - 1) * limit;
+    
+            // Sorting
+            let sort: any = { createdAt: -1 };  // Default sort: newest first
+            if (filteringConditions.sortBy) {
+                if (filteringConditions.sortBy.time) {
+                    switch (filteringConditions.sortBy.time) {
+                        case 'date_newest':
+                            sort = { createdAt: -1 };
+                            break;
+                        case 'date_oldest':
+                            sort = { createdAt: 1 };
+                            break;
+                    }
+                }
+                if (filteringConditions.sortBy.price) {
+                    switch (filteringConditions.sortBy.price) {
+                        case 'price_high_to_low':
+                            sort = { dailyRate: -1 };
+                            break;
+                        case 'price_low_to_high':
+                            sort = { dailyRate: 1 };
+                            break;
+                    }
+                }
+            }
+    
+            const listings = await Listing.find(query)
+                .populate('createdBy')
+                .sort(sort)
+                .skip(skip)
+                .limit(limit + 1)
+                .exec();
+    
+            const totalCount = await Listing.countDocuments(query);
+            const hasNextPage = listings.length > limit;
+            console.log('Final query:', JSON.stringify(query, null, 2));
+    
+            return {
+                listings: listings.slice(0, limit),
+                totalCount,
+                hasNextPage
+            };
+    
+        } catch (error) {
+            console.log(`Error in getSearchBasedListings function in Listing Services: ${error}`);
+            throw error;
         }
     }
 }

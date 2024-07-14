@@ -1,6 +1,6 @@
 import { CardFooter } from "@/components/ui/card"
 import CardButton from "../CardButton/CardButton"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import ConfirmationPopup from "@/components/Popups/Popup"
 import { useState } from "react"
 import { MapPin, DollarSign, List, IndianRupee } from "lucide-react"
@@ -53,6 +53,14 @@ const CardFoot = ({ listing, isMyListings = false }: CardFootProps) => {
       <div className="w-full flex justify-end">
         {isMyListings ? (
           <div className="space-x-2">
+            <Link
+              to={`/listing/${listing.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-700 dark:hover:bg-violet-600 h-9 px-3"
+            >
+              View
+            </Link>
             <CardButton 
               ButtonText="Edit" 
               onClick={() => navigate(`/editlisting/${listing.id}`)} 
@@ -78,13 +86,15 @@ const CardFoot = ({ listing, isMyListings = false }: CardFootProps) => {
           </div>
         ) : (
           <div className="space-x-2">
-            <CardButton 
-              ButtonText="View" 
-              onClick={() => navigate(`/listing/${listing.id}`)} 
-              variant="default" 
-              size="sm"
-              className="border border-violet-300 bg-white text-purple-600 hover:bg-violet-50 dark:border-violet-700 dark:bg-gray-800 dark:text-violet-400 dark:hover:bg-gray-700 transition-colors"
-            />
+            <Link 
+              to={`/listing/${listing.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background border border-violet-300 bg-white text-purple-600 hover:bg-violet-50 dark:border-violet-700 dark:bg-gray-800 dark:text-violet-400 dark:hover:bg-gray-700 h-9 px-3"
+            >
+              View
+            </Link>
+
             <CardButton 
               ButtonText="Chat" 
               onClick={() => navigate('/messages')} 

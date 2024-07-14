@@ -203,4 +203,34 @@ export const typeDefs = `#graphql
         createdBy: ID!
     }
 
+    type ListingConnection {
+        listings: [Listing!]
+        totalCount: Int!
+        hasNextPage: Boolean!
+    }
+
+    input FilterListingInput {
+        location: String
+        bedCount: String
+        bathCount: String
+        priceRange: PriceRange
+        dateRange: SubleaseDurationInput
+        preferences: [Preference!]
+        amenities: [Amenity!]
+        # securityDepositIncluded: Boolean
+        utilitiesIncluded: Boolean
+        sortBy: SortBy
+    }
+
+    input PriceRange {
+        min: Float!
+        max: Float!
+        period: String!
+    }
+
+    input SortBy {
+        time: String
+        price: String
+    }
+
 `

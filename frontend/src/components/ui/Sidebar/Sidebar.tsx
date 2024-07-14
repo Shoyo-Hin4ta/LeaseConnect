@@ -20,7 +20,7 @@ const Sidebar = ({isActive, toggleSidebar}: {
               <X size={24} />
             </button>
             <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Filters</h2>
-            <Filter />
+            <Filter toggleSidebar={toggleSidebar}/>
           </div>
         </div>
     );
