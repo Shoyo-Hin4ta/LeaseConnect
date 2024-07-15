@@ -160,17 +160,17 @@ const ListingForm1 = ({ currentStep }: {
   }
 
 
-  // useEffect(() => {
-  //   loadGoogleMapsApi("abc")
-  //     .then(() => {
-  //       window.initAutocomplete = () => initAutocomplete(setValue);
-  //       window.initAutocomplete();
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error loading Google Maps API:', error);
-  //       // Show an error message to the user
-  //     });
-  // }, [setValue]);
+  useEffect(() => {
+    loadGoogleMapsApi(import.meta.env.REACT_APP_GOOGLE_MAP_API_KEY)
+      .then(() => {
+        window.initAutocomplete = () => initAutocomplete(setValue);
+        window.initAutocomplete();
+      })
+      .catch((error) => {
+        console.error('Error loading Google Maps API:', error);
+        // Show an error message to the user
+      });
+  }, [setValue]);
  
 
   return (

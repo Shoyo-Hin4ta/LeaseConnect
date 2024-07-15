@@ -74,6 +74,6 @@ export const tabs = [
   { id: 'city', label: 'City' },
   { id: 'state', label: 'State' },
   { id: 'country', label: 'Country' },
-  { id: 'all', label: 'All Listings' }
+  { id: 'all', label: 'All ' }
 ];
 

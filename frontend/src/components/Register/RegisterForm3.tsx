@@ -85,7 +85,7 @@ const RegisterForm3 = ({ currentStep }: Form3Types) => {
   const { control, handleSubmit, setValue } = addressForm;
 
   useEffect(() => {
-    loadGoogleMapsApi("abc")
+    loadGoogleMapsApi(import.meta.env.REACT_APP_GOOGLE_MAP_API_KEY!)
       .then(() => {
         window.initAutocomplete = () => initAutocomplete(setValue);
         window.initAutocomplete();

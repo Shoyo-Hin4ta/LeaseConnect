@@ -145,7 +145,8 @@ class ListingService {
             let query: any = {};
 
             if (!city && !state && !country) {
-                country = "USA";
+                // country = "USA";
+                query
             }
 
             if (city || state || country) {
@@ -305,16 +306,22 @@ class ListingService {
             const query: FilterQuery<typeof Listing> = {};
     
             // Location handling
-            if (filteringConditions.location) {
-                const locationRegex = new RegExp(filteringConditions.location, 'i');
-                query['$or'] = [
-                    { 'location.streetAddress': locationRegex },
-                    { 'location.city': locationRegex },
-                    { 'location.state': locationRegex },
-                    { 'location.zipcode': locationRegex },
-                    { 'location.country': locationRegex }
+            if (filteringConditions.location && filteringConditions.location.trim() !== '') {
+                const locationRegex = new RegExp(filteringConditions.location.trim(), 'i');
+                const locationQuery = [
+                  { 'location.streetAddress': locationRegex },
+                  { 'location.city': locationRegex },
+                  { 'location.state': locationRegex },
+                  { 'location.zipcode': locationRegex },
+                  { 'location.country': locationRegex }
                 ];
-            }
+                
+                if (query.$and) {
+                  query.$and.push({ $or: locationQuery });
+                } else {
+                  query.$and = [{ $or: locationQuery }];
+                }
+              }
     
             // Bed and Bath count
             if (filteringConditions.bedCount) query.bedroom = filteringConditions.bedCount;

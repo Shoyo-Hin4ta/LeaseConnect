@@ -22,6 +22,7 @@ import { parseDateRange } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
 import { useMutation } from "@apollo/client";
 import { EDIT_LISTING_QUERY } from "@/graphql/mutations";
+import { setupAddressAutofill } from "./adressAutofill";
 
 const MAX_IMAGES = 8;
 const MIN_IMAGES = 1;
@@ -92,6 +93,10 @@ const EditListingPage: React.FC = () => {
       image: []
     }
   });
+
+  useEffect(() => {
+    setupAddressAutofill(import.meta.env.REACT_APP_GOOGLE_MAP_API_KEY, editListing.setValue);
+  }, [editListing.setValue]);
 
   useEffect(() => {
     if (listingData) {

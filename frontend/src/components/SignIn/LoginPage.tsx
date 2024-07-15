@@ -9,7 +9,7 @@ import { useMutation } from '@apollo/client';
 import { useDispatch } from 'react-redux';
 import { setUser } from '@/appstore/userSlice';
 import { LOGIN_MUTATION } from '@/lib/queries';
-
+import { AlertCircle } from 'lucide-react';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address.' }),
@@ -29,18 +29,15 @@ const LoginPage = () => {
 
   const [logIn, { loading, error }] = useMutation(LOGIN_MUTATION);
   const navigate = useNavigate();
-  // const { updateAuthStatus } = useAuth();
   const dispatch = useDispatch();
 
   const onSubmit = async (data: LoginInputs) => {
-
-    // Handle login logic here
     try {
       const { data: responseData } = await logIn({
-        variables:{
+        variables: {
           input: data
         }
-      })
+      });
 
       console.log("Response:", responseData);
       console.log("to browse");
@@ -49,9 +46,9 @@ const LoginPage = () => {
       navigate('/');
 
     } catch (error) {
-        console.log("Error during sign up:", error.message);
+      console.log("Error during login:", error.message);
+      // We don't need to set the error state here as it's handled by Apollo Client
     }
-
   };
 
   return (
@@ -60,6 +57,7 @@ const LoginPage = () => {
         <h2 className="text-3xl font-bold text-center text-violet-800 dark:text-violet-200 mb-6">
           Login to Your Account
         </h2>
+        
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <InputBox
@@ -82,11 +80,26 @@ const LoginPage = () => {
               labelClassName="text-violet-700 dark:text-violet-300"
               inputClassName="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:ring-2 focus:ring-violet-500 dark:focus:ring-violet-400"
             />
-            <Button type="submit" className="w-full bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-700 dark:hover:bg-violet-600">
-              Login
+
+          {error && (
+                    <div className="mb-4 my-2-2 p-2 border-l-4 border-red-500 bg-red-100 dark:bg-red-900 dark:bg-opacity-20 text-red-700 dark:text-red-200 rounded-r">
+                      <div className="flex items-center">
+                        <AlertCircle className="h-5 w-5 mr-2 flex-shrink-0" />
+                        <p>{error.message}</p>
+                      </div>
+                    </div>
+            )}
+            <Button 
+              type="submit" 
+              className="w-full bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-700 dark:hover:bg-violet-600"
+              disabled={loading}
+            >
+              {loading ? 'Logging in...' : 'Login'}
             </Button>
           </form>
         </Form>
+
+        
         <div className="mt-4 text-center">
           <Link to="/forgot-password" className="text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300">
             Forgot Password?

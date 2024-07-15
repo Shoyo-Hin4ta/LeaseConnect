@@ -26,6 +26,8 @@ const BrowsePage = () => {
     }
   }, [userAddress, locationLoading]);
 
+  console.log(listings)
+
   const updateListings = (tab) => {
     const { city, state, country } = userAddress || {};
     switch (tab) {
@@ -49,9 +51,18 @@ const BrowsePage = () => {
       <div className='flex-grow overflow-y-auto'>
         <div className='container mx-auto px-4 py-8'>
           {initialLoading ? (
-            <p>Loading...</p>
+            <>Loading</>
           ) : error ? (
-            <p>Error: {error.message}</p>
+            <div className="error-container text-center">
+              <p className="text-red-500 mb-4">Error: {error.message || 'An unexpected error occurred.'}</p>
+              <Button onClick={() => updateListings(activeTab)} className="bg-violet-600 text-white hover:bg-violet-500">
+                Try Again
+              </Button>
+            </div>
+          ) : listings.length === 0 ? (
+            <h4 className='text-l font-semibold mb-6 text-center text-violet-600 dark:text-violet-400'>
+                No listings found  {activeTab !== 'all' ? `in your ${activeTab}` : ``}. Try adjusting your search or location.
+            </h4>
           ) : (
             <>
               <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>

@@ -13,6 +13,7 @@ import { useMutation } from '@apollo/client';
 import { EDIT_PROFILE_QUERY } from '@/graphql/mutations';
 import { useNavigate } from 'react-router-dom';
 import { toast, useToast } from "@/components/ui/use-toast";
+import { setupAddressAutofill } from '../OwnListings/EditListing/adressAutofill';
 
 
 const GenderArr = [
@@ -90,6 +91,10 @@ const ProfilePage = () => {
             zipcode: user?.address?.zipcode || ''
         },
     });
+
+    useEffect(() => {
+        setupAddressAutofill(import.meta.env.REACT_APP_GOOGLE_MAP_API_KEY, form.setValue);
+      }, [form.setValue]);
 
     useEffect(() => {
         if (user) {
