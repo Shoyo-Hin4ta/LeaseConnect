@@ -123,7 +123,7 @@ const ListingForm2 = ({ currentStep }: {
                 formControl={control}
                 label='Are Utilities Included In The Rent'
                 inputArray={UTIL_RADIO_ARR}
-                placeholder='Please Select...'
+                // placeholder='Please Select...'
               />
               <Controller
                 name="utilities"

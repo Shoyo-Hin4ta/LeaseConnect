@@ -5,6 +5,7 @@ import { PhoneInput } from "./ui-profile/phone-input";
 import { Pencil, Eye, EyeOff } from "lucide-react";
 import { FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { ControllerRenderProps } from "react-hook-form";
+import { boolean } from "zod";
 
 type objType = {
     value: string;
@@ -21,6 +22,8 @@ interface UpdateFieldTypes {
     isEditMode: boolean;
     setEditMode: (mode: boolean) => void;
     field: ControllerRenderProps<any, any>;
+    enableAutocomplete?: boolean;
+
 }
 
 const UpdateField: React.FC<UpdateFieldTypes> = ({
@@ -32,7 +35,8 @@ const UpdateField: React.FC<UpdateFieldTypes> = ({
     addressField = false,
     isEditMode,
     setEditMode,
-    field
+    field,
+    enableAutocomplete=false
 }) => {
     const [showPassword, setShowPassword] = useState(false);
 
@@ -43,11 +47,11 @@ const UpdateField: React.FC<UpdateFieldTypes> = ({
                     return (
                         <div className="relative">
                             <Input 
-                                id={id} 
-                                type={showPassword ? "text" : "password"} 
+                                id={enableAutocomplete ? id : undefined}
+                                type={type} 
                                 {...field} 
-                                className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-violet-500 dark:focus:ring-violet-400 focus:border-violet-500 dark:focus:border-violet-400 pr-10"
-                            />
+                                className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-violet-500 dark:focus:ring-violet-400 focus:border-violet-500 dark:focus:border-violet-400"
+                                />;
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
@@ -119,7 +123,19 @@ const UpdateField: React.FC<UpdateFieldTypes> = ({
                 )}
             </div>
             {isEditMode ? (
-                <FormControl>{renderInputField()}</FormControl>
+                <FormControl>
+                    {inputType === "input" && enableAutocomplete ? (
+                        <Input 
+                            id={id} 
+                            type={type} 
+                            {...field} 
+                            className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-violet-500 dark:focus:ring-violet-400 focus:border-violet-500 dark:focus:border-violet-400"
+                            autoComplete="off"
+                        />
+                    ) : (
+                        renderInputField()
+                    )}
+                </FormControl>
             ) : (
                 <p className="text-sm text-gray-700 dark:text-gray-300">{getDisplayValue()}</p>
             )}

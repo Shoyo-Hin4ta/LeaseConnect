@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/select"
 
 const formSchema = z.object({
-    gender: z.enum(["male", "female", "other"]),
+    gender: z.enum(["male", "female", "others"]),
 })
 
 interface SelectInputProps {
@@ -55,7 +55,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
                                 <SelectContent>
                                     <SelectItem value="male">Male</SelectItem>
                                     <SelectItem value="female">Female</SelectItem>
-                                    <SelectItem value="other">Other</SelectItem>
+                                    <SelectItem value="others">Others</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>

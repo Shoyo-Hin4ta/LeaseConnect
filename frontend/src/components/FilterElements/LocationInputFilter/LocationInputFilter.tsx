@@ -12,7 +12,7 @@ const LocationInputFilter: React.FC<LocationInputFilterProps> = ({ onChange, val
       <h3 className="font-semibold text-violet-800 dark:text-violet-200">Location</h3>
       <Input 
         type="text" 
-        placeholder="Enter city" 
+        placeholder="City, State (NJ, NY, IL), Country" 
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
         className="w-full"
         value={value}

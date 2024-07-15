@@ -77,3 +77,4 @@ export const tabs = [
   { id: 'all', label: 'All ' }
 ];
 
+export const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAP_API_KEY!

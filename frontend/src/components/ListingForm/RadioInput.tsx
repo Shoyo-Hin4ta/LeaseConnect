@@ -26,7 +26,7 @@ const RadioInput: React.FC<RadioTypes> = ({
   label,
   inputArray,
 }) => {
-  const { field } = useController({
+  const { field, fieldState: { error } } = useController({
     name,
     control: formControl,
   });
@@ -55,7 +55,7 @@ const RadioInput: React.FC<RadioTypes> = ({
           ))}
         </RadioGroup>
       </FormControl>
-      <FormMessage className="text-sm text-red-500 dark:text-red-400" />
+      {error && <FormMessage className="text-sm text-red-500 dark:text-red-400">{error.message}</FormMessage>}
     </FormItem>
   )
 }

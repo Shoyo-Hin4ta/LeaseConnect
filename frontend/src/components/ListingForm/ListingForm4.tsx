@@ -52,7 +52,6 @@ const LISTING_DETAILS_MUTATION = gql`
     numberOfDays
     images
     createdAt
-    updatedAt
   }
 }
 `;
@@ -120,6 +119,8 @@ const ListingForm4 = ({ currentStep }: { currentStep: number }) => {
         ...allData,
       };
 
+      
+
       const preparedImages = await Promise.all(selectedImages.map(async (image) => {
         return new Promise((resolve, reject) => {
           const reader = new FileReader();
@@ -165,11 +166,11 @@ const ListingForm4 = ({ currentStep }: { currentStep: number }) => {
       console.error('Error submitting listing:', error);
       toast({
         title: "Error submitting listing",
-        description: "Please try again later.",
+        description: error.message || "An unexpected error occurred. Please try again later.",
         duration: 2000,
         variant: "destructive",
       });
-    } 
+    }
 
     dispatch(setIsComplete(false));
     dispatch(resetState());

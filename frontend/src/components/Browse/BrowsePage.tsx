@@ -7,6 +7,7 @@ import { getUser } from '@/appstore/userSlice';
 import useGetVisitorLocation from '@/hooks/useGetVisitorLocation';
 import { Button } from '../ui/button';
 import { tabs } from '@/lib/utils';
+import ShimmerListingCards from '../ShimmerListingCards';
 
 export interface UserAddress {
   city: string,
@@ -18,29 +19,55 @@ const BrowsePage = () => {
   const { userAddress, loading: locationLoading } = useGetVisitorLocation();
   const currentUser = useSelector(getUser);
   const { initialLoading, loadingMore, error, listings, getListingsForTheBrowsePage, hasNextPage, loadMore } = useGetListings();
-  const [activeTab, setActiveTab] = useState('city');
+  const [activeTab, setActiveTab] = useState('');
+  const [hasFetchedInitialData, setHasFetchedInitialData] = useState(false);
 
   useEffect(() => {
-    if (!locationLoading && userAddress) {
-      updateListings(activeTab);
+    if (!locationLoading) {
+      if (userAddress && userAddress.city) {
+        setActiveTab('city');
+        getListingsForTheBrowsePage({ city: userAddress.city });
+      } else {
+        setActiveTab('all');
+        getListingsForTheBrowsePage({});
+      }
+      setHasFetchedInitialData(true);
     }
   }, [userAddress, locationLoading]);
+  
 
   console.log(listings)
 
   const updateListings = (tab) => {
-    const { city, state, country } = userAddress || {};
-    switch (tab) {
-      case 'city': getListingsForTheBrowsePage({ city }); break;
-      case 'state': getListingsForTheBrowsePage({ state }); break;
-      case 'country': getListingsForTheBrowsePage({ country }); break;
-      case 'all': getListingsForTheBrowsePage({}); break;
-      default: getListingsForTheBrowsePage({}); break;
+    setActiveTab(tab);
+    if (!userAddress && tab !== 'all') {
+      // If no user address is available, default to 'all'
+      setActiveTab('all');
+      getListingsForTheBrowsePage({});
+    } else {
+      const { city, state, country } = userAddress || {};
+      switch (tab) {
+        case 'city':
+          if (city) getListingsForTheBrowsePage({ city });
+          else getListingsForTheBrowsePage({});
+          break;
+        case 'state':
+          if (state) getListingsForTheBrowsePage({ state });
+          else getListingsForTheBrowsePage({});
+          break;
+        case 'country':
+          if (country) getListingsForTheBrowsePage({ country });
+          else getListingsForTheBrowsePage({});
+          break;
+        case 'all':
+        default:
+          getListingsForTheBrowsePage({});
+          break;
+      }
     }
   };
 
   const handleTabChange = (tab) => {
-    setActiveTab(tab);
     updateListings(tab);
   };
 
@@ -50,8 +77,8 @@ const BrowsePage = () => {
 
       <div className='flex-grow overflow-y-auto'>
         <div className='container mx-auto px-4 py-8'>
-          {initialLoading ? (
-            <>Loading</>
+          {!hasFetchedInitialData || initialLoading ? (
+            <ShimmerListingCards count={6} />
           ) : error ? (
             <div className="error-container text-center">
               <p className="text-red-500 mb-4">Error: {error.message || 'An unexpected error occurred.'}</p>

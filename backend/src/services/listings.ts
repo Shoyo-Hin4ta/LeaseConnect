@@ -7,7 +7,7 @@ import moment from 'moment';
 import { Types } from 'mongoose';
 import { User } from '../models/user.model';
 import { FilterListingInput, ListingSeachType } from '../graphql/listings/resolvers';
-import { LIMIT } from '../utils/constants';
+import { getStateCode, LIMIT } from '../utils/constants';
 
 import { FilterQuery } from 'mongoose';
 
@@ -81,7 +81,10 @@ class ListingService {
                 { new: true }
             );
 
+
             const createdListing = await Listing.findById(savedListing._id);
+
+            console.log(createdListing);
 
             if (!createdListing) {
                 throw new Error('Failed to retrieve created listing');
@@ -146,7 +149,7 @@ class ListingService {
 
             if (!city && !state && !country) {
                 // country = "USA";
-                query
+                query = {}
             }
 
             if (city || state || country) {
@@ -307,7 +310,15 @@ class ListingService {
     
             // Location handling
             if (filteringConditions.location && filteringConditions.location.trim() !== '') {
-                const locationRegex = new RegExp(filteringConditions.location.trim(), 'i');
+                let locationString = filteringConditions.location.trim();
+                
+                if (locationString.toLowerCase() === 'usa') {
+                    locationString = 'United States';
+                }
+
+                const location = getStateCode(locationString);
+                
+                const locationRegex = new RegExp(location, 'i');
                 const locationQuery = [
                   { 'location.streetAddress': locationRegex },
                   { 'location.city': locationRegex },

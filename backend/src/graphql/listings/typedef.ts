@@ -51,6 +51,7 @@ export const typeDefs = `#graphql
         numberOfDays: Int!
         images: [String]!
         createdBy: ID!
+        createdAt: DateTime
     }
 
     type Location {

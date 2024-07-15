@@ -1,169 +1,119 @@
 import { UseFormSetValue } from "react-hook-form";
 
-
-// Simplified to match the option where initAutocomplete is called with setValue
 declare global {
   interface Window {
-    initAutocomplete: () => void;
+    google: typeof google;
+    initializeAutocomplete: (fieldId: string) => void;
   }
 }
 
-// Assigning initAutocomplete to window, but noting that it should be called with setValue
-window.initAutocomplete = () => {
-  console.warn("initAutocomplete should be called with setValue from React component.");
-};
-
-
-
-
-let autocomplete: google.maps.places.Autocomplete;
-let address1Field: HTMLInputElement;
-// let address2Field: HTMLInputElement;
-let postalField: HTMLInputElement;
+let isApiLoaded = false;
 
 export function loadGoogleMapsApi(apiKey: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    if (document.getElementById('google-maps-script')) {
+    if (isApiLoaded) {
       resolve();
+      return;
+    }
+    if (document.getElementById('google-maps-script')) {
+      // Script is already loading
+      const checkLoaded = setInterval(() => {
+        if (isApiLoaded) {
+          clearInterval(checkLoaded);
+          resolve();
+        }
+      }, 100);
       return;
     }
     const script = document.createElement('script');
     script.id = 'google-maps-script';
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initAutocomplete&loading=async`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initializeAutocomplete&loading=async`;
     script.async = true;
+    script.defer = true;
     script.onerror = () => reject(new Error('Failed to load Google Maps API'));
-    script.onload = () => resolve();
-    document.body.appendChild(script);
+    document.head.appendChild(script);
+
+    window.initializeAutocomplete = (fieldId: string) => {
+      isApiLoaded = true;
+      setupAutocomplete(fieldId);
+    };
   });
 }
 
-// export interface AddressComponentType{
-//   city:string | undefined,
-//   state:string | undefined,
-//   country : string | undefined,
-//   zipcode : string | undefined
-// }
 
-// export const defaultAddress: AddressComponentType = {
-//     city : '',
-//     state : '',
-//     country : '',
-//     zipcode : '',
-// }
+function setupAutocomplete(fieldId: string) {
+  const initializeAutocomplete = () => {
+    if (!fieldId) {
+      // console.warn("Field ID is undefined. Autocomplete not initialized.");
+      return;
+    }
 
+    const field = document.getElementById(fieldId) as HTMLInputElement;
+    
+    if (!field) {
+      console.warn(`${fieldId} field not found. Retrying in 100ms.`);
+      setTimeout(initializeAutocomplete, 100);
+      return;
+    }
 
+    if (!window.google || !window.google.maps || !window.google.maps.places) {
+      console.warn("Google Maps Places library not fully loaded. Retrying in 100ms.");
+      setTimeout(initializeAutocomplete, 100);
+      return;
+    }
 
-export function initAutocomplete(
-  setValue: UseFormSetValue<{ city: string; state: string; country: string; zipcode: string; }>
-){
-  address1Field = document.querySelector("#city") as HTMLInputElement;
-//   address2Field = document.querySelector("#address2") as HTMLInputElement;
-  postalField = document.querySelector("#zipcode") as HTMLInputElement;
+    const autocomplete = new google.maps.places.Autocomplete(field, {
+      componentRestrictions: { country: ["us", "ca", "in"] },
+      fields: ["address_components", "geometry"],
+      types: fieldId.includes('city') ? ["(cities)"] : ["address"],
+    });
 
-  // Create the autocomplete object, restricting the search predictions to
-  // addresses in the US and Canada.
-  autocomplete = new google.maps.places.Autocomplete(address1Field, {
-    componentRestrictions: { country: ["us", "ca", "in"] },
-    fields: ["address_components", "geometry"],
-    types: ["address"],
-  });
-  address1Field.focus();
+    autocomplete.addListener("place_changed", () => {
+      const place = autocomplete.getPlace();
+      fillInAddress(place);
+    });
+  };
 
-  // When the user selects an address from the drop-down, populate the
-  // address fields in the form.
-  autocomplete.addListener("place_changed", () => fillInAddress(setValue));
-
-  address1Field.focus();
-
+  initializeAutocomplete();
 }
 
-function fillInAddress(
-  setValue: UseFormSetValue<{ city: string; state: string; country: string; zipcode: string; }>
-) {
-  // Get the place details from the autocomplete object.
-  const place = autocomplete.getPlace();
-  // let address1 = "";
-  let zipcode = "";
-
-  // const addressDetails: AddressComponentType = { ...defaultAddress };
-
-
-  // Get each component of the address from the place details,
-  // and then fill-in the corresponding field on the form.
-  // place.address_components are google.maps.GeocoderAddressComponent objects
-  // which are documented at http://goo.gle/3l5i5Mr
-  console.log(place.address_components);
+function fillInAddress(place: google.maps.places.PlaceResult) {
   for (const component of place.address_components as google.maps.GeocoderAddressComponent[]) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore remove once typings fixed
     const componentType = component.types[0];
     
     switch (componentType) {
-      // case "street_number": {
-      //   address1 = `${component.long_name} ${address1}`;
-      //   break;
-      // }
-
-      // case "route": {
-      //   address1 += component.short_name;
-      //   break;
-      // }
-
-      case "postal_code": {
-        zipcode = `${component.long_name}${zipcode}`;
+      case "street_number":
+        window.setValueFunction?.("streetAddress", component.long_name);
         break;
-      }
-
-      // case "postal_code_suffix": {
-      //   zipcode = `${zipcode}-${component.long_name}`;
-      //   break;
-      // }
-
+      case "route":
+        window.setValueFunction?.("streetAddress", (prev: string) => `${prev} ${component.short_name}`.trim());
+        break;
       case "locality":
-        console.log("printing localtiy");
-        (document.querySelector("#city") as HTMLInputElement).value =
-          component.long_name;
-          // addressDetails.city = component.long_name;
-          setValue("city", component.long_name);
+        window.setValueFunction?.("city", component.long_name);
         break;
-
-      case "administrative_area_level_1": {
-        (document.querySelector("#state") as HTMLInputElement).value =
-          component.short_name;
-          // addressDetails.state = component.short_name;
-          setValue("state", component.short_name);
+      case "administrative_area_level_1":
+        window.setValueFunction?.("state", component.short_name);
         break;
-      }
-
       case "country":
-        (document.querySelector("#country") as HTMLInputElement).value =
-          component.long_name;
-          // addressDetails.country = component.long_name;
-          setValue("country", component.long_name);
+        window.setValueFunction?.("country", component.long_name);
+        break;
+      case "postal_code":
+        window.setValueFunction?.("zipcode", component.long_name);
         break;
     }
   }
-
-  // address1Field.value = address1;
-  postalField.value = zipcode;
-  // addressDetails.zipcode = zipcode;
-  setValue("zipcode", postalField.value);
-
-
-  // After filling the form with address components from the Autocomplete
-  // prediction, set cursor focus on the second address line to encourage
-  // entry of subpremise information such as apartment, unit, or floor number.
-  // address2Field.focus();
-
 }
 
+export function setupAddressAutofill(apiKey: string, setValue: UseFormSetValue<any>, fieldId: string) {
+  window.setValueFunction = setValue;
 
-
-
-// declare global {
-//   interface Window {
-//     initAutocomplete: () => void;
-//   }
-// }
-// window.initAutocomplete = initAutocomplete;
-// export { initAutocomplete }
+  if (isApiLoaded) {
+    setupAutocomplete(fieldId);
+  } else {
+    loadGoogleMapsApi(apiKey).then(() => {
+      setupAutocomplete(fieldId);
+    }).catch((error) => {
+      console.error('Error loading Google Maps API:', error);
+    });
+  }
+}

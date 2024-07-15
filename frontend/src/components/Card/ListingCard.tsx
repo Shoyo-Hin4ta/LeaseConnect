@@ -9,8 +9,8 @@ import { Heart, Calendar, User } from "lucide-react";
 import CardFooter from "./CardFooter/CardFoot"
 import CardCarousel from "./Carousel/CardCaraousel"
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { getUser } from "@/appstore/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser, setUser } from "@/appstore/userSlice";
 import { ADD_TO_FAVOURITE_QUERY, REMOVE_FAVOURITE_QUERY } from "@/graphql/mutations";
 import { ApolloQueryResult, OperationVariables, useMutation } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +25,10 @@ export interface ListingCardProps {
 
 export function ListingCard({ listing, isMyListings = false, isOwnListing, refetch }: ListingCardProps) {
   const { title, subleaseDuration, images, numberOfDays, id } = listing;
+  const dispatch = useDispatch();
 
+
+  
   const currentUser = useSelector(getUser);
   const navigate = useNavigate();
   const [isFavorite, setIsFavorite] = useState(false);
@@ -38,29 +41,38 @@ export function ListingCard({ listing, isMyListings = false, isOwnListing, refet
       const favorite = currentUser.favoriteListings.includes(id);
       setIsFavorite(favorite);
     }
-  }, [currentUser, id]);
+  }, [currentUser, id,isFavorite]);
 
   const handleFavourite = async () => {
     try {
       if(currentUser){
         if (isFavorite) {
-        // Remove from favorites
-        await removeFavorite({
-          variables: {
-            listingId: id
-          }
-        });
+          // Remove from favorites
+          await removeFavorite({
+            variables: {
+              listingId: id
+            }
+          });
+          const updatedFavorites = (currentUser as any).favoriteListings.filter((favId: string) => favId !== id);
+          dispatch(setUser({
+            ...currentUser,
+            favoriteListings: updatedFavorites
+          }));
+        } else {
+          // Add to favorites
+          const {data} = await addFavorite({
+            variables: {
+              listingId: id
+            }
+          });
+          const updatedFavorites = [...(currentUser as any).favoriteListings, id];
+          dispatch(setUser({
+            ...currentUser,
+            favoriteListings: updatedFavorites
+          }));
+        }
+        setIsFavorite(!isFavorite);
       } else {
-        // Add to favorites
-        const {data}= await addFavorite({
-          variables: {
-            listingId: id
-          }
-        });
-        console.log(data)
-      }
-      setIsFavorite(!isFavorite);
-      }else{
         navigate('/login');
       }
     } catch (error) {

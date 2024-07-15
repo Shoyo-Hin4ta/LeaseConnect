@@ -36,7 +36,7 @@ const SelectDrop: React.FC<SelectTypes> = ({
   inputArray,
   className = '',
 }) => {
-  const { field } = useController({
+  const { field, fieldState: { error } } = useController({
     name,
     control: formControl,
   });
@@ -60,7 +60,7 @@ const SelectDrop: React.FC<SelectTypes> = ({
           ))}
         </SelectContent>
       </Select>
-      <FormMessage className="text-sm text-red-500 dark:text-red-400" />
+      {error && <FormMessage className="text-sm text-red-500 dark:text-red-400">{error.message}</FormMessage>}
     </FormItem>
   );
 }

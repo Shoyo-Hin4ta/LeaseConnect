@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { next } from "@/appstore/stepperSlice";
 import { updatePersonalInfo } from "@/appstore/registerFormDataSlice";
 import { isValidPhoneNumber } from "react-phone-number-input";
+import { Eye, EyeOff } from "lucide-react";
 
 const formSchema = z.object({
   name: z
@@ -26,22 +27,22 @@ const formSchema = z.object({
     .string()
     .min(8, { message: "Password must be at least 8 characters long." })
     .max(100, { message: "Password cannot exceed 100 characters." }),
-  age: z.string()
+  age: z
+    .string()
     .refine((age) => !isNaN(parseInt(age)), { message: "Age must be a number." })
     .refine((age) => parseInt(age) >= 18 && parseInt(age) <= 50, { message: "Age should be between 18 and 50." }),
-  gender: z.enum(["male", "female", "other"], { message: "Please select one." }),
+  gender: z.enum(["male", "female", "others"], { message: "Please select one." }),
   phone: z
     .string()
     .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
 })
-
-
 
 export type Inputs = z.infer<typeof formSchema>;
 
 const RegisterForm = ({ currentStep }: { currentStep: number }) => {
   const dispatch = useDispatch();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const form = useForm<Inputs>({
     resolver: zodResolver(formSchema),
@@ -57,7 +58,7 @@ const RegisterForm = ({ currentStep }: { currentStep: number }) => {
 
   const onSubmit = async (data: Inputs) => {
     setIsSubmitting(true);
-    console.log(data);
+    // console.log(data);
     dispatch(next());
     dispatch(updatePersonalInfo(data));
     setIsSubmitting(false);
@@ -85,16 +86,25 @@ const RegisterForm = ({ currentStep }: { currentStep: number }) => {
           labelClassName="text-violet-700 dark:text-violet-300"
           inputClassName="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:ring-2 focus:ring-violet-500 dark:focus:ring-violet-400"
         />
-        <InputBox
-          name="password"
-          label="Password"
-          formControl={form.control}
-          placeholder="Password"
-          type="password"
-          className="w-full"
-          labelClassName="text-violet-700 dark:text-violet-300"
-          inputClassName="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:ring-2 focus:ring-violet-500 dark:focus:ring-violet-400"
-        />
+        <div className="relative">
+          <InputBox
+            name="password"
+            label="Password"
+            formControl={form.control}
+            placeholder="Password"
+            type={showPassword ? "text" : "password"}
+            className="w-full"
+            labelClassName="text-violet-700 dark:text-violet-300"
+            inputClassName="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:ring-2 focus:ring-violet-500 dark:focus:ring-violet-400"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-gray-400"
+          >
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
+        </div>
         <InputBox
           name="age"
           label="Age"

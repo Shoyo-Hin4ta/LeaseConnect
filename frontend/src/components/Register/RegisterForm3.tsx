@@ -1,8 +1,8 @@
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useEffect } from "react";
-import { initAutocomplete, loadGoogleMapsApi } from "@/lib/googlemaps.ts";
+import { initAutocomplete, loadGoogleMapsApi, setupAddressAutofill } from "@/lib/googlemaps.ts";
 import RegisterButton from "./RegisterButton";
 import { useDispatch, useSelector } from "react-redux";
 import { resetState, setIsComplete } from "@/appstore/stepperSlice";
@@ -12,6 +12,8 @@ import { Form } from "../ui/form";
 import InputBox from "../InputBox";
 import { RootState } from "@/appstore/appStore";
 import { gql, useMutation } from '@apollo/client';
+import { GOOGLE_MAPS_API_KEY } from "@/lib/utils";
+import { useGoogleMapsApi } from "@/hooks/useGoogleMapsApi";
 
 const SIGN_UP_MUTATION = gql`
   mutation SignUp($input: UserSignUpInput!, $profileImage: Upload!) {
@@ -29,12 +31,9 @@ const SIGN_UP_MUTATION = gql`
         country
         zipcode
       }
-      createdAt
-      updatedAt
     }
   }
 `;
-
 
 interface Form3Types {
   currentStep: number;
@@ -71,6 +70,7 @@ const RegisterForm3 = ({ currentStep }: Form3Types) => {
   const navigate = useNavigate();
   const formData = useSelector((state: RootState) => state.registerFormData);
   const [signUp, { loading, error }] = useMutation(SIGN_UP_MUTATION);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const addressForm = useForm<AddressFormInputs>({
     resolver: zodResolver(addressFormSchema),
@@ -84,29 +84,18 @@ const RegisterForm3 = ({ currentStep }: Form3Types) => {
 
   const { control, handleSubmit, setValue } = addressForm;
 
-  useEffect(() => {
-    loadGoogleMapsApi(import.meta.env.REACT_APP_GOOGLE_MAP_API_KEY!)
-      .then(() => {
-        window.initAutocomplete = () => initAutocomplete(setValue);
-        window.initAutocomplete();
-      })
-      .catch((error) => {
-        console.error('Error loading Google Maps API:', error);
-      });
-  }, [setValue]);
+  useGoogleMapsApi(addressForm.setValue, 'city');
+
 
   async function onSubmit(data: AddressFormInputs) {
-   
+    setIsSubmitting(true);
 
-    // Get image from localStorage
     const storedImage = localStorage.getItem('selectedImage');
     let imageData = null;
     if (storedImage) {
       imageData = JSON.parse(storedImage);
     }
 
-    console.log(data)
-    // Combine all form data
     const allFormData = {
       address: {
         city: data.city,
@@ -115,28 +104,22 @@ const RegisterForm3 = ({ currentStep }: Form3Types) => {
         zipcode: data.zipcode,
       },
       ...formData,
-      
     };
-
-    console.log("All form except image date:", allFormData, imageData);
 
     try {
       const { data: responseData } = await signUp({
         variables: {
           input: allFormData,
-          profileImage: imageData ,
+          profileImage: imageData,
         },
       });
-  
-      console.log("Response:", responseData);
-
 
       dispatch(setIsComplete(true));
       localStorage.removeItem('selectedImage');
       dispatch(resetState());
       dispatch(setIsComplete(false));
       navigate("/login");
-  
+
       toast({
         title: "Registration completed successfully",
         description: "Your information has been saved.",
@@ -147,9 +130,12 @@ const RegisterForm3 = ({ currentStep }: Form3Types) => {
       console.error("Error during sign up:", err.message);
       toast({
         title: "Registration failed",
-        description: "There was an error during registration. Please try again.",
+        description: err.message || "There was an error during registration. Please try again.",
         duration: 3000,
+        variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -159,6 +145,7 @@ const RegisterForm3 = ({ currentStep }: Form3Types) => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <InputBox
             name="city"
+            id='city'
             label="City"
             formControl={control}
             placeholder="Enter city"
@@ -168,6 +155,7 @@ const RegisterForm3 = ({ currentStep }: Form3Types) => {
           />
           <InputBox
             name="state"
+            id='state'
             label="State"
             formControl={control}
             placeholder="Enter state"
@@ -178,6 +166,7 @@ const RegisterForm3 = ({ currentStep }: Form3Types) => {
           <InputBox
             name="country"
             label="Country"
+            id='country'
             formControl={control}
             placeholder="Enter country"
             className="w-full"
@@ -186,6 +175,7 @@ const RegisterForm3 = ({ currentStep }: Form3Types) => {
           />
           <InputBox
             name="zipcode"
+            id='zipcode'
             label="Zipcode"
             formControl={control}
             placeholder="Enter zipcode"
@@ -196,7 +186,8 @@ const RegisterForm3 = ({ currentStep }: Form3Types) => {
           <RegisterButton 
             currentStep={currentStep} 
             showPrevButton={true}
-            className="w-full bg-violet-600 hover:bg-violet-700 text-white dark:bg-violet-700 dark:hover:bg-violet-600"
+            isSubmitting={isSubmitting}
+            className="w-full"
           />
         </form>
       </Form>

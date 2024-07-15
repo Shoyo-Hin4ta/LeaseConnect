@@ -14,6 +14,7 @@ const useGetListings = () => {
   const { loading, error, data, fetchMore, refetch } = useQuery(GET_LISTINGS, {
     variables: { ...variables, page, limit },
     notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'network-only',
   });
 
   useEffect(() => {

@@ -18,33 +18,100 @@ import { ACCEPTED_IMAGE_MIME_TYPES, MAX_FILE_SIZE } from "@/components/ListingFo
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { useNavigate, useParams } from "react-router-dom";
 import useGetIndividualListing from "@/hooks/useGetIndividualListing";
-import { parseDateRange } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
 import { useMutation } from "@apollo/client";
 import { EDIT_LISTING_QUERY } from "@/graphql/mutations";
 import { setupAddressAutofill } from "./adressAutofill";
+import { useGoogleMapsApi } from "@/hooks/useGoogleMapsApi";
+
 
 const MAX_IMAGES = 8;
-const MIN_IMAGES = 1;
+const titleRegex = /^[a-zA-Z0-9\s.,!?'-]+$/;
+const streetAddressRegex = /^[a-zA-Z0-9\s.,#'-]+$/;
+const cityStateCountryRegex = /^[a-zA-Z\s'-]+$/;
+const zipcodeRegex = /^\d{5}(-\d{4})?$/;
+const currencyRegex = /^\d+(\.\d{1,2})?$/;
 
 const EditListingPageSchema = z.object({
-  title: z.string().min(2, { message: "Title can't be empty." }),
-  propertyType: z.enum(["house", "apartment", "studio"], { required_error: "You need to select a property type." }),
+  title: z
+    .string()
+    .min(2, { message: "Title can't be empty." })
+    .max(100, { message: "Title can't exceed 100 characters." })
+    .regex(titleRegex, { message: "Title contains invalid characters." })
+    .transform((title) => title.trim()),
+
+  propertyType: z.enum(["house", "apartment", "studio"], {
+    required_error: "You need to select a property type.",
+  }),
+
   bedroom: z.string(),
+
   bathroom: z.string(),
-  streetAddress: z.string(),
-  city: z.string(),
-  state: z.string(),
-  zipcode: z.string(),
-  country: z.string(),
+
+  streetAddress: z
+    .string()
+    .min(5, { message: "Street address must be at least 5 characters long." })
+    .max(100, { message: "Street address can't exceed 100 characters." })
+    .regex(streetAddressRegex, { message: "Street address contains invalid characters." })
+    .transform((address) => address.trim()),
+
+  city: z
+    .string()
+    .min(2, { message: "City is required." })
+    .max(50, { message: "City name can't exceed 50 characters." })
+    .regex(cityStateCountryRegex, { message: "City name contains invalid characters." })
+    .transform((city) => city.trim()),
+
+  state: z
+    .string()
+    .min(2, { message: "State is required." })
+    .max(50, { message: "State name can't exceed 50 characters." })
+    .regex(cityStateCountryRegex, { message: "State name contains invalid characters." })
+    .transform((state) => state.trim()),
+
+  zipcode: z
+    .string()
+    .min(5, { message: "Zip code is required." })
+    .max(10, { message: "Zip code can't exceed 10 characters." })
+    .regex(zipcodeRegex, { message: "Invalid zip code format." })
+    .transform((zipcode) => zipcode.trim()),
+
+  country: z
+    .string()
+    .min(2, { message: "Country is required." })
+    .max(50, { message: "Country name can't exceed 50 characters." })
+    .regex(cityStateCountryRegex, { message: "Country name contains invalid characters." })
+    .transform((country) => country.trim()),
+
   utilities: z.array(z.string()).optional(),
-  utilitiesIncludedInRent: z.string(),
+  utilitiesIncludedInRent: z.string({
+    required_error: "Please select one",
+  }),
   amenities: z.array(z.string()).optional(),
   preferences: z.array(z.string()).optional(),
-  description: z.string().max(500, { message: "Bio must not be longer than 500 characters." }),
-  currency: z.enum(["usd", "inr"]),
-  amount: z.string(),
-  timePeriod: z.enum(["day", "week", "month"]),
+  description: z
+    .string()
+    .max(500, {
+      message: "Bio must not be longer than 500 characters.",
+    }),
+
+  currency: z.enum(["usd", "inr"], {
+    required_error: "Currency is required"
+  }),
+  amount: z
+    .string({
+      required_error: "Amount is required"
+    })
+    .regex(currencyRegex, { message: "Not Valid amount" })
+    .refine((value) => {
+      const numberValue = parseFloat(value);
+      return !isNaN(numberValue) && numberValue > 0;
+    }, {
+      message: "Amount must be a positive number.",
+    }),
+  timePeriod: z.enum(["day", "week", "month"], {
+    required_error: "Time period is required"
+  }),
   subleaseDuration: z.string(),
   image: z.array(
     z.union([
@@ -94,9 +161,7 @@ const EditListingPage: React.FC = () => {
     }
   });
 
-  useEffect(() => {
-    setupAddressAutofill(import.meta.env.REACT_APP_GOOGLE_MAP_API_KEY, editListing.setValue);
-  }, [editListing.setValue]);
+  useGoogleMapsApi(editListing.setValue, 'streetAddress');
 
   useEffect(() => {
     if (listingData) {

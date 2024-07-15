@@ -36,11 +36,6 @@ const Header = () => {
     dispatch(toggleTheme());
   };
 
-  // useEffect(() => {
-  //   if (user) {
-  //     // console.log(user);
-  //   }
-  // }, [user]);
 
   const ThemeToggle = () => (
     <Button

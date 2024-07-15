@@ -28,10 +28,10 @@ export const TIME_PERIOD_ARR = [
 const currencyRegex = /^\d+(\.\d{1,2})?$/;
 
 const listingForm3Schema = z.object({
-  currency : z.enum(["usd", "inr"]),
+  currency: z.enum(["usd", "inr"]),
   amount: z
     .string({
-      required_error : "Amount is required"
+      required_error: "Amount is required"
     })
     .regex(currencyRegex, { message: "Not Valid amount" })
     .refine((value) => {
@@ -40,8 +40,14 @@ const listingForm3Schema = z.object({
     }, {
       message: "Amount must be a positive number.",
     }),
-  timePeriod : z.enum(["day", "week", "month"]),
-  subleaseDuration: z.string()
+  timePeriod: z.enum(["day", "week", "month"]),
+  subleaseDuration: z.string().min(1, "Sublease duration is required")
+  .refine((value) => {
+    const [from, to] = value.split(' - ');
+    return from && to && new Date(from) < new Date(to);
+  }, {
+    message: "Please select a valid date range for sublease duration",
+  })
 })
 
 const ListingForm3 = ({ currentStep }: {
@@ -91,18 +97,25 @@ const ListingForm3 = ({ currentStep }: {
           <div className="space-y-2">
             <label className="block text-sm font-medium text-violet-700 dark:text-violet-300">Sublease Period</label>
             <Controller
-              control={control}
-              name="subleaseDuration"
-              render={({ field }) => (
-                <DateRangePicker
-                  onUpdate={(values) => {
-                    const fromDate = values.range.from.toISOString();
-                    const toDate = values.range.to ? values.range.to.toISOString() : '';
-                    field.onChange(`${fromDate} - ${toDate}`);
-                  }}
-                />
-              )}
-            />
+  control={control}
+  name="subleaseDuration"
+  render={({ field, fieldState: { error } }) => (
+    <>
+      <DateRangePicker
+        onUpdate={(values) => {
+          if (values.range.from && values.range.to) {
+            const fromDate = values.range.from.toLocaleDateString();
+            const toDate = values.range.to.toLocaleDateString();
+            field.onChange(`${fromDate} - ${toDate}`);
+          } else {
+            field.onChange('');
+          }
+        }}
+      />
+      {error && <p className="text-red-400 text-sm mt-1">{error.message}</p>}
+    </>
+  )}
+/>
           </div>
           <ListingFormButton 
             currentStep={currentStep} 

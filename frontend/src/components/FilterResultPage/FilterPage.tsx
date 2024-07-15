@@ -8,6 +8,7 @@ import { getUser } from '@/appstore/userSlice';
 import { useLocation } from 'react-router-dom';
 import SearchBar from '../SearchBar/SearchBar';
 import { LIMIT } from '@/lib/constant';
+import ShimmerListingCards from '../ShimmerListingCards';
 
 const limit = LIMIT;
 
@@ -79,7 +80,7 @@ const FilterPage: React.FC = () => {
 
   return (
     <div className='flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100'>
-      <SearchBar isFilterPage={true}  />
+      <SearchBar isFilterPage={true} />
 
       <div className='flex-grow overflow-y-auto'>
         <div className='container mx-auto px-4 py-8'>
@@ -87,21 +88,16 @@ const FilterPage: React.FC = () => {
             Filtered Listings
           </h1>
 
-          {
-            allListings.length === 0 && (
-              <>
-                <h4 className='text-l font-semibold mb-6 text-center text-violet-600 dark:text-violet-400'>
-                    No results found based on your search.
-                </h4>
-              </>
-            )
-
-          }
-          
           {loading && allListings.length === 0 ? (
-            <p>Loading...</p>
+            <ShimmerListingCards count={1} />
           ) : error ? (
-            <p>Error: {error.message}</p>
+            <div className="flex justify-center items-center h-64">
+              <p className="text-lg text-red-500 dark:text-red-400">Error: {error.message}</p>
+            </div>
+          ) : allListings.length === 0 ? (
+            <div className="flex justify-center items-center h-64">
+              <p className="text-lg text-gray-600 dark:text-gray-300">No results found based on your search.</p>
+            </div>
           ) : (
             <>
               <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>

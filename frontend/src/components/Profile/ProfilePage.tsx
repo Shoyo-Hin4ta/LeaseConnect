@@ -12,9 +12,8 @@ import { getUser, setUser } from '@/appstore/userSlice';
 import { useMutation } from '@apollo/client';
 import { EDIT_PROFILE_QUERY } from '@/graphql/mutations';
 import { useNavigate } from 'react-router-dom';
-import { toast, useToast } from "@/components/ui/use-toast";
-import { setupAddressAutofill } from '../OwnListings/EditListing/adressAutofill';
-
+import { toast } from "@/components/ui/use-toast";
+import { useGoogleMapsApi } from '@/hooks/useGoogleMapsApi';
 
 const GenderArr = [
     { value: "male", desc: "Male" },
@@ -35,50 +34,17 @@ const FormSchema = z.object({
 });
 
 const ProfilePage = () => {
-
     const [editProfile, {loading}] = useMutation(EDIT_PROFILE_QUERY);
-
     const [addressEditMode, setAddressEditMode] = useState(false);
     const [editModes, setEditModes] = useState<Record<string, boolean>>({});
     const [formChanged, setFormChanged] = useState(false);
 
     const user = useSelector(getUser);
     const dispatch = useDispatch();
-
     const navigate = useNavigate();
 
-    const customResolver = async (values: any) => {
-        try {
-            // Validate with Zod schema
-            const validatedData = await FormSchema.parseAsync(values);
-
-            // If all validations pass
-            return {
-                values: validatedData,
-                errors: {}
-            };
-        } catch (error) {
-            // If Zod validation fails
-            if (error instanceof z.ZodError) {
-                const errors = error.errors.reduce((acc: any, curr) => {
-                    acc[curr.path[0]] = {
-                        type: 'custom',
-                        message: curr.message
-                    };
-                    return acc;
-                }, {});
-
-                return {
-                    values: {},
-                    errors
-                };
-            }
-            throw error;
-        }
-    };
-    
     const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: customResolver,
+        resolver: zodResolver(FormSchema),
         defaultValues: {
             name: user?.name || '',
             email: user?.email || '',
@@ -92,9 +58,7 @@ const ProfilePage = () => {
         },
     });
 
-    useEffect(() => {
-        setupAddressAutofill(import.meta.env.REACT_APP_GOOGLE_MAP_API_KEY, form.setValue);
-      }, [form.setValue]);
+    useGoogleMapsApi(form.setValue, 'city', addressEditMode);
 
     useEffect(() => {
         if (user) {
@@ -133,22 +97,16 @@ const ProfilePage = () => {
                 zipcode,
             },
         };
-
-        // console.log(userProfileData);
         
         try {
-
             const { data : responseData} = await editProfile({
                 variables : {
                     editUserProfileData: userProfileData
                 }
             })
 
-            // console.log(responseData.editProfile);
-
             dispatch(setUser(responseData.editProfile));
             navigate('/browse')
-            // Turn off all edit modes
             setEditModes({});
             setAddressEditMode(false);
             setFormChanged(false);
@@ -157,8 +115,6 @@ const ProfilePage = () => {
                 description: "Your profile has been successfully updated.",
                 duration: 1000,
             });
-            
-    
         } catch (error) {
             console.error("Error updating profile:", error);
             toast({
@@ -169,7 +125,13 @@ const ProfilePage = () => {
         }
     };
 
-    if (!user) return null;
+    if (!user) {
+        return (
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+                <p className="text-lg text-gray-600 dark:text-gray-300">Loading user data...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
@@ -184,10 +146,10 @@ const ProfilePage = () => {
                                         <img src={user?.profileImage} alt={user?.name} className="w-48 h-48 rounded-full object-cover" />
                                     ) : (
                                         <div className="w-48 h-48 bg-violet-200 dark:bg-violet-700 rounded-full flex items-center justify-center">
-                                        <User size={64} className="text-violet-600 dark:text-violet-300" />
+                                            <User size={64} className="text-violet-600 dark:text-violet-300" />
                                         </div>
-                                    )}                                </div>
-                                {/* <Button type="button" variant="outline" className="w-full dark:text-white">Change Photo</Button> */}
+                                    )}
+                                </div>
                             </div>
                             <div className="w-full md:w-2/3 space-y-6">
                                 {Object.keys(form.getValues()).map((field) => (
@@ -236,6 +198,7 @@ const ProfilePage = () => {
                                                 isEditMode={addressEditMode}
                                                 setEditMode={() => {}}
                                                 field={formField}
+                                                enableAutocomplete={field === 'city'}
                                             />
                                         )}
                                     />

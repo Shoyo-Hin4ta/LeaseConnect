@@ -10,6 +10,9 @@ import { initAutocomplete, loadGoogleMapsApi } from "@/lib/autofillListing"
 import ListingFormButton from "./ListingFormButton"
 import { useDispatch } from "react-redux"
 import { next } from "@/appstore/stepperSlice"
+import { GOOGLE_MAPS_API_KEY } from "@/lib/utils"
+import { setupAddressAutofill } from "@/lib/googlemaps"
+import { useGoogleMapsApi } from "@/hooks/useGoogleMapsApi"
 
 
 export const BedroomInputArray = [{
@@ -160,17 +163,8 @@ const ListingForm1 = ({ currentStep }: {
   }
 
 
-  useEffect(() => {
-    loadGoogleMapsApi(import.meta.env.REACT_APP_GOOGLE_MAP_API_KEY)
-      .then(() => {
-        window.initAutocomplete = () => initAutocomplete(setValue);
-        window.initAutocomplete();
-      })
-      .catch((error) => {
-        console.error('Error loading Google Maps API:', error);
-        // Show an error message to the user
-      });
-  }, [setValue]);
+  useGoogleMapsApi(setValue, 'streetAddress');
+
  
 
   return (
