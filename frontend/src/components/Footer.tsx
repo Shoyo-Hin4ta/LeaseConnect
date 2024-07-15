@@ -6,7 +6,7 @@ const Footer = () => {
         <p>&copy; 2024 Lease Connect. All rights reserved.</p>
         <p className="mt-2">Made By Ritik Singh</p>
         <p className="mt-2 text-sm italic">
-          Our backend is like a caterpillar in a cocoon - still developing, but soon to emerge as a beautiful butterfly!
+          Our backend is like a caterpillar in a cocoon - still developing.
         </p>
       </div>
   </footer>
