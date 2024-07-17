@@ -80,7 +80,7 @@ export const tabs = [
 
 
 export const BACKEND_URI = import.meta.env.VITE_BACKEND_URI!
-
+export const BACKEND_LOCAL_URI = import.meta.env.VITE_BACKEND_LOCAL_URI!
 
 export const calculateDateRange = () : DateRange => {
   const today = new Date();

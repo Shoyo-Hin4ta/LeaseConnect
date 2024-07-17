@@ -48,9 +48,9 @@ const Header = () => {
     </Button>
   );
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <header className="fixed top-0 left-0 right-0 h-14 bg-white dark:bg-gray-900 z-50 flex items-center">

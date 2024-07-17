@@ -31,7 +31,7 @@ const NoListingsFound = ({ message, ctaText, ctaLink } : {
 
   return (
     <motion.div 
-      className="flex flex-col items-center justify-center min-h-[50vh] bg-gray-100 dark:bg-gray-900 p-4"
+      className="flex flex-col items-center justify-center min-h-[50vh] bg-white-100 dark:bg-gray-900 p-4"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
