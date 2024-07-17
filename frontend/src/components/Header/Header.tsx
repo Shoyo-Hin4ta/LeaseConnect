@@ -17,20 +17,20 @@ const Header = () => {
   const isAuthenticated = useSelector(getIsAuthenticated);
   const theme = useSelector((state: RootState) => state.theme.value);
 
-  const { loading, error, data } = useQuery(CURRENT_USER_QUERY, {
-    fetchPolicy: 'network-only',
-    errorPolicy: 'ignore',
-  });
+  // const { loading, error, data } = useQuery(CURRENT_USER_QUERY, {
+  //   fetchPolicy: 'network-only',
+  //   errorPolicy: 'ignore',
+  // });
 
-  useEffect(() => {
-    if (!loading) {
-      if (data?.getCurrentUser) {
-        dispatch(setUser(data.getCurrentUser));
-      } else if (!error) {
-        dispatch(clearUser());
-      }
-    }
-  }, [loading, data, error, dispatch]);
+  // useEffect(() => {
+  //   if (!loading) {
+  //     if (data?.getCurrentUser) {
+  //       dispatch(setUser(data.getCurrentUser));
+  //     } else if (!error) {
+  //       dispatch(clearUser());
+  //     }
+  //   }
+  // }, [loading, data, error, dispatch]);
   
   const handleToggleTheme = () => {
     dispatch(toggleTheme());

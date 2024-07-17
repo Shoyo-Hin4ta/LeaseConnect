@@ -10,7 +10,7 @@ import { Label } from '../ui/label';
 import DateRangeFilter from '../FilterElements/DateRangeFilter/DateRangeFilter';
 import { DateRange } from '../ui/date-range-picker';
 import Footer from '../Footer';
-import { useMutation } from '@apollo/client';
+import { useApolloClient, useMutation } from '@apollo/client';
 import { LOGOUT_MUTATION } from '@/lib/queries';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearUser, getIsAuthenticated, getUser } from '@/appstore/userSlice';
@@ -116,6 +116,7 @@ const HomePage = () => {
   };
 
   const [logout, { loading, error }] = useMutation(LOGOUT_MUTATION);
+  const client = useApolloClient();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -123,6 +124,9 @@ const HomePage = () => {
       const response = await logout();
       if (response.data.logout.success) {
         dispatch(clearUser());
+        localStorage.removeItem('currentUser');
+        localStorage.setItem('logout', Date.now().toString());
+        await client.clearStore();
         navigate('/');
       }
       else{

@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Link, useNavigate } from 'react-router-dom';
 import ConfirmationPopup from '../Popups/Popup';
-import { useMutation } from '@apollo/client';
+import { useApolloClient, useMutation } from '@apollo/client';
 import { LOGOUT_MUTATION } from '@/lib/queries';
 import { useDispatch } from 'react-redux';
 import { clearUser } from '@/appstore/userSlice';
@@ -23,6 +23,8 @@ const DropDown = () => {
   const navigate = useNavigate();
   const [logout] = useMutation(LOGOUT_MUTATION);
   const dispatch = useDispatch();
+  const client = useApolloClient();
+  
 
   const handleLogoutClick = useCallback(() => {
     setIsPopupOpen(true);
@@ -34,6 +36,9 @@ const DropDown = () => {
       const response = await logout();
       if (response.data.logout.success) {
         dispatch(clearUser());
+        localStorage.removeItem('currentUser');
+        localStorage.setItem('logout', Date.now().toString());
+        await client.clearStore();
         navigate('/', { replace: true });
       } else {
         console.error('Logout failed:', response.data.logout.message);
