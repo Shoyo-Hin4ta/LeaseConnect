@@ -39,8 +39,8 @@ const LoginPage = () => {
         }
       });
 
-      console.log("Response:", responseData);
-      console.log("to browse");
+      // console.log("Response:", responseData);
+      // console.log("to browse");
 
       dispatch(setUser(responseData.login));
       navigate('/');

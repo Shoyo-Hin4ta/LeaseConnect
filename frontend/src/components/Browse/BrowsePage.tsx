@@ -8,6 +8,7 @@ import useGetVisitorLocation from '@/hooks/useGetVisitorLocation';
 import { Button } from '../ui/button';
 import { tabs } from '@/lib/utils';
 import ShimmerListingCards from '../ShimmerListingCards';
+import NoListingsFound from '../NoListingsFound';
 
 export interface UserAddress {
   city: string,
@@ -35,8 +36,6 @@ const BrowsePage = () => {
     }
   }, [userAddress, locationLoading]);
   
-
-  console.log(listings)
 
   const updateListings = (tab) => {
     setActiveTab(tab);
@@ -67,6 +66,15 @@ const BrowsePage = () => {
     }
   };
 
+  const getHeadingText = () => {
+    if (activeTab === 'all') {
+      return "Showing all listings";
+    } else {
+      const tabLabel = tabs.find(tab => tab.id === activeTab)?.label || '';
+      return `Showing all listings in your ${tabLabel}`;
+    }
+  };
+
   const handleTabChange = (tab) => {
     updateListings(tab);
   };
@@ -77,6 +85,9 @@ const BrowsePage = () => {
 
       <div className='flex-grow overflow-y-auto'>
         <div className='container mx-auto px-4 py-8'>
+          <h1 className='text-xl font-bold mb-6 text-center text-violet-600 dark:text-violet-400'>
+            {getHeadingText()}            
+          </h1>
           {!hasFetchedInitialData || initialLoading ? (
             <ShimmerListingCards count={6} />
           ) : error ? (
@@ -87,9 +98,11 @@ const BrowsePage = () => {
               </Button>
             </div>
           ) : listings.length === 0 ? (
-            <h4 className='text-l font-semibold mb-6 text-center text-violet-600 dark:text-violet-400'>
-                No listings found  {activeTab !== 'all' ? `in your ${activeTab}` : ``}. Try adjusting your search or location.
-            </h4>
+            <NoListingsFound 
+              message={`No listings found ${activeTab !== 'all' ? `in your ${activeTab}` : ''}. Try adjusting your search or location.`}
+              ctaText="Explore All Listings"
+              ctaLink="/browse"
+            />
           ) : (
             <>
               <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>

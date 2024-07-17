@@ -56,11 +56,16 @@ export function getStateCode(stateName: string): string {
 
     const normalizedStateName = stateName.toLowerCase().replace(/\s+/g, ' ').trim();
     
+    if (stateMap[normalizedStateName]) {
+        return stateMap[normalizedStateName];
+    }
+    
     for (const [fullName, code] of Object.entries(stateMap)) {
-        if (normalizedStateName === fullName || new RegExp(`\\b${fullName}\\b`, 'i').test(stateName)) {
+        if (normalizedStateName.includes(fullName) || fullName.includes(normalizedStateName)) {
             return code;
         }
     }
 
     return stateName;
 }
+

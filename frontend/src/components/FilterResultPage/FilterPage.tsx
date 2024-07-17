@@ -9,12 +9,13 @@ import { useLocation } from 'react-router-dom';
 import SearchBar from '../SearchBar/SearchBar';
 import { LIMIT } from '@/lib/constant';
 import ShimmerListingCards from '../ShimmerListingCards';
+import NoListingsFound from '../NoListingsFound';
 
 const limit = LIMIT;
 
 const FilterPage: React.FC = () => {
   const location = useLocation();
-  const filterData = location.state?.filterData;
+  const [filterData, setFilterData] = useState(location.state?.filterData || {});
 
   const currentUser = useSelector(getUser);
   const [page, setPage] = useState(1);
@@ -30,6 +31,8 @@ const FilterPage: React.FC = () => {
     },
     notifyOnNetworkStatusChange: true,
   });
+
+  
 
   useEffect(() => {
     if (data?.getSearchBasedListings?.listings) {
@@ -47,6 +50,19 @@ const FilterPage: React.FC = () => {
     setVariables(newVariables);
     refetch({ filteringConditions: newVariables, page: 1, limit });
   }, [refetch]);
+
+  useEffect(() => {
+    
+    if (location.state?.filterData) {
+      setFilterData(location.state.filterData);
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    if (filterData) {
+      getListingsForFilter(filterData);
+    }
+  }, [filterData, getListingsForFilter]);
 
   const loadMore = useCallback(() => {
     if (isLoadingMore || !data?.getSearchBasedListings?.hasNextPage) return;
@@ -85,7 +101,7 @@ const FilterPage: React.FC = () => {
       <div className='flex-grow overflow-y-auto'>
         <div className='container mx-auto px-4 py-8'>
           <h1 className='text-3xl font-bold mb-6 text-center text-violet-600 dark:text-violet-400'>
-            Filtered Listings
+            Filtered Results
           </h1>
 
           {loading && allListings.length === 0 ? (
@@ -95,12 +111,14 @@ const FilterPage: React.FC = () => {
               <p className="text-lg text-red-500 dark:text-red-400">Error: {error.message}</p>
             </div>
           ) : allListings.length === 0 ? (
-            <div className="flex justify-center items-center h-64">
-              <p className="text-lg text-gray-600 dark:text-gray-300">No results found based on your search.</p>
-            </div>
+            <NoListingsFound 
+              message="No results found based on your search. Try adjusting your filters."
+              ctaText="Reset Filters"
+              ctaLink="/browse"
+            />
           ) : (
             <>
-              <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+              <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
                 {allListings.map((listing: any) => (
                   <ListingCard 
                     key={listing.id} 

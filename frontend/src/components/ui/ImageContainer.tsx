@@ -60,7 +60,7 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
                     <div className="text-4xl font-thin mb-2">+</div>
                     <div className="text-center">
                         <p className="text-sm">{isProfilePicture ? "Upload Profile Picture" : "Upload Image"}</p>
-                        <p className="text-xs mt-2 text-violet-500 dark:text-violet-400">Click or drag and drop</p>
+                        <p className="text-xs mt-2 text-violet-500 dark:text-violet-400">Click to upload image</p>
                         <p className="text-xs mt-1 text-violet-400 dark:text-violet-500">JPG, PNG, WebP</p>
                     </div>
                 </div>

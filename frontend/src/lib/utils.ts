@@ -1,3 +1,4 @@
+import { DateRange } from "@/components/ui/date-range-picker"
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -78,3 +79,16 @@ export const tabs = [
 ];
 
 export const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAP_API_KEY!
+
+
+export const calculateDateRange = () : DateRange => {
+  const today = new Date();
+  
+  const oneWeekAgo = new Date(today);
+  oneWeekAgo.setDate(today.getDate() - 7);
+  
+  const twoMonthsLater = new Date(today);
+  twoMonthsLater.setMonth(today.getMonth() + 2);
+  
+  return { from: oneWeekAgo, to: twoMonthsLater };
+};

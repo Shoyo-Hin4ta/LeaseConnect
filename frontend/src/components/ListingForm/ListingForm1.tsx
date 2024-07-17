@@ -6,13 +6,12 @@ import InputBox from "./InputBox"
 import SelectDrop from "./SelectDrop"
 import RadioInput from "./RadioInput"
 import { useEffect, useState } from "react"
-import { initAutocomplete, loadGoogleMapsApi } from "@/lib/autofillListing"
 import ListingFormButton from "./ListingFormButton"
 import { useDispatch } from "react-redux"
 import { next } from "@/appstore/stepperSlice"
 import { GOOGLE_MAPS_API_KEY } from "@/lib/utils"
 import { setupAddressAutofill } from "@/lib/googlemaps"
-import { useGoogleMapsApi } from "@/hooks/useGoogleMapsApi"
+import { initAutocomplete } from "./autofillListingForm"
 
 
 export const BedroomInputArray = [{
@@ -147,11 +146,17 @@ const ListingForm1 = ({ currentStep }: {
 
   const { handleSubmit, control, setValue } = listingForm1;
 
+
+  useEffect(() => {
+    window.initAutocomplete = () => initAutocomplete(setValue);
+    window.initAutocomplete();
+  }, [setValue]);
+
+
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const onSubmit = async(data) => {
     setIsSubmitting(true);
-    console.log(data);
 
     const existingData = JSON.parse(localStorage.getItem('listingData') || '{}');
     const updatedData = { ...existingData, ...data };
@@ -162,10 +167,6 @@ const ListingForm1 = ({ currentStep }: {
     setIsSubmitting(false);
   }
 
-
-  useGoogleMapsApi(setValue, 'streetAddress');
-
- 
 
   return (
     <div className="w-full max-w-2xl mx-auto">

@@ -42,8 +42,6 @@ const InputImage: React.FC<InputImageProps> = ({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     if (file) {
-      console.log("File size:", file.size);
-      console.log("File type:", file.type);
       onChange(file);
       field.onChange(file);
     }

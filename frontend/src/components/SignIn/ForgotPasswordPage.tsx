@@ -22,7 +22,7 @@ const ForgotPasswordPage = () => {
   });
 
   const onSubmit = (data: ForgotPasswordInputs) => {
-    console.log(data);
+    // console.log(data);
     // Handle forgot password logic here
   };
 

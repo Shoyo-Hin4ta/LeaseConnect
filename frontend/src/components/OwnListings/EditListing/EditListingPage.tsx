@@ -21,8 +21,7 @@ import useGetIndividualListing from "@/hooks/useGetIndividualListing";
 import { toast } from "@/components/ui/use-toast";
 import { useMutation } from "@apollo/client";
 import { EDIT_LISTING_QUERY } from "@/graphql/mutations";
-import { setupAddressAutofill } from "./adressAutofill";
-import { useGoogleMapsApi } from "@/hooks/useGoogleMapsApi";
+import { initAutocomplete } from "@/components/ListingForm/autofillListingForm";
 
 
 const MAX_IMAGES = 8;
@@ -92,7 +91,7 @@ const EditListingPageSchema = z.object({
   description: z
     .string()
     .max(500, {
-      message: "Bio must not be longer than 500 characters.",
+      message: "Description must not be longer than 500 characters.",
     }),
 
   currency: z.enum(["usd", "inr"], {
@@ -124,6 +123,8 @@ const EditListingPageSchema = z.object({
     .transform(files => files.filter((file): file is File | string => file !== null))
 });
 
+
+
 const EditListingPage: React.FC = () => {
   const { listingID } = useParams<{ listingID: string }>();
   const { listingData, loading, error } = useGetIndividualListing(listingID || '');
@@ -134,7 +135,9 @@ const EditListingPage: React.FC = () => {
 
   const [updateListing] = useMutation(EDIT_LISTING_QUERY);
 
-  console.log(listingData);
+  // console.log(listingData);
+
+
 
   const editListing = useForm<ListingTypes>({
     resolver: zodResolver(EditListingPageSchema),
@@ -161,7 +164,6 @@ const EditListingPage: React.FC = () => {
     }
   });
 
-  useGoogleMapsApi(editListing.setValue, 'streetAddress');
 
   useEffect(() => {
     if (listingData) {
@@ -225,15 +227,38 @@ const EditListingPage: React.FC = () => {
     }
   };
 
-  const { handleSubmit, control } = editListing;
+  const { handleSubmit, control, setValue } = editListing;
+
+  useEffect(() => {
+    const initAutoComplete = () => {
+      if (window.google && window.google.maps) {
+        window.initAutocomplete = () => {
+          setTimeout(() => {
+            const streetAddressField = document.getElementById("streetAddress");
+            if (streetAddressField) {
+              initAutocomplete(setValue);
+            } else {
+              console.error("Street address input field not found");
+            }
+          }, 100);
+        };
+        window.initAutocomplete();
+      } else {
+        console.error("Google Maps API not loaded");
+      }
+    };
+  
+    const timeoutId = setTimeout(initAutoComplete, 0);
+  
+    return () => clearTimeout(timeoutId);
+  }, [setValue]);
 
   const onSubmit = async (data: ListingTypes) => {
     setIsSubmitting(true);
-    setImgError(false); // Reset the image error state
+    setImgError(false);
   
-    console.log("Form submitted", data);
+    // console.log("Form submitted", data);
   
-    // Check if there are any non-null images
     const validImages = listingImages.filter(img => img !== null);
     if (validImages.length === 0) {
       setImgError(true);
@@ -244,10 +269,9 @@ const EditListingPage: React.FC = () => {
         duration: 2000,
         variant: "destructive",
       });
-      return; // Prevent further processing
+      return;
     }
-  
-    // Validate image sizes and types
+
     const invalidImages = validImages.filter((img): img is File => 
       img instanceof File && (img.size > MAX_FILE_SIZE || !ACCEPTED_IMAGE_MIME_TYPES.includes(img.type))
     );
@@ -310,7 +334,7 @@ const EditListingPage: React.FC = () => {
             newImages : newImages
           },
         });
-        console.log("Response:", responseData);
+        // console.log("Response:", responseData);
   
       toast({
         title: "Listing Updated successfully",
@@ -397,7 +421,7 @@ const EditListingPage: React.FC = () => {
                   
                   <InputBox
                     placeholder="Street Address"
-                    label="Address"
+                    label="Street Address"
                     id="streetAddress"
                     formControl={control}
                     name="streetAddress"
@@ -622,7 +646,8 @@ const EditListingPage: React.FC = () => {
 
                 <div className="pt-5">
                   <div className="flex justify-end gap-2">
-                    <Button variant="outline" type="button">
+                    <Button variant="outline" type="button"  onClick={() => navigate(-1)}
+                    >
                       Cancel
                     </Button>
                     <Button 

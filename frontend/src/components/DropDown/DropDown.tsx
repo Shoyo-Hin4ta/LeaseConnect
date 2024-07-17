@@ -34,7 +34,6 @@ const DropDown = () => {
       const response = await logout();
       if (response.data.logout.success) {
         dispatch(clearUser());
-        console.log(response.data.logout.message);
         navigate('/', { replace: true });
       } else {
         console.error('Logout failed:', response.data.logout.message);

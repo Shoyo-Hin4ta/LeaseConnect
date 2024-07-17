@@ -109,8 +109,6 @@ const ListingForm4 = ({ currentStep }: { currentStep: number }) => {
       return;
     }
 
-    console.log(data);
-
     try{
       const allData = JSON.parse(localStorage.getItem('listingData') || '{}');
 
@@ -144,8 +142,6 @@ const ListingForm4 = ({ currentStep }: { currentStep: number }) => {
           listingImages: preparedImages,
         },
       });
-
-      console.log("Response:", responseData);
 
       //send all the combined data to the backend
       localStorage.removeItem('listingData');

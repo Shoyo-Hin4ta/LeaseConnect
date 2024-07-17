@@ -71,8 +71,6 @@ const ListingForm3 = ({ currentStep }: {
 
   const onSubmit = async(data) => {
     setIsSubmitting(true);
-    console.log(data);
-
 
     const existingData = JSON.parse(localStorage.getItem('listingData') || '{}');
     const updatedData = { ...existingData, ...data };

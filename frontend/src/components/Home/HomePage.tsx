@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Link, useNavigate } from 'react-router-dom';
@@ -14,6 +14,7 @@ import { useMutation } from '@apollo/client';
 import { LOGOUT_MUTATION } from '@/lib/queries';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearUser, getIsAuthenticated, getUser } from '@/appstore/userSlice';
+import Popup from './Popup';
 
 
 interface PriceRange{
@@ -49,15 +50,14 @@ const HomePage = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    const searchData = { 
-      location, 
+    const filterData = { 
+      location: location, 
       priceRange : {
         ...priceRange,
         period : pricePeriod
       }, 
       dateRange };
-    console.log('Search data:', searchData);
-    navigate('/filterResultsPage', { state: { searchData } });
+    navigate('/filterResultsPage', { state: { filterData } });
 
   };
 
@@ -69,6 +69,33 @@ const HomePage = () => {
     setPricePeriod(value);
     const range = sliderRanges[value];
     setPriceRange({ min: range.min, max: range.max });
+  };
+
+  const [showPopup, setShowPopup] = useState(false);
+
+  useEffect(() => {
+    const hasSeenPopup = localStorage.getItem('hasSeenWelcomePopup');
+    
+    if (!hasSeenPopup) {
+      const timer = setTimeout(() => {
+        setShowPopup(true);
+        localStorage.setItem('hasSeenWelcomePopup', 'true');
+      }, 500);
+
+      return () => {
+        clearTimeout(timer);
+        setShowPopup(false);
+      };
+    }
+  }, []);
+
+  const resetPopup = () => {
+    localStorage.removeItem('hasSeenWelcomePopup');
+    setShowPopup(false);
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
   };
 
   const containerVariants = {
@@ -94,14 +121,12 @@ const HomePage = () => {
   const handleLogout = async () => {
     try {
       const response = await logout();
-      console.log(response);
       if (response.data.logout.success) {
         dispatch(clearUser());
-        console.log(response.data.logout.message);
         navigate('/');
       }
       else{
-        console.log(error);
+        throw new Error('Logout Failed');
       }
     } catch (err) {
       console.error('Logout failed:', err);
@@ -325,6 +350,17 @@ const HomePage = () => {
       </main>
 
     <Footer />
+
+    <AnimatePresence>
+        {showPopup && <Popup onClose={closePopup} />}
+      </AnimatePresence>
+
+      {/* <button
+        onClick={resetPopup}
+        className="fixed bottom-4 right-4 bg-gray-200 text-gray-800 px-4 py-2 rounded"
+      >
+        Reset Popup (For Testing)
+      </button> */}
     </div>
   );
 };

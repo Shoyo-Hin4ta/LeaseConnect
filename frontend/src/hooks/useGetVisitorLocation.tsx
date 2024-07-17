@@ -11,18 +11,22 @@ const useGetVisitorLocation = () => {
 
     const getAddress = async () => {
       try {
-        const ipResponse = await fetch('https://api.ipify.org');
-        const ipAddress = await ipResponse.text();
-        const locationResponse = await fetch(`http://ip-api.com/json/${ipAddress}`);
-        const locationData = await locationResponse.json();
+        const ipResponse = await fetch('https://ipapi.co/json/');
+        const ip = await ipResponse.json();
+
+        // const locationResponse = await fetch(`http://ip-api.com/json/${ip}`);
+        // const locationData = await locationResponse.json();
+        // console.log('Raw response:', locationData);
+
         // console.log(locationData)
         setUserAddress({
-          city: locationData.city,
-          state: locationData.region,
-          country: locationData.country
+          city: ip.city,
+          state: ip.region_code,
+          country: ip.country_name
         });
       } catch (error) {
         console.error('Error fetching location:', error);
+        return { userAddress:null, loading };
       } finally {
         setLoading(false);
       }
@@ -31,8 +35,7 @@ const useGetVisitorLocation = () => {
     getAddress();
   }, []);
 
-  // return { userAddress, loading };
-  return { userAddress:null, loading };
+  return { userAddress, loading };
 
 };
 

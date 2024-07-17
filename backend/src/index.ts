@@ -9,7 +9,7 @@ import UserService from "./services/users";
 
 dotenv.config({path : './.env'});
 
-const PORT = process.env.PORT!;
+const PORT = process.env.PORT! || 4000;
 const MONGO_URI = process.env.MONGO_URI!
 
 
@@ -20,7 +20,7 @@ async function  init() {
         const app = express();
 
         app.use(cors({
-            origin: 'http://localhost:5173',
+            origin: process.env.ORIGIN,
             credentials : true
         }));
 
@@ -33,6 +33,17 @@ async function  init() {
         app.get('/', (req,res) => {
             res.json({message : "Server is up and running"});
         })
+
+        // app.get('/api/get-ip', async (req, res) => {
+        //     try {
+        //       const response = await fetch('https://api.ipify.org');
+        //       const ip = await response.text();
+        //       res.json({ ip });
+        //     } catch (error) {
+        //       console.error('Error fetching IP:', error);
+        //       res.status(500).json({ error: 'Failed to fetch IP' });
+        //     }
+        //   });
 
 
         app.use(

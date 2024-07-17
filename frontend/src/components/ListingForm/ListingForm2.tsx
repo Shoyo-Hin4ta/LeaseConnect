@@ -66,7 +66,7 @@ const listingForm2Schema = z.object({
     description : z
                 .string()
                 .max(500, {
-                    message: "Bio must not be longer than 500 characters.",
+                    message: "Description must not be longer than 500 characters.",
                 }),
   })
 
@@ -95,7 +95,6 @@ const ListingForm2 = ({ currentStep }: {
 
     
     setIsSubmitting(true);
-    console.log(data);
 
     const existingData = JSON.parse(localStorage.getItem('listingData') || '{}');
     const updatedData = { ...existingData, ...data };

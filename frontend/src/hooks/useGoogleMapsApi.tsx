@@ -1,23 +1,39 @@
-import { setupAddressAutofill } from '@/lib/googlemaps';
-import { useEffect } from 'react';
+// in useGoogleMapsApi.ts
+import { useEffect, useCallback } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
+import { setupAddressAutofill } from '@/lib/googlemaps';
 
-export function useGoogleMapsApi(setValue: UseFormSetValue<any>, fieldId: string, isEditMode?: boolean) {
+export function useGoogleMapsApi(
+  setValue: UseFormSetValue<any>,
+  fieldId: string,
+  isActive: boolean = true
+) {
+  const initializeAutocomplete = useCallback(() => {
+    if (!isActive) return;
+
+    const field = document.getElementById(fieldId);
+    if (field && window.google && window.google.maps && window.google.maps.places) {
+      // console.log(`Initializing autocomplete for ${fieldId}`);
+      setupAddressAutofill(setValue, fieldId);
+    } else {
+      // console.log(`Field ${fieldId} not found or Google Maps API not ready, retrying in 1000ms`);
+      setTimeout(initializeAutocomplete, 1000);
+    }
+  }, [setValue, fieldId, isActive]);
+
   useEffect(() => {
-    const apiKey = import.meta.env.VITE_GOOGLE_MAP_API_KEY;
-    if (!apiKey) {
-      console.error('Google Maps API key is not set');
-      return;
-    }
-    
-    if (isEditMode === undefined || isEditMode) {
-      setTimeout(() => {
-        setupAddressAutofill(apiKey, setValue, fieldId);
-      }, 0);
-    }
+    // console.log(`useGoogleMapsApi for ${fieldId}, isActive: ${isActive}`);
+    const timer = setTimeout(initializeAutocomplete, 0);
 
     return () => {
-      window.setValueFunction = null;
+      clearTimeout(timer);
+      if (window.google && window.google.maps && window.google.maps.event) {
+        const field = document.getElementById(fieldId) as HTMLInputElement | null;
+        if (field) {
+          google.maps.event.clearInstanceListeners(field);
+        }
+      }
+      window.setValueFunction = undefined;
     };
-  }, [setValue, fieldId, isEditMode]);
+  }, [initializeAutocomplete, fieldId, isActive]);
 }

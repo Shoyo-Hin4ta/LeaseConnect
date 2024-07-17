@@ -16,6 +16,8 @@ const Layout = () => {
   const dispatch = useDispatch();
   const currentTheme = useSelector((state: RootState) => state.theme.value);
 
+  
+
   useEffect(() => {
     if (currentTheme === 'dark') {
       document.documentElement.classList.add('dark');

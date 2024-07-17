@@ -7,7 +7,6 @@ import 'dotenv/config';
 const queries = {
 
     getCurrentUser : async(parent:any, parameters : any, context:any) => {
-        // console.log(context.req.cookies.accessToken)
         const user = await UserService.getCurrentUser(context.req);
         return user;
     },
@@ -62,13 +61,21 @@ const mutations = {
     },
 
     addToFavourite : async(_ : any, {listingID} : {listingID : string | Types.ObjectId}, {currentUser} : any) => {
-        const updatedResponse = await UserService.addToFavouriteService(listingID, currentUser?._id);
-        return updatedResponse
+        if(currentUser){
+            const updatedResponse = await UserService.addToFavouriteService(listingID, currentUser?._id);
+            return updatedResponse
+        }else{
+            throw new Error('Not authorized');
+        }
     },
 
     removeFavourite :  async(_ : any, {listingID} : {listingID : string | Types.ObjectId}, {currentUser} : any) => {
-        const updatedResponse = await UserService.removeFavouriteService(listingID, currentUser?._id);
-        return updatedResponse
+        if(currentUser){
+            const updatedResponse = await UserService.removeFavouriteService(listingID, currentUser?._id);
+            return updatedResponse
+        }else{
+            throw new Error('Not authorized');
+        }
     },
 
     editProfile: async (_: any, { editUserProfileData }: any, { currentUser }: any) => {

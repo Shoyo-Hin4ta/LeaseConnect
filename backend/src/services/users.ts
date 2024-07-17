@@ -154,7 +154,6 @@ class UserService{
             }
 
             if(user){
-                // console.log(user);
                 return user
             }else {
                 console.log('User not found');
@@ -186,8 +185,6 @@ class UserService{
         const base64Data = data.split(',')[1];
         
         fs.writeFileSync(pathName, base64Data, 'base64');
-
-        console.log(`File saved as ${pathName}`);
 
         const cdnResponse = await this.uploadOnCDN(pathName);
         
@@ -274,8 +271,6 @@ class UserService{
                 { $push: { favoriteListings: listingID } },
                 { new: true }
             );
-            console.log(updatedResponse?.favoriteListings);
-            // return updatedResponse;
             return "Added To Favourites";
         } catch (error : any) {
             throw new Error(`Failed to add to favourites: ${error.message}`);
@@ -290,7 +285,6 @@ class UserService{
                 { new: true }
             );
     
-            console.log(updatedResponse?.favoriteListings);
             return "Removed the listing from favourites";
         } catch (error : any) {
             throw new Error(`Failed to remove favourites: ${error.message}`);

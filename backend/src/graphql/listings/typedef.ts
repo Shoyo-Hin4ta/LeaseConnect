@@ -218,7 +218,6 @@ export const typeDefs = `#graphql
         dateRange: SubleaseDurationInput
         preferences: [Preference!]
         amenities: [Amenity!]
-        # securityDepositIncluded: Boolean
         utilitiesIncluded: Boolean
         sortBy: SortBy
     }

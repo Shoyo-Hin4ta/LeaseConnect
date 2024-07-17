@@ -23,11 +23,9 @@ const CardFoot = ({ listing, isMyListings = false, refetch }: CardFootProps) => 
 
   const [removeListing, { loading: removeLoading, error: removeError, data }] = useLazyQuery(REMOVE_MY_LISTING, {
     onCompleted: (data) => {
-      console.log('Listing removed:', data.removeMyListings);
       setIsPopupOpen(false);
       if (refetch) {
         refetch().then(() => {
-          console.log("Listings refetched");
           navigate('/myListings');
         });
       } else {
@@ -76,26 +74,27 @@ const CardFoot = ({ listing, isMyListings = false, refetch }: CardFootProps) => 
         {isMyListings ? (
           <div className="space-x-2">
             <Link
-              to={`/listing/${listing.id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-700 dark:hover:bg-violet-600 h-9 px-3"
-            >
-              View
-            </Link>
-            <CardButton 
-              ButtonText="Edit" 
-              onClick={() => navigate(`/editlisting/${listing.id}`)} 
-              variant="default" 
-              size="sm"
-            />
-            <CardButton 
-              ButtonText="Remove Listing" 
-              variant="outline" 
-              size="sm" 
-              onClick={() => setIsPopupOpen(true)} 
-              className="text-red-500 hover:bg-red-50 dark:hover:bg-red-900 bg-slate-50 dark:bg-slate-900"
-            />
+                to={`/listing/${listing.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-700 dark:hover:bg-violet-600 h-9 px-3"
+              >
+                View
+              </Link>
+              <CardButton 
+                ButtonText="Edit" 
+                onClick={() => navigate(`/editlisting/${listing.id}`)} 
+                variant="default" 
+                size="sm"
+                className="bg-slate-100 dark:bg-slate-800 text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900"
+              />
+              <CardButton 
+                ButtonText="Remove Listing" 
+                variant="outline" 
+                size="sm" 
+                onClick={() => setIsPopupOpen(true)} 
+                className="bg-slate-100 dark:bg-slate-800 text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900"
+              />
             <ConfirmationPopup
               isOpen={isPopupOpen}
               onClose={() => setIsPopupOpen(false)}

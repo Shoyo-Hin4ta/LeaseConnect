@@ -41,6 +41,8 @@ class ListingService {
             // Calculate daily rate
             const dailyRate = Number((parseFloat(payload.amount) / (payload.timePeriod === 'month' ? 30 : payload.timePeriod === 'week' ? 7 : 1)).toFixed(2));
 
+            const state = getStateCode(payload.state);
+
             // Create new listing object
             const newListing = new Listing({
                 title: payload.title,
@@ -50,7 +52,7 @@ class ListingService {
                 location: {
                     streetAddress: payload.streetAddress,
                     city: payload.city,
-                    state: payload.state,
+                    state: state,
                     zipcode: payload.zipcode,
                     country: payload.country
                 },
@@ -84,7 +86,6 @@ class ListingService {
 
             const createdListing = await Listing.findById(savedListing._id);
 
-            console.log(createdListing);
 
             if (!createdListing) {
                 throw new Error('Failed to retrieve created listing');
@@ -122,8 +123,6 @@ class ListingService {
             
             fs.writeFileSync(pathName, base64Data, 'base64');
 
-            console.log(`File saved as ${pathName}`);
-
             const cdnResponse = await this.uploadOnCDN(pathName);
             
             fs.unlinkSync(pathName);
@@ -143,7 +142,6 @@ class ListingService {
     }
 
     public static async getListings({city, state, country, page=1, limit=LIMIT } :ListingSeachType) {
-        console.log(page, limit)
         try {
             let query: any = {};
 
@@ -151,6 +149,11 @@ class ListingService {
                 // country = "USA";
                 query = {}
             }
+
+            if(state){
+                state = getStateCode(state);
+            }
+
 
             if (city || state || country) {
                 if (city) query['location.city'] = new RegExp(city, 'i');
@@ -215,7 +218,6 @@ class ListingService {
                 return []; 
             }
     
-            console.log(ownListings.ownListings);
             return ownListings.ownListings;
     
         } catch (error) {
@@ -251,7 +253,9 @@ class ListingService {
             const toDate = new Date(listingDetails.subleaseDuration.to);
     
             const numberOfDays = Math.ceil((toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24));
-    
+
+            const state = getStateCode(listingDetails.state);
+
             const dailyRate = Number((parseFloat(listingDetails.amount) / (listingDetails.timePeriod === 'month' ? 30 : listingDetails.timePeriod === 'week' ? 7 : 1)).toFixed(2));    
             const updatedListing = {
                 title: listingDetails.title,
@@ -261,7 +265,7 @@ class ListingService {
                 location: {
                     streetAddress: listingDetails.streetAddress,
                     city: listingDetails.city,
-                    state: listingDetails.state,
+                    state: state,
                     zipcode: listingDetails.zipcode,
                     country: listingDetails.country
                 },
@@ -306,8 +310,8 @@ class ListingService {
         limit: number;
     }) {
         try {
-            const query: FilterQuery<typeof Listing> = {};
-    
+            const query: FilterQuery<typeof Listing> = { $and: [] };
+        
             // Location handling
             if (filteringConditions.location && filteringConditions.location.trim() !== '') {
                 let locationString = filteringConditions.location.trim();
@@ -315,24 +319,20 @@ class ListingService {
                 if (locationString.toLowerCase() === 'usa') {
                     locationString = 'United States';
                 }
-
+            
                 const location = getStateCode(locationString);
                 
-                const locationRegex = new RegExp(location, 'i');
+                const locationRegex = location; // Remove the RegExp creation here
                 const locationQuery = [
-                  { 'location.streetAddress': locationRegex },
-                  { 'location.city': locationRegex },
-                  { 'location.state': locationRegex },
-                  { 'location.zipcode': locationRegex },
-                  { 'location.country': locationRegex }
+                  { 'location.streetAddress': { $regex: locationRegex, $options: 'i' } },
+                  { 'location.city': { $regex: locationRegex, $options: 'i' } },
+                  { 'location.state': { $regex: locationRegex, $options: 'i' } },
+                  { 'location.zipcode': { $regex: locationRegex, $options: 'i' } },
+                  { 'location.country': { $regex: locationRegex, $options: 'i' } }
                 ];
                 
-                if (query.$and) {
-                  query.$and.push({ $or: locationQuery });
-                } else {
-                  query.$and = [{ $or: locationQuery }];
-                }
-              }
+                query?.$and?.push({ $or: locationQuery });
+            }
     
             // Bed and Bath count
             if (filteringConditions.bedCount) query.bedroom = filteringConditions.bedCount;
@@ -348,10 +348,10 @@ class ListingService {
     
             // Date range
             if (filteringConditions.dateRange) {
-                query.$and = [
+                query?.$and?.push(
                     { 'subleaseDuration.from': { $lte: filteringConditions.dateRange.to } },
                     { 'subleaseDuration.to': { $gte: filteringConditions.dateRange.from } }
-                ];
+                );
             }
     
             // Preferences and Amenities
@@ -365,6 +365,11 @@ class ListingService {
             // Utilities included
             if (filteringConditions.utilitiesIncluded !== undefined && filteringConditions.utilitiesIncluded !== null) {
                 query.utilitiesIncludedInRent = filteringConditions.utilitiesIncluded;
+            }
+    
+            // Remove $and if it's empty
+            if (query?.$and?.length === 0) {
+                delete query.$and;
             }
     
             const skip = (page - 1) * limit;
@@ -394,6 +399,7 @@ class ListingService {
                 }
             }
     
+    
             const listings = await Listing.find(query)
                 .populate('createdBy')
                 .sort(sort)
@@ -403,7 +409,6 @@ class ListingService {
     
             const totalCount = await Listing.countDocuments(query);
             const hasNextPage = listings.length > limit;
-            console.log('Final query:', JSON.stringify(query, null, 2));
     
             return {
                 listings: listings.slice(0, limit),
@@ -427,7 +432,6 @@ class ListingService {
                 return [];
             }
 
-            console.log(favouriteListings.favoriteListings);
 
             return favouriteListings.favoriteListings;
 

@@ -39,7 +39,7 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
       const [phoneNumber, setPhoneNumber] = useState<E164Number | "">(value || "");
 
       const handleChange = (newValue?: E164Number) => {
-        console.log(newValue || ""); // Log the changing phone number
+        // console.log(newValue || ""); // Log the changing phone number
         setPhoneNumber(newValue || "");
         onChange?.(newValue || "");
       };

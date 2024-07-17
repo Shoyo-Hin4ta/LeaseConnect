@@ -13,6 +13,7 @@ import { useLazyQuery, useQuery } from '@apollo/client'
 import { GET_SEARCH_LISTINGS } from '@/graphql/queries'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import { LayoutContextType } from '../Layout'
+import { calculateDateRange } from '@/lib/utils'
 
 
 interface FilterData {
@@ -20,7 +21,7 @@ interface FilterData {
   bedCount: string;
   bathCount: string;
   priceRange: { min: number; max: number; period: 'per_day' | 'per_week' | 'per_month' };
-  dateRange: DateRange;
+  dateRange: DateRange ;
   preferences: string[];
   amenities: string[];
   // securityDepositIncluded: boolean;
@@ -35,6 +36,7 @@ interface FilterProps {
   toggleSidebar: () => void;
 }
 
+
 const Filter: React.FC<FilterProps> = ({toggleSidebar}) => {
 
 
@@ -43,7 +45,7 @@ const Filter: React.FC<FilterProps> = ({toggleSidebar}) => {
     bedCount: '',
     bathCount: '',
     priceRange: { min: 0, max: 200, period: 'per_day' },
-    dateRange: { from: new Date(), to: new Date() },
+    dateRange: calculateDateRange(),
     preferences: [],
     amenities: [],
     // securityDepositIncluded: false,
@@ -57,12 +59,19 @@ const Filter: React.FC<FilterProps> = ({toggleSidebar}) => {
   const navigate = useNavigate();
   
 
-  const handleFilterClick = () => {
-    console.log('Filter data:', filterData)
+  const handleFilterClick = (e) => {
+    e.preventDefault(); // Prevent any default form submission
+    
     toggleSidebar();
-    navigate('/filterResultsPage', { state: { filterData } });
-
+    
+    // Always update the state, regardless of the current page
+    navigate('/filterResultsPage', { 
+      state: { filterData },
+      replace: true // Use replace to avoid adding to history
+    });
+    
   }
+
 
   const handleResetClick = () => {
     setFilterData({

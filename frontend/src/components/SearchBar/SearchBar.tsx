@@ -20,7 +20,7 @@ const SearchBar = ({handleTabChange, activeTab, isFilterPage=false} : {
       try {
         // Replace this with your actual API call
         // Handle the search results here
-        console.log(trimmedSearchValue);
+        // console.log(trimmedSearchValue);
       } catch (error) {
         // console.error("Error searching:", error);
       }

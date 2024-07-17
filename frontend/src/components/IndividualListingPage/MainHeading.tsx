@@ -17,8 +17,6 @@ const MainHeading = ({ listingData }) => {
 
   const user = useSelector(getUser);
 
-  console.log(user);
-
   const getPropertyTypeIcon = (propertyType) => {
     switch(propertyType.toLowerCase()) {
       case 'apartment':

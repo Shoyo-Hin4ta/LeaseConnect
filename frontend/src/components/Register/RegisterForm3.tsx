@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { initAutocomplete, loadGoogleMapsApi, setupAddressAutofill } from "@/lib/googlemaps.ts";
 import RegisterButton from "./RegisterButton";
 import { useDispatch, useSelector } from "react-redux";
 import { resetState, setIsComplete } from "@/appstore/stepperSlice";
@@ -12,8 +11,7 @@ import { Form } from "../ui/form";
 import InputBox from "../InputBox";
 import { RootState } from "@/appstore/appStore";
 import { gql, useMutation } from '@apollo/client';
-import { GOOGLE_MAPS_API_KEY } from "@/lib/utils";
-import { useGoogleMapsApi } from "@/hooks/useGoogleMapsApi";
+import { initCityAutocomplete } from "@/lib/cityAutocomplete";
 
 const SIGN_UP_MUTATION = gql`
   mutation SignUp($input: UserSignUpInput!, $profileImage: Upload!) {
@@ -84,8 +82,20 @@ const RegisterForm3 = ({ currentStep }: Form3Types) => {
 
   const { control, handleSubmit, setValue } = addressForm;
 
-  useGoogleMapsApi(addressForm.setValue, 'city');
-
+  useEffect(() => {
+    const loadAutocomplete = () => {
+      if (window.google && window.google.maps) {
+        initCityAutocomplete(setValue, "city");
+      } else {
+        console.error("Google Maps API not loaded");
+      }
+    };
+  
+    // Use a small timeout to ensure the DOM is ready
+    const timeoutId = setTimeout(loadAutocomplete, 100);
+  
+    return () => clearTimeout(timeoutId);
+  }, [setValue]);
 
   async function onSubmit(data: AddressFormInputs) {
     setIsSubmitting(true);

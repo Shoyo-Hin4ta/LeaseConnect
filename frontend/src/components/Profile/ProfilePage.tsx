@@ -13,7 +13,7 @@ import { useMutation } from '@apollo/client';
 import { EDIT_PROFILE_QUERY } from '@/graphql/mutations';
 import { useNavigate } from 'react-router-dom';
 import { toast } from "@/components/ui/use-toast";
-import { useGoogleMapsApi } from '@/hooks/useGoogleMapsApi';
+import { initCityAutocomplete } from '@/lib/cityAutocomplete';
 
 const GenderArr = [
     { value: "male", desc: "Male" },
@@ -58,7 +58,6 @@ const ProfilePage = () => {
         },
     });
 
-    useGoogleMapsApi(form.setValue, 'city', addressEditMode);
 
     useEffect(() => {
         if (user) {
@@ -75,6 +74,27 @@ const ProfilePage = () => {
             });
         }
     }, [user, form]);
+
+    useEffect(() => {
+        const loadAutocomplete = () => {
+            if (window.google && window.google.maps && addressEditMode) {
+                initCityAutocomplete(form.setValue, "city");
+            }
+        };
+
+        // Call loadAutocomplete when addressEditMode changes
+        loadAutocomplete();
+
+        // Clean up the autocomplete when addressEditMode is turned off
+        return () => {
+            if (window.google && window.google.maps && !addressEditMode) {
+                const cityInput = document.getElementById("city") as HTMLInputElement;
+                if (cityInput) {
+                    google.maps.event.clearInstanceListeners(cityInput);
+                }
+            }
+        };
+    }, [form.setValue, addressEditMode]);
 
     const handleEditModeChange = (field: string, mode: boolean) => {
         setEditModes(prev => ({ ...prev, [field]: mode }));
@@ -198,7 +218,7 @@ const ProfilePage = () => {
                                                 isEditMode={addressEditMode}
                                                 setEditMode={() => {}}
                                                 field={formField}
-                                                enableAutocomplete={field === 'city'}
+                                                enableAutocomplete={field === 'city' && addressEditMode}
                                             />
                                         )}
                                     />

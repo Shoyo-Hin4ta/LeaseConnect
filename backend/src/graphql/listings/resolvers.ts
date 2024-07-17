@@ -52,8 +52,13 @@ const queries = {
     },
 
     getMyListings : async(_ : any,params : any, {currentUser}: {currentUser : any}) => {
-        const myListings = await ListingService.getMyListings(currentUser.id);
-        return myListings
+        if(currentUser){
+            const myListings = await ListingService.getMyListings(currentUser.id);
+            return myListings
+        }else{
+            throw new Error('Login first');
+
+        }
     },
 
     getSearchBasedListings  : async(_ : any,{filteringConditions,page=1,limit=LIMIT} : {
@@ -61,46 +66,58 @@ const queries = {
         page: number,
         limit:number
     }) => {
-        // console.log(filteringConditions);
         const searchedListings = await ListingService.getSearchBasedListings({filteringConditions, page, limit});
-        // console.log(searchedListings);
         return searchedListings
     },
 
     getFavouriteListings : async(_:any, params: any, {currentUser}: any) => {
-        const favouriteListings = await ListingService.getFavouriteListings(currentUser.id);
-        return favouriteListings;
+        if(currentUser){
+            const favouriteListings = await ListingService.getFavouriteListings(currentUser.id);
+            return favouriteListings;
+        }else{
+            throw new Error('What you doing bradda');
+        }
     },
 
     removeMyListings : async(_:any, {listingID}: any, {currentUser}: any) => {
-        const response = await ListingService.removeMyListings(listingID, currentUser.id);
-        return response;
+        if(currentUser){
+            const response = await ListingService.removeMyListings(listingID, currentUser.id);
+            return response;
+        }else{
+            throw new Error('Not authorized');
+        }
     }
 
 }
 
 const mutations = {
     createListing : async (parent : any, {listingDetails, listingImages} : any, {currentUser} : any) => {
-        try {
-            console.log(listingDetails);
-            const createdListing = await ListingService.createListing(listingDetails, listingImages, currentUser?._id);
-            return createdListing;
-        } catch (error) {
-            throw new Error(
-                error instanceof Error ? error.message : 'An unknown error occurred'
-            );
+        if(currentUser){
+            try {
+                const createdListing = await ListingService.createListing(listingDetails, listingImages, currentUser?._id);
+                return createdListing;
+            } catch (error) {
+                throw new Error(
+                    error instanceof Error ? error.message : 'An unknown error occurred'
+                );
+            }
+        }else{
+            throw new Error('What you doing bradda');
         }
     },
 
     editListing : async(parent: any, {listingID, createdBy, listingDetails, imagesURL, newImages} : any, {currentUser} : any) => {
-        console.log(listingID, createdBy, listingDetails, imagesURL, newImages);
-        try {
-            const editedListingResponse = await ListingService.editListings({listingID, createdBy, listingDetails, imagesURL, newImages});
-            return editedListingResponse;
-        } catch (error) {
-            throw new Error(
-                error instanceof Error ? error.message : 'An unknown error occurred while updating the listings'
-            );
+        if(currentUser){
+            try {
+                const editedListingResponse = await ListingService.editListings({listingID, createdBy, listingDetails, imagesURL, newImages});
+                return editedListingResponse;
+            } catch (error) {
+                throw new Error(
+                    error instanceof Error ? error.message : 'An unknown error occurred while updating the listings'
+                );
+            }
+        }else{
+            throw new Error('What you doing bradda');
         }
     }
 }

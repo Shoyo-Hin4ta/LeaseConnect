@@ -71,14 +71,14 @@ interface Preset {
 // Define presets
 const PRESETS: Preset[] = [
   { name: 'today', label: 'Today' },
-  { name: 'yesterday', label: 'Yesterday' },
-  { name: 'last7', label: 'Last 7 days' },
-  { name: 'last14', label: 'Last 14 days' },
-  { name: 'last30', label: 'Last 30 days' },
+  // { name: 'yesterday', label: 'Yesterday' },
+  // { name: 'last7', label: 'Last 7 days' },
+  // { name: 'last14', label: 'Last 14 days' },
+  // { name: 'last30', label: 'Last 30 days' },
   { name: 'thisWeek', label: 'This Week' },
-  { name: 'lastWeek', label: 'Last Week' },
+  // { name: 'lastWeek', label: 'Last Week' },
   { name: 'thisMonth', label: 'This Month' },
-  { name: 'lastMonth', label: 'Last Month' }
+  // { name: 'lastMonth', label: 'Last Month' }
 ]
 
 /** The DateRangePicker component allows a user to select a range of dates */
@@ -369,22 +369,22 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
         <div className="flex py-2 text-violet-600 dark:text-violet-400">
           <div className="flex">
             <div className="flex flex-col">
-              <div className="flex flex-col lg:flex-row gap-2 px-3 justify-end items-center lg:items-start pb-4 lg:pb-0">
-                {showCompare && (
-                  <div className="flex items-center space-x-2 pr-4 py-1">
-                    <Switch
-                      defaultChecked={Boolean(rangeCompare)}
-                      onCheckedChange={(checked: boolean) => {
-                        // ... (switch logic remains the same)
-                      }}
-                      id="compare-mode"
-                      className="bg-violet-600 dark:bg-violet-400"
-                    />
-                    <Label htmlFor="compare-mode" className="text-gray-700 dark:text-gray-300">Compare</Label>
-                  </div>
+              <div className="flex flex-col lg:flex-row gap-2 px-3 justify-center items-center lg:items-start pb-4 lg:pb-0">
+                {showCompare && (<></>
+                  // <div className="flex items-center space-x-2 pr-4 py-1">
+                  //   <Switch
+                  //     defaultChecked={Boolean(rangeCompare)}
+                  //     onCheckedChange={(checked: boolean) => {
+                  //       // ... (switch logic remains the same)
+                  //     }}
+                  //     id="compare-mode"
+                  //     className="bg-violet-600 dark:bg-violet-400"
+                  //   />
+                  //   <Label htmlFor="compare-mode" className="text-gray-700 dark:text-gray-300">Compare</Label>
+                  // </div>
                 )}
                 <div className="flex flex-col gap-2">
-                  <div className="flex gap-2 rounded-lg">
+                  <div className="flex gap-2 rounded-lg  ">
                     <DateInput
                       value={range.from}
                       onChange={(date) => {
@@ -454,7 +454,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
                   )}
                 </div>
               </div>
-              { isSmallScreen && (
+              {/* { isSmallScreen && (
                 <Select defaultValue={selectedPreset} onValueChange={(value) => { setPreset(value) }}>
                   <SelectTrigger className="w-[180px] mx-auto mb-2">
                     <SelectValue placeholder="Select..." />
@@ -467,7 +467,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
                     ))}
                   </SelectContent>
                 </Select>
-              )}
+              )} */}
               <div>
                 <Calendar
                   mode="range"
@@ -489,7 +489,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
               </div>
             </div>
           </div>
-          {!isSmallScreen && (
+          {/* {!isSmallScreen && (
             <div className="flex flex-col items-end gap-1 pr-2 pl-6 pb-6">
               <div className="flex w-full flex-col items-end gap-1 pr-2 pl-6 pb-6">
                 {PRESETS.map((preset) => (
@@ -502,7 +502,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
                 ))}
               </div>
             </div>
-          )}
+          )} */}
         </div>
         <div className="flex justify-end gap-2 py-2 pr-4">
           <Button
