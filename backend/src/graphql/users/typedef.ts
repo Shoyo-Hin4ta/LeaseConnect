@@ -65,6 +65,7 @@ export const typeDefs = `#graphql
         phone: String!
         profileImage: String!
         address: Address
+        accessToken: String
     }
 
     type LogoutResponse{
@@ -84,6 +85,7 @@ export const typeDefs = `#graphql
         favoriteListings: [ID!]
         ownListings: [ID!]
         chats: [ID!]
+        accessToken:String
     }
 
     input EditUserProfileInput{

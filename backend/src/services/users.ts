@@ -252,6 +252,9 @@ class UserService{
       
             const options = {
               httpOnly: true,
+              secure: true,
+              sameSite: 'none' as const,
+              path: '/',
             };
       
             res.clearCookie('accessToken', options);
