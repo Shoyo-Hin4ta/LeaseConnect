@@ -39,7 +39,7 @@ const mutations = {
                     httpOnly: true,
                     secure: isProduction,
                     sameSite: 'none',
-                    domain: 'lease-connect.vercel.app',
+                    path: '/',
                     maxAge: parseInt(process.env.ACCESS_TOKEN_EXPIRY || '1') * MS_PER_DAY
                 });
 
@@ -47,7 +47,7 @@ const mutations = {
                     httpOnly: true,
                     secure: isProduction,
                     sameSite: 'none',
-                    domain: 'lease-connect.vercel.app',
+                    path: '/',
                     maxAge: parseInt(process.env.REFRESH_TOKEN_EXPIRY || '5') * MS_PER_DAY
                 });
             }
