@@ -17,7 +17,7 @@ const ACCEPTED_IMAGE_MIME_TYPES = [
   "image/webp",
 ];
 
-const imageFormSchema = z.object({
+export const imageFormSchema = z.object({
   image: z
     .instanceof(File)
     .nullable()
