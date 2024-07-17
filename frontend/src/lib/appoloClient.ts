@@ -4,7 +4,10 @@ import { BACKEND_LOCAL_URI, BACKEND_URI } from './utils';
 
 const localUploadLink = createUploadLink({
   uri: `${BACKEND_LOCAL_URI}/graphql`,
-  credentials: 'include'
+  credentials: 'include',
+  headers: {
+    'Apollo-Require-Preflight': 'true',
+  },
 });
 
 const productionUploadLink = createUploadLink({

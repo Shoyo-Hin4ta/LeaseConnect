@@ -14,7 +14,7 @@ const useGetVisitorLocation = () => {
         const ipResponse = await fetch('https://ipapi.co/json/');
         const ip = await ipResponse.json();
 
-        // const locationResponse = await fetch(`http://ip-api.com/json/${ip}`);
+        // const locationResponse = await fetch(`https://ip-api.com/json/${ip}`);
         // const locationData = await locationResponse.json();
         // console.log('Raw response:', locationData);
 

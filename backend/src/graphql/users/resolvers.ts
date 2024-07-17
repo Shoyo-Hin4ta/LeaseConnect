@@ -38,14 +38,16 @@ const mutations = {
                 context.res.cookie('accessToken', loggedInUser.accessToken, {
                     httpOnly: true,
                     secure: isProduction,
-                    sameSite: 'lax',
+                    sameSite: 'none',
+                    domain: 'lease-connect.vercel.app',
                     maxAge: parseInt(process.env.ACCESS_TOKEN_EXPIRY || '1') * MS_PER_DAY
                 });
 
                 context.res.cookie('refreshToken', loggedInUser.refreshToken, {
                     httpOnly: true,
                     secure: isProduction,
-                    sameSite: 'lax',
+                    sameSite: 'none',
+                    domain: 'lease-connect.vercel.app',
                     maxAge: parseInt(process.env.REFRESH_TOKEN_EXPIRY || '5') * MS_PER_DAY
                 });
             }
