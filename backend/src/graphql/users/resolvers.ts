@@ -30,18 +30,22 @@ const mutations = {
     login : async(parent:any, {loginDetails} : any, context : any) => {
         try{
             const MS_PER_DAY = 24 * 60 * 60 * 1000;
-            // const isProduction = process.env.NODE_ENV === 'production';
+            const isProduction = process.env.NODE_ENV === 'production';
 
             const loggedInUser = await UserService.loginService(loginDetails)
 
             if(context.res){
                 context.res.cookie('accessToken', loggedInUser.accessToken, {
                     httpOnly: true,
+                    secure: isProduction,
+                    sameSite: 'lax',
                     maxAge: parseInt(process.env.ACCESS_TOKEN_EXPIRY || '1') * MS_PER_DAY
                 });
 
                 context.res.cookie('refreshToken', loggedInUser.refreshToken, {
                     httpOnly: true,
+                    secure: isProduction,
+                    sameSite: 'lax',
                     maxAge: parseInt(process.env.REFRESH_TOKEN_EXPIRY || '5') * MS_PER_DAY
                 });
             }

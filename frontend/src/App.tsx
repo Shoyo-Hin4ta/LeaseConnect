@@ -42,7 +42,7 @@ const router = createBrowserRouter(
       <Route element={<ProtectedRoute />}>
         <Route path='/listingform' element={<ListingPage />} />
         <Route path="/public-profile/:userId"  element={<PublicProfilePage />} />
-        <Route path='/messages' element={<ChatComponent />} />
+        {/* <Route path='/messages' element={<ChatComponent />} /> */}
         <Route path='/profilepage' element={<ProfilePage />} />
         <Route path='/mylistings' element={<MyListings />} />
         <Route path='/editlisting/:listingID' element={<EditListingPage />} />
