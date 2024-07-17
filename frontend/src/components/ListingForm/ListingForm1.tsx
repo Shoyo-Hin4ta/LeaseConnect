@@ -9,8 +9,6 @@ import { useEffect, useState } from "react"
 import ListingFormButton from "./ListingFormButton"
 import { useDispatch } from "react-redux"
 import { next } from "@/appstore/stepperSlice"
-import { GOOGLE_MAPS_API_KEY } from "@/lib/utils"
-import { setupAddressAutofill } from "@/lib/googlemaps"
 import { initAutocomplete } from "./autofillListingForm"
 
 

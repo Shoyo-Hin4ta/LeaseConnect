@@ -78,8 +78,8 @@ export const tabs = [
   { id: 'all', label: 'All ' }
 ];
 
-export const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAP_API_KEY!
 
+export const BACKEND_URI = import.meta.env.VITE_BACKEND_URI!
 
 export const calculateDateRange = () : DateRange => {
   const today = new Date();
