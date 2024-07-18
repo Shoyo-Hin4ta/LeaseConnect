@@ -37,18 +37,18 @@ const mutations = {
             const loggedInUser = await UserService.loginService(loginDetails)
 
             if(context.res){
-                context.res.cookie('authToken', loggedInUser.accessToken, {
+                context.res.cookie('accessToken', loggedInUser.accessToken, {
                     httpOnly: true,
-                    secure: isProduction,
-                    sameSite: 'none',
+                    secure: true,
+                    sameSite: 'none', 
                     path: '/',
                     maxAge: parseInt(process.env.ACCESS_TOKEN_EXPIRY || '1') * MS_PER_DAY
                 });
 
                 context.res.cookie('refreshToken', loggedInUser.refreshToken, {
                     httpOnly: true,
-                    secure: isProduction,
-                    sameSite: 'none',
+                    secure: true,
+                    sameSite: 'none', 
                     path: '/',
                     maxAge: parseInt(process.env.REFRESH_TOKEN_EXPIRY || '5') * MS_PER_DAY
                 });

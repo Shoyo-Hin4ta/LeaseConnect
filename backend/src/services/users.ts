@@ -211,7 +211,7 @@ class UserService{
     }
     
     public static async getCurrentUser(req: any) {
-        const accessToken = req.cookies?.authToken;
+        const accessToken = req.cookies?.accessToken;
         console.log('Received accessToken:', accessToken);
     
         if (!accessToken) {
@@ -254,13 +254,13 @@ class UserService{
             }
       
             const options = {
-              httpOnly: true,
-              secure: true,
-              sameSite: 'none' as const,
-              path: '/',
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none', 
+                path: '/',
             };
       
-            res.clearCookie('authToken', options);
+            res.clearCookie('accessToken', options);
             res.clearCookie('refreshToken', options);
       
             return { message: 'User logged out successfully', success: true };
