@@ -43,7 +43,6 @@ const LoginPage = () => {
       // console.log("to browse");
 
       dispatch(setUser(responseData.login));
-      localStorage.setItem('currentUser', JSON.stringify(responseData.login));
       navigate('/');
 
     } catch (error) {

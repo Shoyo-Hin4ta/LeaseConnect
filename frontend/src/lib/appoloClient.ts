@@ -12,7 +12,10 @@ const localUploadLink = createUploadLink({
 
 const productionUploadLink = createUploadLink({
   uri: `${BACKEND_URI}/graphql`,
-  credentials: 'include'
+  credentials: 'include',
+  headers: {
+    'Apollo-Require-Preflight': 'true',
+  },
 });
 
 const chooseLink = () => {

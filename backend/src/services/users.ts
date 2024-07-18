@@ -210,23 +210,26 @@ class UserService{
         return decodedToken as DecodedToken;
     }
     
-    public static async getCurrentUser(req : any){
-        const accessToken = req.cookies?.accessToken;
-
+    public static async getCurrentUser(req: any) {
+        const accessToken = req.cookies?.authToken;
+        console.log('Received accessToken:', accessToken);
+    
         if (!accessToken) {
-            return null
+            console.log('No access token found in cookies');
+            return null;
         }
-
-        const decodedToken = this.decodeJWTToken(accessToken);
-
+    
         try {
-            const user = await this.findUser(decodedToken._id)
-            if(!user){
+            const decodedToken = this.decodeJWTToken(accessToken);
+            const user = await this.findUser(decodedToken._id);
+            
+            if (!user) {
                 console.log("User not found. Login Again");
                 return null;
             }
+            
+            console.log('User found:', user.id);
             return user;
-
         } catch (error) {
             console.error("Error getting current user:", error);
             return null;
@@ -257,7 +260,7 @@ class UserService{
               path: '/',
             };
       
-            res.clearCookie('accessToken', options);
+            res.clearCookie('authToken', options);
             res.clearCookie('refreshToken', options);
       
             return { message: 'User logged out successfully', success: true };

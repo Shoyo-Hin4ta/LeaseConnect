@@ -1,4 +1,6 @@
+import { setAuthToken , removeAuthToken } from "@/lib/authUtils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
 
 interface UserState {
   currentUser: object | null;
@@ -17,10 +19,14 @@ const userSlice = createSlice({
     setUser: (state, action: PayloadAction<object | null>) => {
       state.currentUser = action.payload;
       state.isAuthenticated = action.payload !== null;
+      if (action.payload && 'accessToken' in action.payload) {
+        setAuthToken(action.payload.accessToken);
+      }
     },
     clearUser: (state) => {
       state.currentUser = null;
       state.isAuthenticated = false;
+      removeAuthToken();
     },
   },
 });

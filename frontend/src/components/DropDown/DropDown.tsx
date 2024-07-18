@@ -29,6 +29,7 @@ const DropDown = () => {
   const handleLogoutClick = useCallback(() => {
     setIsPopupOpen(true);
   }, []);
+  
 
   const handleConfirm = useCallback(async () => {
     setIsLoggingOut(true);
@@ -36,20 +37,20 @@ const DropDown = () => {
       const response = await logout();
       if (response.data.logout.success) {
         dispatch(clearUser());
-        localStorage.removeItem('currentUser');
-        localStorage.setItem('logout', Date.now().toString());
         await client.clearStore();
+        window.dispatchEvent(new Event('logout'));
         navigate('/', { replace: true });
       } else {
-        console.error('Logout failed:', response.data.logout.message);
+        throw new Error(response.data.logout.message || 'Logout Failed');
       }
     } catch (err) {
       console.error('Logout error:', err);
+      // toast.error('Logout failed. Please try again.');
     } finally {
       setIsLoggingOut(false);
       setIsPopupOpen(false);
     }
-  }, [logout, dispatch, navigate]);
+  }, [logout, dispatch, navigate, client]);
 
   return (
     <>

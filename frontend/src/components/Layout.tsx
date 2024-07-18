@@ -28,36 +28,25 @@ const Layout = () => {
     if (!loading && !error) {
       if (data?.getCurrentUser) {
         dispatch(setUser(data.getCurrentUser));
-        localStorage.setItem('currentUser', JSON.stringify(data.getCurrentUser));
       } else {
         dispatch(clearUser());
-        localStorage.removeItem('currentUser');
       }
     }
   }, [loading, error, data, dispatch]);
 
-
   useEffect(() => {
     const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === 'currentUser') {
-        if (event.newValue) {
-          const user = JSON.parse(event.newValue);
-          dispatch(setUser(user));
-        } else {
-          dispatch(clearUser());
-        }
-      } else if (event.key === 'theme') {
+      if (event.key === 'theme') {
         dispatch(setTheme(event.newValue as 'light' | 'dark'));
-      }else if (event.key === 'logout') {
+      } else if (event.key === 'logout') {
         dispatch(clearUser());
-        localStorage.removeItem('currentUser');
-        navigate('/'); 
+        navigate('/');
       }
     };
 
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
-  }, [dispatch]);
+  }, [dispatch, navigate]);
 
   useEffect(() => {
     if (currentTheme === 'dark') {

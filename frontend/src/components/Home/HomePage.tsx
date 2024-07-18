@@ -124,16 +124,15 @@ const HomePage = () => {
       const response = await logout();
       if (response.data.logout.success) {
         dispatch(clearUser());
-        localStorage.removeItem('currentUser');
-        localStorage.setItem('logout', Date.now().toString());
         await client.clearStore();
-        navigate('/');
-      }
-      else{
-        throw new Error('Logout Failed');
+        window.dispatchEvent(new Event('logout'));
+        navigate('/', { replace: true });
+      } else {
+        throw new Error(response.data.logout.message || 'Logout Failed');
       }
     } catch (err) {
       console.error('Logout failed:', err);
+      // toast.error('Logout failed. Please try again.');
     }
   };
 

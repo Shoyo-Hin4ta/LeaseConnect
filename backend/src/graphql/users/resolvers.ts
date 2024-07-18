@@ -6,8 +6,10 @@ import 'dotenv/config';
 
 const queries = {
 
-    getCurrentUser : async(parent:any, parameters : any, context:any) => {
+    getCurrentUser: async (parent: any, parameters: any, context: any) => {
+        console.log('getCurrentUser query called');
         const user = await UserService.getCurrentUser(context.req);
+        console.log('User returned from getCurrentUser:', user ? user.id : null);
         return user;
     },
 
@@ -35,7 +37,7 @@ const mutations = {
             const loggedInUser = await UserService.loginService(loginDetails)
 
             if(context.res){
-                context.res.cookie('accessToken', loggedInUser.accessToken, {
+                context.res.cookie('authToken', loggedInUser.accessToken, {
                     httpOnly: true,
                     secure: isProduction,
                     sameSite: 'none',
