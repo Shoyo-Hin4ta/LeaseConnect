@@ -38,16 +38,16 @@ const mutations = {
 
             if(context.res){
                 context.res.cookie('accessToken', loggedInUser.accessToken, {
-                    httpOnly: true,
-                    secure: true,
+                    httpOnly: false,
+                    secure: false,
                     sameSite: 'none', 
                     path: '/',
                     maxAge: parseInt(process.env.ACCESS_TOKEN_EXPIRY || '1') * MS_PER_DAY
                 });
 
                 context.res.cookie('refreshToken', loggedInUser.refreshToken, {
-                    httpOnly: true,
-                    secure: true,
+                    httpOnly: false,
+                    secure: false,
                     sameSite: 'none', 
                     path: '/',
                     maxAge: parseInt(process.env.REFRESH_TOKEN_EXPIRY || '5') * MS_PER_DAY

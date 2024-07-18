@@ -49,8 +49,8 @@ async function  init() {
         //   });
 
         const cookieOptions: CookieOptions = {
-            httpOnly: true,
-            secure: true,
+            httpOnly: false,
+            secure: false,
             sameSite: 'none',
             path: '/',
             maxAge: 24 * 60 * 60 * 1000
