@@ -211,16 +211,17 @@ class UserService{
     }
     
     public static async getCurrentUser(req: any) {
-        const accessToken = req.cookies?.accessToken;
-        console.log('Received accessToken:', accessToken);
+        const authHeader = req.headers.authorization;
+        const token = authHeader && authHeader.split(' ')[1];
+        console.log('Received accessToken:', token);
     
-        if (!accessToken) {
-            console.log('No access token found in cookies');
+        if (!token) {
+            console.log('No access token found in headers');
             return null;
         }
     
         try {
-            const decodedToken = this.decodeJWTToken(accessToken);
+            const decodedToken = this.decodeJWTToken(token);
             const user = await this.findUser(decodedToken._id);
             
             if (!user) {
@@ -252,11 +253,13 @@ class UserService{
             if (!user) {
               throw new Error('User not found');
             }
+
+            const isProduction = process.env.NODE_ENV === 'production';
       
             const options = {
-                httpOnly: false,
-                secure: false,
-                sameSite: 'none', 
+                httpOnly: true,  
+                secure: isProduction, 
+                sameSite: 'None', 
                 path: '/',
             };
       

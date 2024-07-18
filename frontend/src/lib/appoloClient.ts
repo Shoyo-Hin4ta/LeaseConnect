@@ -1,10 +1,11 @@
-import { ApolloClient, InMemoryCache, ApolloLink } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloLink, createHttpLink } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import createUploadLink from "apollo-upload-client/createUploadLink.mjs";
 import { BACKEND_LOCAL_URI, BACKEND_URI } from './utils';
 
+
 const localUploadLink = createUploadLink({
   uri: `${BACKEND_LOCAL_URI}/graphql`,
-  credentials: 'include',
   headers: {
     'Apollo-Require-Preflight': 'true',
   },
@@ -12,7 +13,6 @@ const localUploadLink = createUploadLink({
 
 const productionUploadLink = createUploadLink({
   uri: `${BACKEND_URI}/graphql`,
-  credentials: 'include',
   headers: {
     'Apollo-Require-Preflight': 'true',
   },
@@ -26,8 +26,18 @@ const chooseLink = () => {
   }
 };
 
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('token');
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    }
+  };
+});
+
 const client = new ApolloClient({
-  link: ApolloLink.from([chooseLink()]),
+  link: ApolloLink.from([authLink, chooseLink()]),
   cache: new InMemoryCache(),
 }); 
 

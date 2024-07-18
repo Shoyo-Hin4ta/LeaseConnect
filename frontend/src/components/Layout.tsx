@@ -7,8 +7,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/appstore/appStore';
 import { setTheme } from '@/appstore/themeSlice';
 import { useQuery } from '@apollo/client';
-import { clearUser, setUser } from '@/appstore/userSlice';
+import { clearUser, setUser, setToken } from '@/appstore/userSlice';
 import { CURRENT_USER_QUERY } from '@/lib/queries';
+import LoadingScreen from './LoadingAnimation';
 
 export type LayoutContextType = {
   toggleSidebar: () => void;
@@ -17,10 +18,12 @@ export type LayoutContextType = {
 const Layout = () => {
   const [isActive, setIsActive] = useState(false);
   const currentTheme = useSelector((state: RootState) => state.theme.value);
+  const token = useSelector((state: RootState) => state.user.token);
 
   const dispatch = useDispatch();
   const { loading, error, data } = useQuery(CURRENT_USER_QUERY, {
     fetchPolicy: 'network-only',
+    skip: !token,
   });
   const navigate = useNavigate();
 
@@ -28,19 +31,23 @@ const Layout = () => {
     if (!loading && !error) {
       if (data?.getCurrentUser) {
         dispatch(setUser(data.getCurrentUser));
-      } else {
+      } else if (token) {
         dispatch(clearUser());
       }
     }
-  }, [loading, error, data, dispatch]);
+  }, [loading, error, data, dispatch, token]);
 
   useEffect(() => {
     const handleStorageChange = (event: StorageEvent) => {
       if (event.key === 'theme') {
         dispatch(setTheme(event.newValue as 'light' | 'dark'));
-      } else if (event.key === 'logout') {
-        dispatch(clearUser());
-        navigate('/');
+      } else if (event.key === 'token') {
+        if (event.newValue) {
+          dispatch(setToken(event.newValue));
+        } else {
+          dispatch(clearUser());
+          navigate('/');
+        }
       }
     };
 
@@ -61,6 +68,9 @@ const Layout = () => {
   };
 
   const contextValue: LayoutContextType = { toggleSidebar };
+
+  if (loading) return <LoadingScreen />;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">

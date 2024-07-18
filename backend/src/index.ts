@@ -48,40 +48,12 @@ async function  init() {
         //     }
         //   });
 
-        const cookieOptions: CookieOptions = {
-            httpOnly: false,
-            secure: false,
-            sameSite: 'none',
-            path: '/',
-            maxAge: 24 * 60 * 60 * 1000
-          };
-
-          app.get('/set-cookie', (req, res) => {
-            const token = req.query.token;
-            
-            if (typeof token === 'string' && token) {
-              res.cookie('accessToken', token, cookieOptions);
-              res.redirect('https://lease-connect.vercel.app');
-            } else {
-              // Handle the case where token is not a string or is empty
-              res.status(400).send('Invalid token');
-            }
-          });
-    
-
-        app.get('/check-auth', (req, res) => {
-            console.log('Cookies received:', req.cookies);
-            res.json({ authenticated: !!req.cookies.authToken });
-        });
-
 
         app.use(
             '/graphql',
             expressMiddleware(await createGraphQLServer(), {
                 context: async({req, res}) => {
-
                     const currentUser = await UserService.getCurrentUser(req);
-
                     return {
                         req,
                         res,

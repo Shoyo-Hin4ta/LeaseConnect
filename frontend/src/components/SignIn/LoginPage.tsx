@@ -7,7 +7,7 @@ import { Button } from '../ui/button';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { useDispatch } from 'react-redux';
-import { setUser } from '@/appstore/userSlice';
+import { setToken, setUser } from '@/appstore/userSlice';
 import { LOGIN_MUTATION } from '@/lib/queries';
 import { AlertCircle } from 'lucide-react';
 
@@ -38,16 +38,13 @@ const LoginPage = () => {
           input: data
         }
       });
-
-      // console.log("Response:", responseData);
-      // console.log("to browse");
-
+  
       dispatch(setUser(responseData.login));
+      dispatch(setToken(responseData.login.accessToken));
       navigate('/');
-
+  
     } catch (error) {
       console.log("Error during login:", error.message);
-      // We don't need to set the error state here as it's handled by Apollo Client
     }
   };
 

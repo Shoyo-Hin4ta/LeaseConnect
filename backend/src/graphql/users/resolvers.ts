@@ -38,17 +38,17 @@ const mutations = {
 
             if(context.res){
                 context.res.cookie('accessToken', loggedInUser.accessToken, {
-                    httpOnly: false,
-                    secure: false,
-                    sameSite: 'none', 
+                    httpOnly: true,  
+                    secure: isProduction, 
+                    sameSite: 'None', 
                     path: '/',
                     maxAge: parseInt(process.env.ACCESS_TOKEN_EXPIRY || '1') * MS_PER_DAY
                 });
 
                 context.res.cookie('refreshToken', loggedInUser.refreshToken, {
-                    httpOnly: false,
-                    secure: false,
-                    sameSite: 'none', 
+                    httpOnly: true, 
+                    secure: isProduction, 
+                    sameSite: 'None', 
                     path: '/',
                     maxAge: parseInt(process.env.REFRESH_TOKEN_EXPIRY || '5') * MS_PER_DAY
                 });

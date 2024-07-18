@@ -15,6 +15,7 @@ import { useApolloClient, useMutation } from '@apollo/client';
 import { LOGOUT_MUTATION } from '@/lib/queries';
 import { useDispatch } from 'react-redux';
 import { clearUser } from '@/appstore/userSlice';
+import { toast } from '../ui/use-toast';
 
 const DropDown = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);

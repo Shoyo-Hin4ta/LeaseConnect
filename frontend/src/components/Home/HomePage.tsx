@@ -18,8 +18,8 @@ import Popup from './Popup';
 
 
 interface PriceRange{
-  from : DateRange,
-  to: DateRange,
+  from : DateRange | Date,
+  to: DateRange | Date,
   pricePeriod? : 'per_day' | 'per_week' | 'per_month'
 }
 
