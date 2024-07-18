@@ -253,7 +253,12 @@ class UserService{
               throw new Error('User not found');
             }
       
-            
+            const options = {
+                httpOnly: false,
+                secure: false,
+                sameSite: 'none', 
+                path: '/',
+            };
       
             res.clearCookie('accessToken', options);
             res.clearCookie('refreshToken', options);
