@@ -23,7 +23,6 @@ const Layout = () => {
   const dispatch = useDispatch();
   const { loading, error, data } = useQuery(CURRENT_USER_QUERY, {
     fetchPolicy: 'network-only',
-    skip: !token,
   });
   const navigate = useNavigate();
 
