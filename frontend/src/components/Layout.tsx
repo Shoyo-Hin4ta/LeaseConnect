@@ -69,7 +69,7 @@ const Layout = () => {
 
   const contextValue: LayoutContextType = { toggleSidebar };
 
-  if (loading) return <LoadingScreen />;
+  // if (loading) return <LoadingScreen />;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
