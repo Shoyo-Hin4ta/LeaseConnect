@@ -44,7 +44,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
             render={({ field }) => (
                 <FormItem className={`flex flex-col w-full ${className}`}>
                     <div className="flex w-full items-center justify-between">
-                        <FormLabel className={`w-1/3 ${labelClassName}`}>{label}</FormLabel>
+                        <FormLabel className={`w-1/2 ${labelClassName}`}>{label}</FormLabel>
                         <div className="w-[100%]">
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                 <FormControl>

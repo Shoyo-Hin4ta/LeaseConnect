@@ -11,7 +11,6 @@ import { useDispatch } from "react-redux";
 import { next } from "@/appstore/stepperSlice";
 import { updatePersonalInfo } from "@/appstore/registerFormDataSlice";
 import { isValidPhoneNumber } from "react-phone-number-input";
-import { Eye, EyeOff } from "lucide-react";
 
 const formSchema = z.object({
   name: z
@@ -86,25 +85,25 @@ const RegisterForm = ({ currentStep }: { currentStep: number }) => {
           labelClassName="text-violet-700 dark:text-violet-300"
           inputClassName="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:ring-2 focus:ring-violet-500 dark:focus:ring-violet-400"
         />
-        <div className="relative">
-          <InputBox
-            name="password"
-            label="Password"
-            formControl={form.control}
-            placeholder="Password"
-            type={showPassword ? "text" : "password"}
-            className="w-full"
-            labelClassName="text-violet-700 dark:text-violet-300"
-            inputClassName="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:ring-2 focus:ring-violet-500 dark:focus:ring-violet-400"
-          />
-          <button
+        {/* <div className="relative"> */}
+        <InputBox
+          name="password"
+          label="Password"
+          formControl={form.control}
+          placeholder="Password"
+          type="password"
+          className="w-full"
+          labelClassName="text-violet-700 dark:text-violet-300"
+          inputClassName="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:ring-2 focus:ring-violet-500 dark:focus:ring-violet-400"
+        />
+          {/* <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
             className="absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-gray-400"
           >
             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-          </button>
-        </div>
+          </button> */}
+        {/* </div> */}
         <InputBox
           name="age"
           label="Age"
@@ -125,7 +124,7 @@ const RegisterForm = ({ currentStep }: { currentStep: number }) => {
         />
         <InputMobileNumber
           formControl={form.control}
-          label="Mobile Number"
+          label="Mobile"
           placeholder="Mobile Number"
           className=""
           labelClassName="text-violet-700 dark:text-violet-300"

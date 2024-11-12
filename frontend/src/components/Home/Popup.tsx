@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import React from 'react';
 
 const Popup = ({ onClose }) => {
   return (
@@ -30,6 +29,10 @@ const Popup = ({ onClose }) => {
         <p className="text-lg mb-4 dark:text-white">
           Do you know someone looking to lease out a space? Encourage them to list on LeaseConnect! 
           Together, we can build a great community of leasers and tenants.
+        </p>
+        <p className="text-lg mb-4 dark:text-white">
+          P.S. - If it keeps on loading. Please give the backend time to spin-up.
+                 It's deployed on a free service. 😅
         </p>
         <button
           onClick={onClose}
